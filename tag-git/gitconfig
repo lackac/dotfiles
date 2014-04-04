@@ -18,7 +18,7 @@
 	humin = name-rev --refs=refs/heads/* --stdin
 	cl = log -n25 --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset' -- lib
 [core]
-	excludesfile = /Users/LacKac/.gitignore
+	excludesfile = ~/.gitignore
 [branch]
 	autosetuprebase = always
 [push]
