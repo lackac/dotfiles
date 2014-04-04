@@ -35,7 +35,9 @@ set formatoptions+=q    " allow formatting of comments with "gq"
 set formatoptions+=r    " automatically insert the current comment leader after hitting <cr> in insert mode
 set formatoptions+=n    " when formatting text, recognize numbered lists
 set formatoptions+=1    " don't break a line after a one-letter word
-set formatoptions+=j    " remove a comment leader when joining lines
+if v:version >= 704
+  set formatoptions+=j  " remove a comment leader when joining lines
+end
 set showmatch           " briefly jump to matching bracket if insert one
 set backspace=indent,eol,start " backspace through everything in insert mode
 
