@@ -1,0 +1,11 @@
+# ~/.tmuxinator/bibliaolvaso.yml
+# you can make as many windows as you wish...
+
+project_name: Bibliaolvasó
+project_root: ~/Code/bibliaolvaso/ember-app
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - vim
+  - shell: git pull

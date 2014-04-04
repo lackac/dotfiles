@@ -1,0 +1,37 @@
+# encoding: utf-8
+
+$LOAD_PATH.push(*Dir["#{ENV['HOME']}/.prygems/gems/*/lib"]).uniq!
+
+# vim FTW
+Pry.config.editor = "vim"
+
+# My pry is polite
+Pry.config.hooks.add_hook(:after_session, :say_bye) { puts "bye-bye" }
+
+# Prompt with ruby version
+Pry.prompt = [
+  proc { |obj, nest_level| "#{RUBY_ENGINE}-#{RUBY_VERSION} (#{obj})#{":#{nest_level}" if nest_level > 0}> " },
+  proc { |obj, nest_level| "#{RUBY_ENGINE}-#{RUBY_VERSION} (#{obj})#{":#{nest_level}" if nest_level > 0}* " }
+]
+
+# requiring essentials.rb first
+require File.expand_path("~/.pryrc.d/essentials.rb")
+
+# load rc files from .pryrc.d
+Dir[File.expand_path("~/.pryrc.d/*.rb")].each {|f| require(f) rescue nil}
+
+# load .pryrc from current directory
+if File.exists?(".pryrc") and File.expand_path(".pryrc") != __FILE__
+  begin
+    load(".pryrc")
+    $console_extensions << "#{ANSI[:GREEN]}local .pryrc#{ANSI[:RESET]}"
+  rescue
+    puts "Error loading local .pryrc: #{ANSI[:RED]}#{$!}#{ANSI[:RESET]}"
+  end
+end
+
+# Show results of all extension-loading
+puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"
+
+
+tip

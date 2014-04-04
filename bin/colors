@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+puts "Normal colors"
+
+%w(black red green yellow blue magenta cyan white).each_with_index do |color, i|
+  padding = " " * (7-color.length)
+  puts "\e[3#{i}m#{i} #{color}#{padding}  \e[1m#{i} bold #{color}\e[0m"
+end
+
+puts "Bright colors"
+
+%w(black red green yellow blue magenta cyan white).each_with_index do |color, i|
+  padding = " " * (7-color.length)
+  puts "\e[9#{i}m#{i} #{color}#{padding}  \e[1m#{i} bold #{color}\e[0m"
+end

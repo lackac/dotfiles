@@ -1,0 +1,5 @@
+#compdef c
+
+local paths
+paths=(~/Code/* ~/Code)
+_files -W paths -/

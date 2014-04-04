@@ -1,0 +1,15 @@
+# ~/.tmuxinator/gyce.yml
+# you can make as many windows as you wish...
+
+project_name: GYC Europe
+project_root: ~/Code/lackac/europe.gycweb.org
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - vim
+  - shell:
+      layout: main-horizontal
+      panes:
+        -
+        - bin/jekyll build --watch

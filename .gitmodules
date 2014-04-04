@@ -1,0 +1,3 @@
+[submodule "tag-zsh/zprezto"]
+	path = tag-zsh/zprezto
+	url = https://github.com/lackac/prezto.git

@@ -1,0 +1,15 @@
+"\e[3~": delete-char
+
+set meta-flag on
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# TAB & S-TAB
+TAB: menu-complete
+"\e[Z": "\M--1\t"
+  # reverse-menu-complete
+
+set completion-ignore-case on
+
+#set editing-mode vi

@@ -1,0 +1,6 @@
+ServerAliveInterval 60
+ServerAliveCountMax 3
+
+ControlMaster auto
+ControlPath /tmp/%r@%h:%p
+ControlPersist yes

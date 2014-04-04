@@ -1,0 +1,29 @@
+.DS_Store
+*.orig
+*.rej
+*~
+.ackrc*
+
+.bundle
+vendor/ruby/
+
+# The following ignores all files in the .xcodeproj bundle,
+# And then adds back in only the project (skipping the user files)
+*.xcodeproj/
+!*.xcodeproj/project.pbxproj
+
+*~.nib
+*.swp
+.ctrlp_cache
+
+*.o
+.#*
+a.out
+
+.envrc
+.powenv
+.irbrc
+.pryrc
+config/setup_load_paths.rb
+.test-app-root
+tags

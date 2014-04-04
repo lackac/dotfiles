@@ -1,0 +1,22 @@
+if [[ $1 == "list" ]]; then
+  tree -dL 2 ~/Code
+  return;
+fi
+
+local user=$(echo $1 | awk -F'/' '{print $1}')
+local repo=$2
+[[ $repo == "" ]] && repo=$(echo $1 | awk -F'/' '{print $2}')
+
+if [[ $user != "" && $repo != "" && ! -d ~/Code/$user/$repo ]]; then
+  [[ $user == "lackac" || $user == "sspinc" || $user == "CPlus" ]] && local private="-p"
+  mkdir -p ~/Code/$user
+  cd ~/Code/$user
+  hub clone $private $user/$repo
+fi
+
+if [[ -d ~/Code/$user/$repo ]]; then
+  cd ~/Code/$user/$repo
+else
+  local match=$(tree -fidL 2 --noreport ~/Code | grep /$user$ | head -1)
+  [[ $match != "" ]] && cd $match
+fi

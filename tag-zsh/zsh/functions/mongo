@@ -1,0 +1,8 @@
+local uri=$1
+shift
+
+if [ "${uri[0,10]}" = "mongodb://" ]; then
+  mongo ${uri#*@} -u ${${uri#*://}%:*} -p ${${uri%@*}##*:}
+else
+  /usr/local/bin/mongo $uri "$@"
+fi

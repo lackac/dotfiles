@@ -1,0 +1,43 @@
+require 'rubygems'
+
+$LOAD_PATH.push(*Dir["#{ENV['HOME']}/.prygems/gems/*/lib"]).uniq!
+
+begin
+  # Use Pry everywhere
+  require 'pry'
+rescue LoadError => e
+end
+
+if defined? Pry
+
+  Pry.start
+  exit
+
+else
+
+  IRB.conf[:SAVE_HISTORY] = 5000
+  IRB.conf[:EVAL_HISTORY] = 100
+  IRB.conf[:AUTO_INDENT] = true
+
+  # requiring essentials.rb first
+  require File.join("#{__FILE__}.d", "essentials.rb")
+
+  # load rc files from .irbrc.d
+  Dir[File.join("#{__FILE__}.d", "*.rb")].each {|f| require(f) rescue nil}
+
+  # load .irbrc from current directory
+  if File.exists?(".irbrc") and File.expand_path(".irbrc") != __FILE__
+    begin
+      load(".irbrc")
+      $console_extensions << "#{ANSI[:GREEN]}local .irbrc#{ANSI[:RESET]}"
+    rescue
+      puts "Error loading local .irbrc: #{ANSI[:RED]}#{$!}#{ANSI[:RESET]}"
+    end
+  end
+
+  # Show results of all extension-loading
+  puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"
+
+  tip
+
+end

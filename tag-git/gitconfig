@@ -1,0 +1,50 @@
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[user]
+	name = Laszlo Bacsi
+	email = lackac@lackac.hu
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	cl = clone
+	conflicts = !git ls-files --unmerged | cut -c51- | sort -u | xargs $EDITOR
+	resolve = !git ls-files --unmerged | cut -c51- | sort -u | xargs git add
+	headless = !sh -c 'git symbolic-ref HEAD refs/heads/$0 && rm .git/index && git clean -fdx'
+	human = name-rev --name-only --refs=refs/heads/*
+	humin = name-rev --refs=refs/heads/* --stdin
+	cl = log -n25 --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset' -- lib
+[core]
+	excludesfile = /Users/LacKac/.gitignore
+[branch]
+	autosetuprebase = always
+[push]
+	default = tracking
+
+[include]
+	path = .gitconfig.private
+	path = .gitconfig.local
+
+[url "git@github.com:"]
+	insteadOf = "gh:"
+	pushInsteadOf = "github:"
+	pushInsteadOf = "git://github.com/"
+[url "git://github.com/"]
+	insteadOf = "github:"
+[url "git@gist.github.com:"]
+	insteadOf = "gst:"
+	pushInsteadOf = "gist:"
+	pushInsteadOf = "git://gist.github.com/"
+[url "git://gist.github.com/"]
+	insteadOf = "gist:"
+[url "git@heroku.com:"]
+	insteadOf = "heroku:"
+[rerere]
+	enabled = 1
+[heroku]
+	account = personal
+[hub]
+	protocol = https

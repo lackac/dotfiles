@@ -1,0 +1,20 @@
+# ~/.tmuxinator/collectplus.yml
+# you can make as many windows as you wish...
+
+project_name: collect+
+project_root: ~/Code/CPlus/collectplus
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - vim
+  - console:
+      layout: even-horizontal
+      panes:
+        - spring rails console
+  - shell: gll
+  - server:
+      layout: main-horizontal
+      panes:
+        - tail -f log/development.log
+        -
