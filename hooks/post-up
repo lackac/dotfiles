@@ -5,10 +5,10 @@ if [ ! -e $HOME/.vim/bundle/vundle ]; then
 fi
 vim +BundleInstall +qa
 
-for rcfile in ~/.zprezto/runcoms/*; do
+for rcfile in $(ls ~/.zprezto/runcoms/*); do
   filename="$(basename $rcfile)"
   dotfile="$HOME/.$filename"
-  [[ "$filename" = "README.md" || -L "$dotfile" ]] && continue
+  [ "$filename" = "README.md" -o -L "$dotfile" ] && continue
 
   if [ -f "$dotfile" ]; then
     rm -i "$dotfile"
