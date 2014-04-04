@@ -1,5 +1,5 @@
 DOTFILES_DIR="~/.dotfiles-private ~/.dotfiles"
 COPY_ALWAYS="ssh/id_* ssh/*_rsa*"
 EXCLUDES="README*"
-TAGS="zsh tmux vim git ruby osx"
+TAGS="zsh tmux vim git ruby"
 SYMLINK_DIRS="zprezto"
