@@ -50,6 +50,7 @@ nmap <leader>a :Ag -S
 nmap <leader>A :AgFromSearch<cr>
 
 Bundle 'jeetsukumaran/vim-buffergator'
+let g:buffergator_suppress_keymaps = 1
 nmap <leader>b :BuffergatorToggle<cr>
 
 Bundle 'tpope/vim-bundler'
@@ -61,6 +62,7 @@ if exists(getcwd()."/.git")
 else
   let g:ctrlp_working_path_mode = 0
 end
+let g:ctrlp_open_multiple_files = '2vjr'
 let g:ctrlp_cache_dir = getcwd()."/.ctrlp_cache"
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_custom_ignore = {
