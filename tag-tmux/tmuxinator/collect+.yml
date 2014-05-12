@@ -11,7 +11,7 @@ windows:
   - console:
       layout: even-horizontal
       panes:
-        - spring rails console
+        - rails console
   - shell: gll
   - server:
       layout: main-horizontal
