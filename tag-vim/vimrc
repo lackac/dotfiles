@@ -117,6 +117,8 @@ Bundle 'dsawardekar/portkey'
 let g:Powerline_symbols = 'fancy'
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
+Bundle 'tpope/vim-rbenv'
+
 Bundle 'tpope/vim-repeat'
 
 Bundle 'duff/vim-scratch'
@@ -176,6 +178,14 @@ if v:version >= 704 || v:version == 703 && has("patch584")
 end
 Bundle 'itspriddle/ZoomWin'
 
+Bundle 't9md/vim-ruby-xmpfilter'
+autocmd FileType ruby nmap <buffer> <C-d> <Plug>(xmpfilter-mark)
+autocmd FileType ruby xmap <buffer> <C-d> <Plug>(xmpfilter-mark)
+autocmd FileType ruby imap <buffer> <C-d> <Plug>(xmpfilter-mark)
+autocmd FileType ruby nmap <buffer> <C-e> <Plug>(xmpfilter-run)
+autocmd FileType ruby xmap <buffer> <C-e> <Plug>(xmpfilter-run)
+autocmd FileType ruby imap <buffer> <C-e> <Plug>(xmpfilter-run)
+
 " Framework Support
 
 Bundle 't9md/vim-chef'
@@ -192,6 +202,7 @@ Bundle 'thoughtbot/vim-rspec'
 nmap <leader>rt :call RunCurrentSpecFile()<CR>
 nmap <leader>rs :call RunNearestSpec()<CR>
 nmap <leader>rl :call RunLastSpec()<CR>
+
 
 " Turn on filetype plugins and syntax highlighting
 " needs to be at the end when rtp already includes paths for all ftdetect dirs
