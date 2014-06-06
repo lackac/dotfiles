@@ -184,7 +184,7 @@ end
 Bundle 'itspriddle/ZoomWin'
 
 Bundle 't9md/vim-ruby-xmpfilter'
-autocmd FileType ruby nmap <buffer> <C-d> <Plug>(xmpfilter-mark)
+"autocmd FileType ruby nmap <buffer> <C-d> <Plug>(xmpfilter-mark)
 autocmd FileType ruby xmap <buffer> <C-d> <Plug>(xmpfilter-mark)
 autocmd FileType ruby imap <buffer> <C-d> <Plug>(xmpfilter-mark)
 autocmd FileType ruby nmap <buffer> <C-e> <Plug>(xmpfilter-run)
