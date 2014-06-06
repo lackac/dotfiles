@@ -71,6 +71,9 @@ let g:ctrlp_custom_ignore = {
 Bundle 'kien/ctrlp.vim'
 imap <C-t> <esc>:CtrlP<cr>
 
+Bundle 'rizzatti/dash.vim'
+nmap <silent> <leader>d <Plug>DashSearch
+
 Bundle 'tpope/vim-dispatch'
 Bundle 'editorconfig/editorconfig-vim'
 Bundle 'tpope/vim-endwise'
