@@ -72,19 +72,5 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
         Rails.application.routes.named_routes.get index_or_name
       end
     end
-
-    include Rails.application.routes.url_helpers
-    default_url_options[:host] = "#{Rails.application.class.parent_name.downcase}.#{Rails.env.first(3)}"
-  end
-
-  extend_console 'helpers', defined?(ActionView::Helpers), false do
-    include ApplicationController._helpers # Your own helpers
-
-    include ActionView::Helpers::DebugHelper
-    include ActionView::Helpers::NumberHelper
-    include ActionView::Helpers::SanitizeHelper
-    include ActionView::Helpers::TagHelper
-    include ActionView::Helpers::TextHelper
-    include ActionView::Helpers::TranslationHelper
   end
 end
