@@ -104,6 +104,8 @@ Bundle 'rgarver/Kwbd.vim'
 nmap <C-W>! <Plug>Kwbd
 
 Bundle 'edsono/vim-matchit'
+
+xmap <leader>nr <Plug>NrrwrgnDo
 Bundle 'chrisbra/NrrwRgn'
 
 Bundle 'scrooloose/nerdcommenter'
