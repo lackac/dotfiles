@@ -1,17 +1,106 @@
-source ~/.vim/setup/settings.vim
-source ~/.vim/setup/filetypes.vim
-source ~/.vim/setup/mappings.vim
+""" Initialize Vundle
+filetype off
+set rtp+=~/.vim,~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-set rtp+=~/.vim,~/.vim/bundle/vundle/
-
-call vundle#rc()
-
-" let Vundle manage Vundle - required!
-Bundle 'gmarik/vundle'
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
 
 """ Color Theme
 
-Bundle 'altercation/vim-colors-solarized'
+Plugin 'altercation/vim-colors-solarized'
+
+""" Language Support
+
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'chrisbra/csv.vim'
+Plugin 'elixir-lang/vim-elixir'
+Plugin 'jimenezrick/vimerl'
+Plugin 'tpope/vim-haml'
+Plugin 'nono/vim-handlebars'
+Plugin 'digitaltoad/vim-jade'
+Plugin 'pangloss/vim-javascript'
+Plugin 'elzr/vim-json'
+Plugin 'groenewege/vim-less'
+Plugin 'tpope/vim-markdown'
+Plugin 'mmalecki/vim-node.js'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'rosstimson/scala-vim-support'
+Plugin 'cakebaker/scss-syntax.vim'
+Plugin 'wavded/vim-stylus'
+Plugin 'timcharper/textile.vim'
+
+""" Tools
+
+Plugin 'rking/ag.vim'
+Plugin 'bling/vim-airline'
+Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'tpope/vim-bundler'
+Plugin 'ap/vim-css-color'
+Plugin 'kien/ctrlp.vim'
+Plugin 'rizzatti/dash.vim'
+Plugin 'tpope/vim-dispatch'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-eunuch'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-git'
+Plugin 'mattn/gist-vim'
+"Plugin 'airblade/vim-gitgutter'  " disabled because makes things slow
+Plugin 'junegunn/goyo.vim'
+Plugin 'sjl/gundo.vim'
+Plugin 'michaeljsmith/vim-indent-object'
+Plugin 'rgarver/Kwbd.vim'
+Plugin 'edsono/vim-matchit'
+Plugin 'chrisbra/NrrwRgn'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'reedes/vim-pencil'
+Plugin 'dsawardekar/portkey'
+Plugin 'tpope/vim-rbenv'
+Plugin 'tpope/vim-repeat'
+Plugin 'duff/vim-scratch'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'tpope/vim-surround'
+Plugin 'scrooloose/syntastic'
+Plugin 'godlygeek/tabular'
+Plugin 'majutsushi/tagbar'
+Plugin 'kana/vim-textobj-user'
+Plugin 'nelstrom/vim-textobj-rubyblock'
+Plugin 'tomtom/tlib_vim'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'edkolev/tmuxline.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'benmills/vimux'
+Plugin 'sjl/vitality.vim'
+Plugin 'skalnik/vim-vroom'
+Plugin 'mattn/webapi-vim'
+Plugin 'vim-scripts/YankRing.vim'
+if v:version >= 704 || v:version == 703 && has("patch584")
+  Plugin 'Valloric/YouCompleteMe'
+end
+Plugin 'itspriddle/ZoomWin'
+Plugin 't9md/vim-ruby-xmpfilter'
+Plugin 'amix/vim-zenroom2'
+
+""" Framework Support
+
+Plugin 't9md/vim-chef'
+Plugin 'tpope/vim-cucumber'
+Plugin 'dsawardekar/ember.vim'
+Plugin 'sunaku/vim-ruby-minitest'
+Plugin 'ajf/puppet-vim'
+Plugin 'tpope/vim-rails'
+Plugin 'thoughtbot/vim-rspec'
+
+""" Finalize Vundle
+
+call vundle#end()
+filetype plugin indent on
+
+""" Color Theme
+
 let g:solarized_menu = 0
 let g:solarized_contrast = "high"
 set background=light
@@ -19,199 +108,12 @@ if $USER == "action" " running in nitrous.io without proper colors
   let g:solarized_termcolors=256
 end
 color solarized
-
-""" Language Support
-
-Bundle 'kchmck/vim-coffee-script'
-nmap <leader>j :CoffeeCompile<cr>
-vmap <leader>j :CoffeeCompile<cr>
-
-Bundle 'chrisbra/csv.vim'
-Bundle 'elixir-lang/vim-elixir'
-Bundle 'jimenezrick/vimerl'
-Bundle 'tpope/vim-haml'
-Bundle 'nono/vim-handlebars'
-Bundle 'digitaltoad/vim-jade'
-Bundle 'pangloss/vim-javascript'
-Bundle 'elzr/vim-json'
-Bundle 'groenewege/vim-less'
-Bundle 'tpope/vim-markdown'
-Bundle 'mmalecki/vim-node.js'
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'rosstimson/scala-vim-support'
-Bundle 'cakebaker/scss-syntax.vim'
-Bundle 'wavded/vim-stylus'
-Bundle 'timcharper/textile.vim'
-
-""" Tools
-
-Bundle 'rking/ag.vim'
-nmap <leader>a :Ag -S 
-nmap <leader>A :AgFromSearch<cr>
-
-Bundle 'jeetsukumaran/vim-buffergator'
-let g:buffergator_suppress_keymaps = 1
-nmap <leader>b :BuffergatorToggle<cr>
-
-Bundle 'tpope/vim-bundler'
-Bundle 'ap/vim-css-color'
-
-let g:ctrlp_map = '<C-t>'
-if exists(getcwd()."/.git")
-  let g:ctrlp_working_path_mode = 2
-else
-  let g:ctrlp_working_path_mode = 0
-end
-let g:ctrlp_open_multiple_files = '2vjr'
-let g:ctrlp_cache_dir = getcwd()."/.ctrlp_cache"
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_custom_ignore = {
-  \ 'dir': '\v[\/](_site|app-js|app-cov|test/support/public)'
-  \ }
-Bundle 'kien/ctrlp.vim'
-imap <C-t> <esc>:CtrlP<cr>
-
-Bundle 'rizzatti/dash.vim'
-nmap <silent> <leader>d <Plug>DashSearch
-
-Bundle 'tpope/vim-dispatch'
-Bundle 'editorconfig/editorconfig-vim'
-Bundle 'tpope/vim-endwise'
-Bundle 'tpope/vim-eunuch'
-
-Bundle 'tpope/vim-fugitive'
-nmap <leader>gb :Gblame<CR>
-nmap <leader>gs :Gstatus<CR>
-nmap <leader>gd :Gdiff<CR>
-nmap <leader>gl :Glog<CR>
-nmap <leader>gc :Gcommit<CR>
-nmap <leader>gA :Gcommit --amend -v<CR>
-nmap <leader>gv :Gcommit -v<CR>
-nmap <leader>gp :Git push<CR>
-
-Bundle 'tpope/vim-git'
-Bundle 'mattn/gist-vim'
-"Bundle 'airblade/vim-gitgutter'  " disabled because makes things slow
-
-Bundle 'junegunn/goyo.vim'
-Bundle 'amix/vim-zenroom2'
-nmap <leader>z :Goyo<cr>
-
-Bundle 'sjl/gundo.vim'
-Bundle 'michaeljsmith/vim-indent-object'
-
-Bundle 'rgarver/Kwbd.vim'
-nmap <C-W>! <Plug>Kwbd
-
-Bundle 'edsono/vim-matchit'
-
-xmap <leader>nr <Plug>NrrwrgnDo
-Bundle 'chrisbra/NrrwRgn'
-
-Bundle 'scrooloose/nerdcommenter'
-vmap <leader>/ <plug>NERDCommenterToggle<CR>
-
-Bundle 'scrooloose/nerdtree'
-let NERDTreeChDirMode = 2
-let NERDTreeIgnore = ['\.git$', '\.pyc$', '\.pyo$', '\.rbc$', '\.rbo$', '\.class$', '\.o$', '\~$', '^tmp$', '^log$', '\.bundle$', '\.sass-cache', '\.ctrlp_cache', '\.swp$', '^build$', '^coverage$', '\.sock$']
-let NERDTreeQuitOnOpen = 1
-let NERDTreeShowHidden = 1
-nmap <leader>n :NERDTreeToggle<cr>
-nmap <leader>N :NERDTreeFind<cr>
-
-Bundle 'dsawardekar/portkey'
-
-let g:Powerline_symbols = 'fancy'
-Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-
-Bundle 'tpope/vim-rbenv'
-
-Bundle 'tpope/vim-repeat'
-
-Bundle 'duff/vim-scratch'
-nmap <leader><tab>  :Scratch<cr>
-
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'tpope/vim-surround'
-
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html'] }
-Bundle 'scrooloose/syntastic'
-let g:syntastic_enable_signs=1
-let g:syntastic_quiet_messages = {'level': 'warnings'}
-let g:syntastic_auto_loc_list=2
-
-Bundle 'godlygeek/tabular'
-"AddTabularPattern first_comma /^[^,]*,\zs/l0l1
-nmap <leader>.= :Tabularize /=<CR>
-vmap <leader>.= :Tabularize /=<CR>
-nmap <leader>.> :Tabularize /=><CR>
-vmap <leader>.> :Tabularize /=><CR>
-nmap <leader>., :Tabularize /,\zs/l0l1<CR>
-vmap <leader>., :Tabularize /,\zs/l0l1<CR>
-nmap <leader>.: :Tabularize /:\zs/l0l1<CR>
-vmap <leader>.: :Tabularize /:\zs/l0l1<CR>
-
-Bundle 'majutsushi/tagbar'
-nmap <leader>tb :TagbarToggle<CR>
-
-Bundle 'kana/vim-textobj-user'
-Bundle 'nelstrom/vim-textobj-rubyblock'
-Bundle 'tomtom/tlib_vim'
-Bundle 'christoomey/vim-tmux-navigator'
-
-Bundle 'SirVer/ultisnips'
-let g:UltiSnipsListSnippets="<S-C-J>"
-let g:UltiSnipsExpandTrigger="<C-J>"
-let g:UltiSnipsJumpForwardTrigger="<C-J>"
-let g:UltiSnipsJumpBackwardTrigger="<C-K>"
-
-Bundle 'tpope/vim-unimpaired'
-
-Bundle 'benmills/vimux'
-nmap <leader>tp :VimuxPromptCommand<cr>
-nmap <leader>tl :VimuxRunLastCommand<cr>
-nmap <leader>ti :VimuxInspectRunner<cr>
-nmap <leader>tx :VimuxClosePanes<cr>
-nmap <leader>ts :VimuxInterruptRunner<cr>
-
-let g:vitality_fix_focus = 0 " don't let vitality mess up things with focus handling
-Bundle 'sjl/vitality.vim'
-
-Bundle 'skalnik/vim-vroom'
-Bundle 'mattn/webapi-vim'
-Bundle 'vim-scripts/YankRing.vim'
-if v:version >= 704 || v:version == 703 && has("patch584")
-  Bundle 'Valloric/YouCompleteMe'
-end
-Bundle 'itspriddle/ZoomWin'
-
-Bundle 't9md/vim-ruby-xmpfilter'
-"autocmd FileType ruby nmap <buffer> <C-d> <Plug>(xmpfilter-mark)
-autocmd FileType ruby xmap <buffer> <C-d> <Plug>(xmpfilter-mark)
-autocmd FileType ruby imap <buffer> <C-d> <Plug>(xmpfilter-mark)
-autocmd FileType ruby nmap <buffer> <C-e> <Plug>(xmpfilter-run)
-autocmd FileType ruby xmap <buffer> <C-e> <Plug>(xmpfilter-run)
-autocmd FileType ruby imap <buffer> <C-e> <Plug>(xmpfilter-run)
-
-" Framework Support
-
-Bundle 't9md/vim-chef'
-nmap <C-Tab> :ChefFindAny<CR>
-
-Bundle 'tpope/vim-cucumber'
-Bundle 'dsawardekar/ember.vim'
-Bundle 'sunaku/vim-ruby-minitest'
-Bundle 'ajf/puppet-vim'
-Bundle 'tpope/vim-rails'
-
-let g:rspec_command = 'call VimuxRunCommand("spring rspec {spec}")'
-Bundle 'thoughtbot/vim-rspec'
-nmap <leader>rt :call RunCurrentSpecFile()<CR>
-nmap <leader>rs :call RunNearestSpec()<CR>
-nmap <leader>rl :call RunLastSpec()<CR>
-
-
-" Turn on filetype plugins and syntax highlighting
-" needs to be at the end when rtp already includes paths for all ftdetect dirs
-filetype plugin indent on
 syntax enable
+
+""" Settings
+
+source ~/.vim/setup/settings.vim
+source ~/.vim/setup/filetypes.vim
+source ~/.vim/setup/mappings.vim
+source ~/.vim/setup/plugin_settings.vim
+source ~/.vim/setup/plugin_mappings.vim
