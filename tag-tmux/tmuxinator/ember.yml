@@ -1,0 +1,8 @@
+# ~/.tmuxinator/ember.yml
+# you can make as many tabs as you wish...
+
+name: Ember
+root: ~/Code/sandbox/ember
+windows:
+  - rarwe: cd ~/Code/balinterdi/rarwe-book && vim
+  - shell:

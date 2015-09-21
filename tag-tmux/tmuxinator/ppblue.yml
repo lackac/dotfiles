@@ -1,0 +1,13 @@
+# ~/.tmuxinator/ppblue.yml
+# you can make as many tabs as you wish...
+
+name: PPBlue
+root: ~/Code/CPlus/paypoint-blue
+windows:
+  - vim: vim
+  - console:
+      layout: main-horizontal
+      panes:
+        - bin/console
+        - bundle exec guard
+  - shell:

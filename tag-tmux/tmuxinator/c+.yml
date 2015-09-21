@@ -1,0 +1,17 @@
+# ~/.tmuxinator/c+.yml
+# you can make as many windows as you wish...
+
+project_name: C+
+project_root: ~/Code/CPlus/collectplus
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - vim
+  - console: rails console
+  - shell: git pull
+  - logs:
+      layout: main-horizontal
+      panes:
+        - tail -f log/development.log
+  - ngrok: ngrok http --host-header=collectplus.dev --subdomain=cplus-lackac 80

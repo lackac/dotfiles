@@ -1,0 +1,12 @@
+# ~/.tmuxinator/senses.yml
+# you can make as many windows as you wish...
+
+project_name: Senses
+project_root: ~/Code/r3missions/senses
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - vim
+  - shell:
+  - server: bundle exec middleman server -p7004

@@ -1,0 +1,9 @@
+# ~/.tmuxinator/100starlings.yml
+# you can make as many windows as you wish...
+
+project_name: 100Starlings
+project_root: ~/Code/lackac/100starlings
+windows:
+  - editor: vim
+  - shell:
+  - server: bundle exec middleman server -p7005
