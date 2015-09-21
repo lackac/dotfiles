@@ -10,8 +10,12 @@ Pry.config.hooks.add_hook(:after_session, :say_bye) { puts "bye-bye" }
 
 # Prompt with ruby version
 Pry.prompt = [
-  proc { |obj, nest_level| "#{RUBY_ENGINE}-#{RUBY_VERSION} (#{obj})#{":#{nest_level}" if nest_level > 0}> " },
-  proc { |obj, nest_level| "#{RUBY_ENGINE}-#{RUBY_VERSION} (#{obj})#{":#{nest_level}" if nest_level > 0}* " }
+  proc { |obj, nest_level, pry|
+    "[#{pry.input_array.count}] (#{Pry.config.prompt_name}) #{RUBY_ENGINE}-#{RUBY_VERSION} (#{Pry.view_clip(obj)})#{":#{nest_level}" if nest_level > 0}> "
+  },
+  proc { |obj, nest_level, pry|
+    "[#{pry.input_array.count}] (#{Pry.config.prompt_name}) #{RUBY_ENGINE}-#{RUBY_VERSION} (#{Pry.view_clip(obj)})#{":#{nest_level}" if nest_level > 0}* "
+  }
 ]
 
 # requiring essentials.rb first

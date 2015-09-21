@@ -6,11 +6,7 @@ end
 
 # When you're using Rails 3 console, show queries in the console
 extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
-  rails_prompt = "#{Rails.application.class.parent_name.downcase}:#{Rails.env.first(3)}-#{RUBY_VERSION}"
-  Pry.prompt = [
-    proc { |obj, nest_level| "#{rails_prompt} (#{obj})#{":#{nest_level}" if nest_level > 0}> " },
-    proc { |obj, nest_level| "#{rails_prompt} (#{obj})#{":#{nest_level}" if nest_level > 0}* " }
-  ]
+  Pry.config.prompt_name = "#{Rails.application.class.parent_name.downcase}:#{Rails.env.first(3)}"
 
   $odd_or_even_queries = false
   ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
