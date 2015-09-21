@@ -7,8 +7,9 @@ local user=$(echo $1 | awk -F'/' '{print $1}')
 local repo=$2
 [[ $repo == "" ]] && repo=$(echo $1 | awk -F'/' '{print $2}')
 
+orgs=(lackac r3missions 100Starlings Bibliaolvaso CPlus)
 if [[ $user != "" && $repo != "" && ! -d ~/Code/$user/$repo ]]; then
-  [[ $user == "lackac" || $user == "sspinc" || $user == "CPlus" ]] && local private="-p"
+  [[ ${orgs[(r)$user]} == $user ]] && local private="-p"
   mkdir -p ~/Code/$user
   cd ~/Code/$user
   hub clone $private $user/$repo
