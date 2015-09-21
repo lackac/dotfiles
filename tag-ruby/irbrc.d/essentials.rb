@@ -6,27 +6,27 @@ RUBY_ENGINE = "ruby" unless defined?(RUBY_ENGINE)
 # Some of the following is borrowed from Iain Hecker, http://iain.nl
 alias q exit
 
-ANSI = {}
-ANSI[:RESET]     = "\e[0m"
-ANSI[:BOLD]      = "\e[1m"
-ANSI[:UNDERLINE] = "\e[4m"
-ANSI[:LGRAY]     = "\e[0;37m"
-ANSI[:GRAY]      = "\e[1;30m"
-ANSI[:RED]       = "\e[31m"
-ANSI[:GREEN]     = "\e[32m"
-ANSI[:YELLOW]    = "\e[33m"
-ANSI[:BLUE]      = "\e[34m"
-ANSI[:MAGENTA]   = "\e[35m"
-ANSI[:CYAN]      = "\e[36m"
-ANSI[:WHITE]     = "\e[37m"
+ANSI_CODES = {}
+ANSI_CODES[:RESET]     = "\e[0m"
+ANSI_CODES[:BOLD]      = "\e[1m"
+ANSI_CODES[:UNDERLINE] = "\e[4m"
+ANSI_CODES[:LGRAY]     = "\e[0;37m"
+ANSI_CODES[:GRAY]      = "\e[1;30m"
+ANSI_CODES[:RED]       = "\e[31m"
+ANSI_CODES[:GREEN]     = "\e[32m"
+ANSI_CODES[:YELLOW]    = "\e[33m"
+ANSI_CODES[:BLUE]      = "\e[34m"
+ANSI_CODES[:MAGENTA]   = "\e[35m"
+ANSI_CODES[:CYAN]      = "\e[36m"
+ANSI_CODES[:WHITE]     = "\e[37m"
 
 # Build a simple colorful IRB prompt
 IRB.conf[:PROMPT][:SIMPLE_COLOR] = {
-  :PROMPT_I => "#{ANSI[:BLUE]}>>#{ANSI[:RESET]} ",
-  :PROMPT_N => "#{ANSI[:BLUE]}>>#{ANSI[:RESET]} ",
-  :PROMPT_C => "#{ANSI[:RED]}?>#{ANSI[:RESET]} ",
-  :PROMPT_S => "#{ANSI[:YELLOW]}?>#{ANSI[:RESET]} ",
-  :RETURN   => "#{ANSI[:GREEN]}=>#{ANSI[:RESET]} %s\n",
+  :PROMPT_I => "#{ANSI_CODES[:BLUE]}>>#{ANSI_CODES[:RESET]} ",
+  :PROMPT_N => "#{ANSI_CODES[:BLUE]}>>#{ANSI_CODES[:RESET]} ",
+  :PROMPT_C => "#{ANSI_CODES[:RED]}?>#{ANSI_CODES[:RESET]} ",
+  :PROMPT_S => "#{ANSI_CODES[:YELLOW]}?>#{ANSI_CODES[:RESET]} ",
+  :RETURN   => "#{ANSI_CODES[:GREEN]}=>#{ANSI_CODES[:RESET]} %s\n",
   :AUTO_INDENT => true }
 IRB.conf[:PROMPT_MODE] = :SIMPLE_COLOR
 
@@ -37,13 +37,13 @@ def extend_console(name, care = true, needs_require = true)
   if care
     require name if needs_require
     yield if block_given?
-    $console_extensions << "#{ANSI[:GREEN]}#{name}#{ANSI[:RESET]}"
+    $console_extensions << "#{ANSI_CODES[:GREEN]}#{name}#{ANSI_CODES[:RESET]}"
   else
-    $console_extensions << "#{ANSI[:GRAY]}#{name}#{ANSI[:RESET]}"
+    $console_extensions << "#{ANSI_CODES[:GRAY]}#{name}#{ANSI_CODES[:RESET]}"
   end
 rescue Exception => e
-  puts "Error loading #{name}: #{ANSI[:RED]}#{$!}#{ANSI[:RESET]}"
-  $console_extensions << "#{ANSI[:RED]}#{name}#{ANSI[:RESET]}"
+  puts "Error loading #{name}: #{ANSI_CODES[:RED]}#{$!}#{ANSI_CODES[:RESET]}"
+  $console_extensions << "#{ANSI_CODES[:RED]}#{name}#{ANSI_CODES[:RESET]}"
 end
 $console_extensions = []
 
@@ -55,7 +55,7 @@ IRB_MOTD = [
 def tip(new_tip = nil)
   if new_tip.nil?
     tip = IRB_MOTD[rand(IRB_MOTD.size)]
-    puts "#{ANSI[:CYAN]}Tip#{ANSI[:RESET]}: #{ANSI[:BOLD]}#{tip}#{ANSI[:RESET]}"
+    puts "#{ANSI_CODES[:CYAN]}Tip#{ANSI_CODES[:RESET]}: #{ANSI_CODES[:BOLD]}#{tip}#{ANSI_CODES[:RESET]}"
   else
     IRB_MOTD << new_tip
   end

@@ -28,13 +28,13 @@ Dir[File.expand_path("~/.pryrc.d/*.rb")].each {|f| require(f) rescue nil}
 if File.exists?(".pryrc") and File.expand_path(".pryrc") != __FILE__
   begin
     load(".pryrc")
-    $console_extensions << "#{ANSI[:GREEN]}local .pryrc#{ANSI[:RESET]}"
+    $console_extensions << "#{ANSI_CODES[:GREEN]}local .pryrc#{ANSI_CODES[:RESET]}"
   rescue
-    puts "Error loading local .pryrc: #{ANSI[:RED]}#{$!}#{ANSI[:RESET]}"
+    puts "Error loading local .pryrc: #{ANSI_CODES[:RED]}#{$!}#{ANSI_CODES[:RESET]}"
   end
 end
 
 # Show results of all extension-loading
-puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"
+puts "#{ANSI_CODES[:GRAY]}~> Console extensions:#{ANSI_CODES[:RESET]} #{$console_extensions.join(' ')}#{ANSI_CODES[:RESET]}"
 
 tip

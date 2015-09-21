@@ -9,11 +9,11 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
   $odd_or_even_queries = false
   ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
     $odd_or_even_queries = !$odd_or_even_queries
-    color = $odd_or_even_queries ? ANSI[:CYAN] : ANSI[:MAGENTA]
+    color = $odd_or_even_queries ? ANSI_CODES[:CYAN] : ANSI_CODES[:MAGENTA]
     event = ActiveSupport::Notifications::Event.new(*args)
     time  = "%.1fms" % event.duration
     name  = event.payload[:name]
     sql   = event.payload[:sql].gsub("\n", " ").squeeze(" ")
-    puts "  #{ANSI[:UNDERLINE]}#{color}#{name} (#{time})#{ANSI[:RESET]}  #{sql}"
+    puts "  #{ANSI_CODES[:UNDERLINE]}#{color}#{name} (#{time})#{ANSI_CODES[:RESET]}  #{sql}"
   end
 end

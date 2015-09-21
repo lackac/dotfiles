@@ -29,14 +29,14 @@ else
   if File.exists?(".irbrc") and File.expand_path(".irbrc") != __FILE__
     begin
       load(".irbrc")
-      $console_extensions << "#{ANSI[:GREEN]}local .irbrc#{ANSI[:RESET]}"
+      $console_extensions << "#{ANSI_CODES[:GREEN]}local .irbrc#{ANSI_CODES[:RESET]}"
     rescue
-      puts "Error loading local .irbrc: #{ANSI[:RED]}#{$!}#{ANSI[:RESET]}"
+      puts "Error loading local .irbrc: #{ANSI_CODES[:RED]}#{$!}#{ANSI_CODES[:RESET]}"
     end
   end
 
   # Show results of all extension-loading
-  puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"
+  puts "#{ANSI_CODES[:GRAY]}~> Console extensions:#{ANSI_CODES[:RESET]} #{$console_extensions.join(' ')}#{ANSI_CODES[:RESET]}"
 
   tip
 
