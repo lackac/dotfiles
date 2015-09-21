@@ -27,3 +27,5 @@ a.out
 config/setup_load_paths.rb
 .test-app-root
 tags
+.tags
+.tags[0-9]

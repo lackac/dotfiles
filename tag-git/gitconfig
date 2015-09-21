@@ -17,6 +17,7 @@
 	human = name-rev --name-only --refs=refs/heads/*
 	humin = name-rev --refs=refs/heads/* --stdin
 	cl = log -n25 --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset' -- lib
+	start = !git init && git commit --allow-empty -m \"Inception\"
 [core]
 	excludesfile = ~/.gitignore
 [branch]
@@ -48,3 +49,7 @@
 	account = personal
 [hub]
 	protocol = https
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
