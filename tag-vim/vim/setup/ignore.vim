@@ -1,0 +1,10 @@
+set wildignore=*.o,*.out,*.obj,.git/**,.gitkeep,.hg/**,.svn/**,*.rbc,*.rbo,*.pyc,*.pyo,*.class,*.o,*.gem
+set wildignore+=*.swp,*~,._*,*.sock,*DS_Store*
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+set wildignore+=vendor/ruby/**,vendor/gems/**,vendor/cache/**,.bundle/**
+set wildignore+=.sass-cache/**,vendor/assets/**
+set wildignore+=node_modules/**,bower_components/**
+set wildignore+=tmp/**,.tmp/**,log/**,build/**,coverage/**,.coverage/**,.ctrlp_cache/**
+set wildignore+=.env,.envrc,.env[0-9]+
+set wildignore+=__pycache__/**,*.egg,*.egg-info,.env-pypy
+set wildignore+=*.png,*.jpg,*.gif,*.ttf,*.otf,*.eot,*.woff

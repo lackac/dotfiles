@@ -1,22 +1,13 @@
 """ General Mappings (Normal, Visual, Operator-pending)
 
-" toggle paste mode
-nmap <silent> <F4> :set invpaste<CR>:set paste?<CR>
-imap <silent> <F4> <ESC>:set invpaste<CR>:set paste?<CR>
+" help with the transitional period
+nmap , :echoe "You've changed \<leader\> to \<space\>, remember?"<CR>
 
 " format the entire file
 nmap <leader>fef ggVG=
 
 " format paragraph
 nmap <leader>q gqip
-
-" upper/lower word
-nmap <leader>u mQviwU`Q
-nmap <leader>l mQviwu`Q
-
-" upper/lower first char of word
-nmap <leader>U mQgewvU`Q
-nmap <leader>L mQgewvu`Q
 
 " cd to the directory containing the file in the buffer
 nmap <silent> <leader>cd :lcd %:h<CR>
@@ -31,14 +22,11 @@ nmap <leader>es :sp <C-R>=expand('%:h').'/'<cr>
 nmap <leader>ev :vsp <C-R>=expand('%:h').'/'<cr>
 nmap <leader>et :tabe <C-R>=expand('%:h').'/'<cr>
 
-" swap two words
-nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
-
 " underline the current line with '='
 nmap <silent> <leader>ul :t.<CR>Vr=
 
-" set text wrapping toggles
-nmap <silent> <leader>tw :set invwrap<CR>:set wrap?<CR>
+" toggle text wrapping
+nmap <silent> <leader>tw :set invwrap wrap?<CR>
 
 " find merge conflict markers
 nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
@@ -48,10 +36,7 @@ map <Down> gj
 map <Up> gk
 
 " toggle hlsearch with <leader>/
-nmap <leader>/ :set hlsearch! hlsearch?<CR>
-
-" adjust viewports to the same size
-map <Leader>= <C-w>=
+nmap <leader>/ :set invhlsearch hlsearch?<CR>
 
 " yank visual to clipboard
 vmap <C-c> "*y
@@ -66,6 +51,10 @@ nmap <leader>V V`]
 " split vertically/horizontally and focus new window
 nmap <leader>v <C-w>v<C-w>l
 nmap <leader>s <C-w>s<C-w>j
+
+" open file under cursor in a vertical split
+nmap <C-w>f :vertical rightbelow wincmd f<cr>
+nmap <C-w><C-f> <C-w>f
 
 """ Command-Line Mappings
 
@@ -120,14 +109,3 @@ function! s:ToggleRubyBlocks()
   endif
 endfunction
 autocmd FileType ruby :nmap <buffer> <leader>d :call <sid>ToggleRubyBlocks()<cr>
-
-" search Dash for word under cursor
-function! SearchDash()
-  let s:browser = "/usr/bin/open"
-  let s:wordUnderCursor = expand("<cword>")
-  let s:url = "dash://".s:wordUnderCursor
-  let s:cmd ="silent ! " . s:browser . " " . s:url
-  execute s:cmd
-  redraw!
-endfunction
-map <leader>D :call SearchDash()<CR>

@@ -4,10 +4,10 @@
 
 " Some file types should wrap their text
 function! s:setupWrapping()
-  set wrap
-  set linebreak
-  set textwidth=72
-  set nolist
+  setlocal wrap
+  setlocal linebreak
+  setlocal textwidth=72
+  setlocal nolist
 endfunction
 
 ""
@@ -23,7 +23,7 @@ if has("autocmd")
   au FileType markdown call s:setupWrapping()
 
   " Treat JSON files like JavaScript
-  au BufNewFile,BufRead *.json set ft=javascript
+  au BufNewFile,BufRead *.json setf javascript
 
   " make Python follow PEP8 for whitespace ( http://www.python.org/dev/peps/pep-0008/ )
   au FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4

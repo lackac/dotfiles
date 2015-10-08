@@ -1,14 +1,20 @@
-nmap <leader>a :Ag -S 
+nmap <leader>a :Ag -S<space>
 nmap <leader>A :AgFromSearch<cr>
-
-nmap <leader>b :BuffergatorToggle<cr>
 
 nmap <leader>j :CoffeeCompile<cr>
 vmap <leader>j :CoffeeCompile<cr>
 
 imap <C-t> <esc>:CtrlP<cr>
+nmap <silent> <C-e>] :CtrlPBufTagAll<cr>
+nmap <silent> <C-e>b :CtrlPBuffer<cr>
+nmap <silent> <C-e>p :CtrlPCmdPalette<cr>
+nmap <silent> <C-e>g :CtrlPModified<cr>
 
 nmap <silent> <leader>d <Plug>DashSearch
+nmap <silent> <leader>D <Plug>DashGlobalSearch
+
+vmap <Enter> <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 nmap <leader>gb :Gblame<CR>
 nmap <leader>gs :Gstatus<CR>
@@ -19,38 +25,19 @@ nmap <leader>gA :Gcommit --amend -v<CR>
 nmap <leader>gv :Gcommit -v<CR>
 nmap <leader>gp :Git push<CR>
 
-nmap <leader>n :NERDTreeToggle<cr>
-nmap <leader>N :NERDTreeFind<cr>
-
 xmap <leader>nr <Plug>NrrwrgnDo
 
 nmap <leader>rt :call RunCurrentSpecFile()<CR>
 nmap <leader>rs :call RunNearestSpec()<CR>
 nmap <leader>rl :call RunLastSpec()<CR>
 
-nmap <leader>tb :TagbarToggle<CR>
-
 nmap <leader>tp :VimuxPromptCommand<cr>
 nmap <leader>tl :VimuxRunLastCommand<cr>
 nmap <leader>ti :VimuxInspectRunner<cr>
-nmap <leader>tx :VimuxClosePanes<cr>
+nmap <leader>tx :VimuxCloseRunner<cr>
 nmap <leader>ts :VimuxInterruptRunner<cr>
+nmap <leader>tc :VimuxRunCommand "cucumber <c-r>=expand("%")<cr>"<cr>
 
 nmap <leader>z :Goyo<cr>
 
-nmap <leader><tab>  :Scratch<cr>
-
-vmap <leader>/ <plug>NERDCommenterToggle<CR>
-
-nmap <leader>.= :Tabularize /=<CR>
-vmap <leader>.= :Tabularize /=<CR>
-nmap <leader>.> :Tabularize /=><CR>
-vmap <leader>.> :Tabularize /=><CR>
-nmap <leader>., :Tabularize /,\zs/l0l1<CR>
-vmap <leader>., :Tabularize /,\zs/l0l1<CR>
-nmap <leader>.: :Tabularize /:\zs/l0l1<CR>
-vmap <leader>.: :Tabularize /:\zs/l0l1<CR>
-
-nmap <C-W>! <Plug>Kwbd
-
-nmap <C-Tab> :ChefFindAny<CR>
+nmap <leader><tab> :Scratch<cr>
