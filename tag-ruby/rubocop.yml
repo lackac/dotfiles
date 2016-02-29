@@ -1,0 +1,50 @@
+### Style ######################################################################
+
+Style/AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Style/AndOr:
+  # Whether `and` and `or` are banned only in conditionals (conditionals)
+  # or completely (always).
+  EnforcedStyle: conditionals
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockDelimiters:
+  EnforcedStyle: line_count_based
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+# Not enforcing single space before first arg to allow tabular alignments when
+# using DSL methods (e.g. FactoryGirl).
+Style/SingleSpaceBeforeFirstArg:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+# Not enforcing %i() arrays, because they are too similar to %w() and don't have
+# proper syntax highlighting support for differentiating between them.
+Style/SymbolArray:
+  Enabled: false
+
+Style/TrailingComma:
+  EnforcedStyleForMultiline: comma
