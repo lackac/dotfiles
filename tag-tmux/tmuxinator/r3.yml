@@ -7,7 +7,7 @@ windows:
   - editor:
       layout: main-horizontal
       panes:
-        - vim
+        - nvim
   - console:
       layout: main-horizontal
       panes:
@@ -17,7 +17,7 @@ windows:
   - api:
       layout: main-horizontal
       panes:
-        - cd ~/Code/r3missions/r3-api && vim
+        - cd ~/Code/r3missions/r3-api && nvim
   - server:
       layout: main-horizontal
       panes:

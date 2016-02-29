@@ -4,6 +4,6 @@
 project_name: IMPACT
 project_root: ~/Code/lackac/impactgeneration.org
 windows:
-  - editor: vim
+  - editor: nvim
   - shell:
   - server: bundle exec middleman server -p7003

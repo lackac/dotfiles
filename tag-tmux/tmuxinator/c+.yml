@@ -7,11 +7,12 @@ windows:
   - editor:
       layout: main-horizontal
       panes:
-        - vim
+        - nvim
   - console: rails console
   - shell: git pull
   - logs:
       layout: main-horizontal
       panes:
         - tail -f log/development.log
+  - worker: bundle exec sidekiq
   - ngrok: ngrok http --host-header=collectplus.dev --subdomain=cplus-lackac 80

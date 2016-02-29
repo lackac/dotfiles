@@ -4,6 +4,6 @@
 name: exercism
 root: ~/Code/lackac/exercises
 windows:
-  - editor: vim
+  - editor: nvim
   - iex: iex
   - shell:

@@ -4,5 +4,5 @@
 name: Sandbox
 root: ~/Code/sandbox
 windows:
-  - vim: vim
+  - editor: nvim
   - shell:

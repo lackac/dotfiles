@@ -4,6 +4,6 @@
 project_name: GYC Europe
 project_root: ~/Code/lackac/europe.gycweb.org
 windows:
-  - vim: vim
+  - vim: nvim
   - shell:
   - server: bin/middleman server -p7002

@@ -30,6 +30,8 @@ call expand_region#custom_text_objects('ruby', {
   \ 'am' :0,
   \ })
 
+let g:deoplete#enable_at_startup = 1
+
 augroup markdown
   autocmd!
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown

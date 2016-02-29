@@ -4,6 +4,6 @@
 project_name: 100Starlings
 project_root: ~/Code/100Starlings/www.100starlings.com
 windows:
-  - editor: vim
+  - editor: nvim
   - shell:
   - server: bundle exec middleman server -p7005

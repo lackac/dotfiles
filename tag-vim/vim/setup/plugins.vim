@@ -9,6 +9,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'kchmck/vim-coffee-script'
 Plug 'chrisbra/csv.vim'
 Plug 'elixir-lang/vim-elixir'
+Plug 'awetzel/elixir.nvim', { 'do': './install.sh' }
 Plug 'jimenezrick/vimerl'
 Plug 'fatih/vim-go'
 Plug 'tpope/vim-haml'
@@ -29,7 +30,8 @@ Plug 'timcharper/textile.vim'
 """ Tools
 
 Plug 'rking/ag.vim'
-Plug 'bling/vim-airline'                                  " lean & mean status/tabline for vim that's light as air
+Plug 'vim-airline/vim-airline'                            " lean & mean status/tabline for vim that's light as air
+Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-commentary'                               " toggle commenting with gc
 Plug 'ap/vim-css-color'
 Plug 'kien/ctrlp.vim'                                     " fuzzy file, buffer, mru, tag, etc finder
@@ -40,6 +42,7 @@ if has('python')
 end
 Plug 'rizzatti/dash.vim'
 Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
+Plug 'Shougo/deoplete.nvim'                               " asynchronous completion framework for neovim
 Plug 'tpope/vim-dispatch'                                 " TODO: decide which of these type of plugins to keep
 Plug 'junegunn/vim-easy-align'                            " simple, easy-to-use alignment plugin
 Plug 'editorconfig/editorconfig-vim'
@@ -58,6 +61,7 @@ Plug 'chrisbra/NrrwRgn'                                   " focus on a selected 
 Plug 'tpope/vim-obsession'                                " continuously updated session files
 Plug 'tpope/vim-projectionist'                            " granular project configuration using 'projections'
 Plug 'tpope/vim-rbenv'
+Plug 'thinca/vim-ref'                                     " integrated reference viewer
 Plug 'tpope/vim-repeat'                                   " enable repeating supported plugin maps with .
 Plug 'ngmy/vim-rubocop'
 Plug 'duff/vim-scratch'
@@ -76,7 +80,6 @@ Plug 'tpope/vim-vinegar'                                  " enhances netrw to ma
 Plug 'sjl/vitality.vim'                                   " TODO: review if this is still necessary; make vim play nicely with iterm 2 and tmux
 Plug 'mattn/webapi-vim'                                   " an interface to web apis, used by other plugins
 Plug 'vim-scripts/YankRing.vim'                           " maintains a history of previous yanks, changes and deletes
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }   " code-completion engine for vim
 Plug 'itspriddle/ZoomWin'                                 " zoom in/out of windows
 Plug 't9md/vim-ruby-xmpfilter'                            " TODO: review using this with seeing_is_believing; helper for ruby's xmpfilter or seeing_is_believing
 Plug 'amix/vim-zenroom2'                                  " companion to goyo which emulates an iA Writer environment
