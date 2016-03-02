@@ -1,0 +1,12 @@
+# ~/.tmuxinator/elixir.yml
+# you can make as many tabs as you wish...
+
+name: Elixir
+root: ~/Code/sandbox/elixir/programming_elixir
+windows:
+  - editor: nvim
+  - iex:
+      layout: even-vertical
+      panes:
+        - iex --sname apple
+        - iex --sname banana
