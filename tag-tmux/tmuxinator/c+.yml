@@ -13,6 +13,6 @@ windows:
   - logs:
       layout: main-horizontal
       panes:
-        - tail -f log/development.log
+        - tail -f log/development.log | perl -pe 's/"method":"([A-Z]*)","path":"([^"]*)"/"method":"\e[42m\1\e[0m","path":"\e[42m\2\e[0m"/; s/:tag=>"([^"]*)"/:tag=>"\a\e[44m\1\e[0m"/'
   - worker: bundle exec sidekiq
   - ngrok: ngrok http --host-header=collectplus.dev --subdomain=cplus-lackac 80
