@@ -3,6 +3,7 @@
 *.rej
 *~
 .ackrc*
+.agignore
 
 .bundle
 vendor/ruby/
