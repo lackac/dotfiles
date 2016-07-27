@@ -10,3 +10,4 @@ windows:
       panes:
         - iex --sname apple
         - iex --sname banana
+  - shell:
