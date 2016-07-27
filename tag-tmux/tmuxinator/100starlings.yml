@@ -2,8 +2,8 @@
 # you can make as many windows as you wish...
 
 project_name: 100Starlings
-project_root: ~/Code/100Starlings/www.100starlings.com
+project_root: ~/Code/100Starlings/100starlings.github.io
 windows:
   - editor: nvim
   - shell:
-  - server: bundle exec middleman server -p7005
+  - server: jekyll serve -P 7006
