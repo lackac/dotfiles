@@ -26,12 +26,11 @@ def extend_console(name, care = true, needs_require = true)
   else
     $console_extensions << "#{ANSI_CODES[:GRAY]}#{name}#{ANSI_CODES[:RESET]}"
   end
-rescue Exception => e
-  puts "Error loading #{name}: #{ANSI_CODES[:RED]}#{$!}#{ANSI_CODES[:RESET]}"
+rescue => e
+  puts "Error loading #{name}: #{ANSI_CODES[:RED]}#{e}#{ANSI_CODES[:RESET]}"
   $console_extensions << "#{ANSI_CODES[:RED]}#{name}#{ANSI_CODES[:RESET]}"
 end
 $console_extensions = []
-
 
 IRB_MOTD = [
   "use Rack::Shell for a rails like console"
@@ -46,9 +45,9 @@ def tip(new_tip = nil)
   end
 end
 
-extend_console 'pry-doc'
+extend_console "pry-doc"
 
-extend_console 'hirb' do
+extend_console "hirb" do
   Hirb::View.instance_eval do
     def enable_output_method
       @output_method = true
@@ -67,4 +66,8 @@ extend_console 'hirb' do
   Hirb.enable
 
   tip "table User.all, :fields => [:id, :name, :email]"
+end
+
+extend_console "ap" do
+  alias pp ap
 end
