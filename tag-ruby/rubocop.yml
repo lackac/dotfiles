@@ -32,7 +32,7 @@ Style/MultilineOperationIndentation:
 
 # Not enforcing single space before first arg to allow tabular alignments when
 # using DSL methods (e.g. FactoryGirl).
-Style/SingleSpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Enabled: false
 
 Style/StringLiterals:
@@ -46,5 +46,8 @@ Style/StringLiteralsInInterpolation:
 Style/SymbolArray:
   Enabled: false
 
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
