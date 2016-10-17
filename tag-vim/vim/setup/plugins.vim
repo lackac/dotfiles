@@ -66,6 +66,8 @@ Plug 'thinca/vim-ref'                                     " integrated reference
 Plug 'tpope/vim-repeat'                                   " enable repeating supported plugin maps with .
 Plug 'ngmy/vim-rubocop'
 Plug 'duff/vim-scratch'
+Plug 'Shougo/neosnippet.vim'
+Plug 'honza/vim-snippets'
 Plug 'tpope/vim-surround'                                 " quoting/parenthesizing made simple
 Plug 'scrooloose/syntastic'                               " Syntax checking hacks for vim
 Plug 'kana/vim-textobj-entire'
@@ -74,7 +76,6 @@ Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'tomtom/tlib_vim'                                    " some utility functions for vim
 Plug 'christoomey/vim-tmux-navigator'                     " seamless navigation between tmux panes and vim splits
-"Plug 'SirVer/ultisnips'                                   " TODO: start using this; the ultimate snippet solution for vim
 Plug 'tpope/vim-unimpaired'                               " pairs of handy bracket mappings
 Plug 'benmills/vimux'                                     " TODO: decide this or dispatch
 Plug 'tpope/vim-vinegar'                                  " enhances netrw to make it more useful, trigger by pressing '-'

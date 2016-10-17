@@ -43,10 +43,9 @@ let g:syntastic_ruby_checkers = ["mri", "rubocop"]
 let g:syntastic_ruby_mri_exec = '/Users/LacKac/.rbenv/shims/ruby'
 let g:syntastic_ruby_rubocop_exec = '/Users/LacKac/.rbenv/shims/rubocop'
 
-"let g:UltiSnipsListSnippets="<S-C-J>"
-"let g:UltiSnipsExpandTrigger="<C-J>"
-"let g:UltiSnipsJumpForwardTrigger="<C-J>"
-"let g:UltiSnipsJumpBackwardTrigger="<C-K>"
+let g:neosnippet#disable_runtime_snippets = { '_': 1 }
+let g:neosnippet#enable_snipmate_compatibility = 1
+let g:neosnippet#snippets_directory = '~/.vim/plugged/vim-snippets/snippets'
 
 let g:vitality_fix_focus = 0 " don't let vitality mess up things with focus handling
 

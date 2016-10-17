@@ -27,6 +27,12 @@ nmap <leader>gp :Git push<CR>
 
 xmap <leader>nr <Plug>NrrwrgnDo
 
+imap <expr><TAB> pumvisible() ? "\<C-n>" :
+      \ neosnippet#expandable_or_jumpable() ?
+      \   "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+imap <expr><CR> pumvisible() && neosnippet#expandable() ?
+      \ "\<Plug>(neosnippet_expand)" : "\<CR>\<Plug>DiscretionaryEnd"
+
 nmap <leader>rt :call RunCurrentSpecFile()<CR>
 nmap <leader>rs :call RunNearestSpec()<CR>
 nmap <leader>rl :call RunLastSpec()<CR>
