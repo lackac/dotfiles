@@ -6,26 +6,12 @@ Plug 'altercation/vim-colors-solarized'
 
 """ Language Support
 
-Plug 'kchmck/vim-coffee-script'
+Plug 'sheerun/vim-polyglot'         " a collection of language packs for Vim
 Plug 'chrisbra/csv.vim'
-Plug 'elixir-lang/vim-elixir'
 Plug 'awetzel/elixir.nvim', { 'do': './install.sh' }
 Plug 'jimenezrick/vimerl'
-Plug 'fatih/vim-go'
-Plug 'tpope/vim-haml'
-Plug 'nono/vim-handlebars'
-Plug 'digitaltoad/vim-jade'
-Plug 'pangloss/vim-javascript'
-Plug 'elzr/vim-json'
-Plug 'groenewege/vim-less'
-Plug 'tpope/vim-markdown'
-Plug 'jtratner/vim-flavored-markdown'
 Plug 'mmalecki/vim-node.js'
-Plug 'vim-ruby/vim-ruby'
-Plug 'rosstimson/scala-vim-support'
 Plug 'cakebaker/scss-syntax.vim'
-Plug 'wavded/vim-stylus'
-Plug 'timcharper/textile.vim'
 
 """ Tools
 
