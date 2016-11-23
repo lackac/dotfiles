@@ -4,6 +4,8 @@ let g:airline_right_sep=''
 let g:airline#extensions#tagbar#enabled = 0
 let g:airline#extensions#tmuxline#enabled = 0
 
+let g:alchemist_tag_disable = 1
+
 let g:ctrlp_map = '<C-t>'
 let g:ctrlp_root_markers = ['Gemfile', 'package.json']
 let g:ctrlp_open_multiple_files = '2vjr'
