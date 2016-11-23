@@ -18,6 +18,8 @@ if has('python')
   let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 endif
 
+let g:deoplete#enable_at_startup = 1
+
 call expand_region#custom_text_objects({
   \ 'a]' :1,
   \ 'ab' :1,
@@ -30,7 +32,7 @@ call expand_region#custom_text_objects('ruby', {
   \ 'am' :0,
   \ })
 
-let g:deoplete#enable_at_startup = 1
+let g:gutentags_cache_dir = '~/.tags_cache'
 
 augroup markdown
   autocmd!

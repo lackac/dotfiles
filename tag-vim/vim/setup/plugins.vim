@@ -41,6 +41,7 @@ Plug 'tpope/vim-git'
 Plug 'mattn/gist-vim'
 Plug 'junegunn/goyo.vim'                                  " distraction-free writing in Vim
 Plug 'sjl/gundo.vim'                                      " visualize your Vim undo tree
+Plug 'ludovicchabant/vim-gutentags'                       " manages tag files
 Plug 'lucidstack/hex.vim'                                 " nifty functions for your Elixir Hex dependencies
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'pbrisbin/vim-mkdir'                                 " automatically create any non-existent directories before writing the buffer
