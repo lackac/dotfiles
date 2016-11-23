@@ -39,11 +39,9 @@ augroup markdown
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
 augroup END
 
-let g:rspec_command = 'call VimuxRunCommand("rspec {spec}")'
+autocmd! BufWritePost * Neomake
 
-let g:syntastic_ruby_checkers = ["mri", "rubocop"]
-let g:syntastic_ruby_mri_exec = '/Users/LacKac/.rbenv/shims/ruby'
-let g:syntastic_ruby_rubocop_exec = '/Users/LacKac/.rbenv/shims/rubocop'
+let g:rspec_command = 'call VimuxRunCommand("rspec {spec}")'
 
 let g:neosnippet#disable_runtime_snippets = { '_': 1 }
 let g:neosnippet#enable_snipmate_compatibility = 1

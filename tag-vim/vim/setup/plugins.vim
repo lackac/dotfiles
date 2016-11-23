@@ -29,7 +29,6 @@ end
 Plug 'rizzatti/dash.vim'
 Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Shougo/deoplete.nvim'                               " asynchronous completion framework for neovim
-Plug 'tpope/vim-dispatch'                                 " TODO: decide which of these type of plugins to keep
 Plug 'junegunn/vim-easy-align'                            " simple, easy-to-use alignment plugin
 Plug 'editorconfig/editorconfig-vim'
 "Plug 'mattn/emmet-vim'                                    " TODO: configure; greatly improve HTML & CSS workflow
@@ -45,6 +44,7 @@ Plug 'ludovicchabant/vim-gutentags'                       " manages tag files
 Plug 'lucidstack/hex.vim'                                 " nifty functions for your Elixir Hex dependencies
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'pbrisbin/vim-mkdir'                                 " automatically create any non-existent directories before writing the buffer
+Plug 'neomake/neomake'                                    " async :make and linting framework for Neovim/Vim
 Plug 'chrisbra/NrrwRgn'                                   " focus on a selected region
 Plug 'tpope/vim-obsession'                                " continuously updated session files
 Plug 'tpope/vim-projectionist'                            " granular project configuration using 'projections'
@@ -56,7 +56,6 @@ Plug 'duff/vim-scratch'
 Plug 'Shougo/neosnippet.vim'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-surround'                                 " quoting/parenthesizing made simple
-Plug 'scrooloose/syntastic'                               " Syntax checking hacks for vim
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
