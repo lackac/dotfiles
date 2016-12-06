@@ -1,4 +1,4 @@
-nmap <leader>a :Ag -S<space>
+nmap <leader>a :Ag! -S<space>
 nmap <leader>A :AgFromSearch<cr>
 
 nmap <leader>j :CoffeeCompile<cr>
