@@ -1,3 +1,5 @@
+--exclude=node_modules
+
 --langdef=Css
 --langmap=Css:.css
 --langmap=Css:+.less
