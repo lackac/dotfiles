@@ -51,3 +51,7 @@ Style/TrailingCommaInArguments:
 
 Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
+
+# This would need RSpec 3+
+RSpec/VerifiedDoubles:
+  Enabled: false
