@@ -86,6 +86,8 @@ Plug 'thoughtbot/vim-rspec'
 
 """ Let's be sensible
 
-Plug 'tpope/vim-sensible'                                 " defaults everyone can agree on
+if !has('nvim')
+  Plug 'tpope/vim-sensible'                                 " defaults everyone can agree on
+end
 
 call plug#end()
