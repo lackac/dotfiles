@@ -48,7 +48,7 @@ Plug 'pbrisbin/vim-mkdir'                                 " automatically create
 Plug 'neomake/neomake'                                    " async :make and linting framework for Neovim/Vim
 Plug 'chrisbra/NrrwRgn'                                   " focus on a selected region
 Plug 'tpope/vim-obsession'                                " continuously updated session files
-Plug 'tpope/vim-projectionist'                            " granular project configuration using 'projections'
+"Plug 'tpope/vim-projectionist'                            " granular project configuration using 'projections'
 Plug 'tpope/vim-rbenv'
 Plug 'thinca/vim-ref'                                     " integrated reference viewer
 Plug 'tpope/vim-repeat'                                   " enable repeating supported plugin maps with .
