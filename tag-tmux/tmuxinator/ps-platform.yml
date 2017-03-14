@@ -1,0 +1,16 @@
+# ~/.tmuxinator/ps-platform.yml
+# you can make as many windows as you wish...
+
+project_name: PS/platform
+project_root: ~/Code/postshift/platform
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - nvim
+  - console:
+  - shell: git pull
+  - server:
+      layout: main-horizontal
+      panes:
+        - npm start
