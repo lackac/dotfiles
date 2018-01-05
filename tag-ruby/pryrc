@@ -3,10 +3,7 @@
 $LOAD_PATH.push(*Dir["#{ENV['HOME']}/.prygems/gems/*/lib"]).uniq!
 
 # vim FTW
-Pry.config.editor = "vim"
-
-# My pry is polite
-Pry.config.hooks.add_hook(:after_session, :say_bye) { puts "bye-bye" }
+Pry.config.editor = "nvim"
 
 # Prompt with ruby version
 Pry.prompt = [
