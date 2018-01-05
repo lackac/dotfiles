@@ -21,6 +21,7 @@ nmap <leader>ew :e <C-R>=expand('%:h').'/'<cr>
 nmap <leader>es :sp <C-R>=expand('%:h').'/'<cr>
 nmap <leader>ev :vsp <C-R>=expand('%:h').'/'<cr>
 nmap <leader>et :tabe <C-R>=expand('%:h').'/'<cr>
+nmap <leader>rw :r <C-R>=expand('%:h').'/'<cr>
 
 " underline the current line with '='
 nmap <silent> <leader>ul :t.<CR>Vr=
@@ -72,6 +73,9 @@ cnoremap <Esc>f <S-Right>
 
 " allow saving of files as sudo when forgetting to start vim using sudo
 cmap w!! %!sudo tee > /dev/null %
+
+" insert uuid at cursor
+imap <C-U> <C-R>=systemlist("uuid")[0]<CR>
 
 """ More complicated mappings
 

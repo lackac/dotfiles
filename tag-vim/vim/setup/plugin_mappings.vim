@@ -27,9 +27,10 @@ nmap <leader>gp :Git push<CR>
 
 xmap <leader>nr <Plug>NrrwrgnDo
 
-imap <expr><TAB> pumvisible() ? "\<C-n>" :
+imap <expr><Tab> pumvisible() ? "\<C-n>" :
       \ neosnippet#expandable_or_jumpable() ?
-      \   "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+      \   "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
+imap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 imap <expr><CR> pumvisible() && neosnippet#expandable() ?
       \ "\<Plug>(neosnippet_expand)" : "\<CR>\<Plug>DiscretionaryEnd"
 

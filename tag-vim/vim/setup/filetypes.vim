@@ -7,7 +7,8 @@ function! s:setupWrapping()
   setlocal wrap
   setlocal linebreak
   setlocal textwidth=72
-  setlocal nolist
+  setlocal breakindent
+  setlocal breakindentopt=shift:2,sbr
 endfunction
 
 ""
@@ -21,6 +22,9 @@ if has("autocmd")
   " Make sure all markdown files have the correct filetype set and setup wrapping
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
   au FileType markdown call s:setupWrapping()
+
+  " Make it easier to edit Yaml files with long lines
+  au FileType yaml call s:setupWrapping()
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json setf javascript

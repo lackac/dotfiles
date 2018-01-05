@@ -6,6 +6,7 @@ set relativenumber    " show relative line numbers
 set number            " show line number on current line
 set encoding=utf-8    " set default encoding to UTF-8
 set hidden            " don't unload buffer when it is abandoned
+set wildmode=longest:full,full " shell like autocompletion for paths
 
 """ Layout
 
@@ -54,12 +55,17 @@ set listchars+=extends:>          " the character to show in the last column whe
                                   " off and the line continues beyond the right of the screen
 set listchars+=precedes:<         " the character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
+set showbreak=↳                   " the character to show at the start of lines that have
+                                  " been wrapped
 
 """ Searching
 
 set hlsearch    " highlight matches
 set ignorecase  " searches are case insensitive...
 set smartcase   " ... unless they contain at least one capital letter
+if has("nvim")
+  set inccommand=nosplit " live substitution previews
+endif
 
 """ Backup and swap files
 

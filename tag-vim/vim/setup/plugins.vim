@@ -8,8 +8,9 @@ Plug 'altercation/vim-colors-solarized'
 
 Plug 'sheerun/vim-polyglot'         " a collection of language packs for Vim
 Plug 'chrisbra/csv.vim'
-Plug 'awetzel/elixir.nvim', { 'do': './install.sh' }
+Plug 'elixir-editors/vim-elixir'
 Plug 'jimenezrick/vimerl'
+Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'mmalecki/vim-node.js'
 Plug 'cakebaker/scss-syntax.vim'
 
@@ -25,9 +26,10 @@ Plug 'kien/ctrlp.vim'                                     " fuzzy file, buffer, 
 Plug 'fisadev/vim-ctrlp-cmdpalette'                       " command palette extension for CtrlP
 Plug 'jasoncodes/ctrlp-modified.vim'                      " open locally modified files in your git-versioned projects
 if has('python')
-  Plug 'FelikZ/ctrlp-py-matcher'                          " fast vim CtrlP matcher based on python
+  Plug 'JazzCore/ctrlp-cmatcher', { 'do': './install.sh' }" better and faster fuzzy matching
 end
 Plug 'rizzatti/dash.vim'
+Plug 'vim-scripts/dbext.vim'                              " database access to many dbms
 Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Shougo/deoplete.nvim'                               " asynchronous completion framework for neovim
 Plug 'junegunn/vim-easy-align'                            " simple, easy-to-use alignment plugin
@@ -44,6 +46,7 @@ Plug 'sjl/gundo.vim'                                      " visualize your Vim u
 Plug 'ludovicchabant/vim-gutentags'                       " manages tag files
 Plug 'lucidstack/hex.vim'                                 " nifty functions for your Elixir Hex dependencies
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'ledger/vim-ledger'                                  " ledger filetype
 Plug 'pbrisbin/vim-mkdir'                                 " automatically create any non-existent directories before writing the buffer
 Plug 'neomake/neomake'                                    " async :make and linting framework for Neovim/Vim
 Plug 'chrisbra/NrrwRgn'                                   " focus on a selected region
@@ -55,7 +58,7 @@ Plug 'tpope/vim-repeat'                                   " enable repeating sup
 Plug 'ngmy/vim-rubocop'
 Plug 'duff/vim-scratch'
 Plug 'Shougo/neosnippet.vim'
-Plug 'honza/vim-snippets'
+Plug 'Shougo/neosnippet-snippets'
 Plug 'tpope/vim-surround'                                 " quoting/parenthesizing made simple
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-line'

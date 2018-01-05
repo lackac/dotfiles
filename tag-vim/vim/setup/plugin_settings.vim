@@ -17,8 +17,19 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 if has('python')
-  let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+  let g:ctrlp_match_func = { 'match': 'matcher#cmatch' }
 endif
+
+"let g:dbext_default_profile = 'psql'
+let g:dbext_default_profile_psql = 'type=PGSQL:dbname=sandbox'
+let g:dbext_default_profile_shiftbase_auth = 'type=PGSQL:dbname=shiftbase-auth'
+let g:dbext_default_profile_shiftbase_health = 'type=PGSQL:dbname=shiftbase-health'
+let g:dbext_default_profile_shiftbase_skills = 'type=PGSQL:dbname=shiftbase-skills'
+let g:dbext_default_profile_wesayy = 'type=PGSQL:dbname=wesayy_development'
+let g:dbext_default_profile_redshift_warehouse = 'type=PGSQL:port=5439:dbname=ds:user=dev'
+let g:dbext_default_profile_redshift_warehouse_admin = 'type=PGSQL:port=5439:dbname=ds:user=admin'
+let g:dbext_default_profile_mysql = 'type=MYSQL:dbname=sandbox:user=root'
+let g:dbext_default_profile_cplus = 'type=MYSQL:dbname=collectplus:user=root'
 
 let g:deoplete#enable_at_startup = 1
 
@@ -44,10 +55,6 @@ augroup END
 autocmd! BufWritePost * Neomake
 
 let g:rspec_command = 'call VimuxRunCommand("rspec {spec}")'
-
-let g:neosnippet#disable_runtime_snippets = { '_': 1 }
-let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#snippets_directory = '~/.vim/plugged/vim-snippets/snippets'
 
 let g:vitality_fix_focus = 0 " don't let vitality mess up things with focus handling
 
