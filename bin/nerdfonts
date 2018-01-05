@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require "io/console"
+
+# Assumes each value has the same length
+def print_in_columns(values, padding = "  ")
+  _rows, cols = IO.console.winsize
+  column_count = cols / (values.first.length + padding.length)
+  values.each_slice(column_count) do |row|
+    puts row.join(padding)
+  end
+end
+
+def char_info(codepoint)
+  [codepoint.to_s(16), codepoint.chr(Encoding::UTF_8)].join(" - ")
+end
+
+filter = ARGV.first
+{
+  "Seti-UI"                 => 0xe5fa..0xe62b,
+  "Devicons"                => 0xe700..0xe7c5,
+  "Font Awesome"            => 0xf000..0xf2e0,
+  "Font Awesome Extension"  => 0xe200..0xe2a9,
+  "Octicons"                => [0x2192, 0x2665, 0x26a1] + [*0xf400..0xf4a8] + [0xf67c],
+  "Powerline Extra Symbols" => [*0xe0a0..0xe0a3] + [*0xe0b0..0xe0d4],
+  "IEC Power Symbols"       => [*0x23fb..0x23fe] + [0x2b58],
+  "Font Linux"              => 0xf300..0xf313,
+  "Pomicons"                => 0xe000..0xe00a
+}.each do |section, codepoints|
+  next if filter && !section.downcase.index(filter.downcase)
+  puts "\e[1;34m#{section}\e[0m"
+  print_in_columns codepoints.map { |c| char_info(c) }
+end
