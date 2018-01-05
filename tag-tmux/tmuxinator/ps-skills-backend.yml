@@ -1,8 +1,8 @@
-# ~/.tmuxinator/ps-auth.yml
+# ~/.tmuxinator/ps-skills-backend.yml
 # you can make as many windows as you wish...
 
-name: PS/auth 
-root: ~/Code/postshift/auth
+name: "PS/skills "
+root: ~/Code/postshift/skills-backend
 startup_window: shell
 windows:
   - :
@@ -11,6 +11,11 @@ windows:
         - nvim
   - : rails console
   - shell: git pull
+  - :
+      index: 8
+      layout: main-horizontal
+      panes:
+        - guard
   - :
       index: 9
       layout: main-horizontal

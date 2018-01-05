@@ -1,0 +1,29 @@
+# ~/.tmuxinator/ps-health-backend.yml
+# you can make as many windows as you wish...
+
+name: "PS/health "
+root: ~/Code/postshift/health-backend
+startup_window: shell
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - nvim
+  - : rails console
+  - shell: git pull
+  - :
+      index: 7
+      layout: main-horizontal
+      panes:
+        - ngrok http --region=eu --subdomain=health-shiftbase-lackac 3021
+        - puma --port 3021 --thread 0:5 --log-requests
+  - :
+      index: 8
+      layout: main-horizontal
+      panes:
+        - guard
+  - :
+      index: 9
+      layout: main-horizontal
+      panes:
+        - tail -f log/development.log | perl -pe 's/^Started ([A-Z]+) "([^"]+)"/Started \e[43;1m\1\e[0m "\e[44;1m\2\e[0m"/; s/:tag=>"([^"]*)"/:tag => "\a\e[44m\1\e[0m"/'

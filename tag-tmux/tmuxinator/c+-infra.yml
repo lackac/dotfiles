@@ -1,0 +1,12 @@
+# ~/.tmuxinator/c+-infra.yml
+# you can make as many windows as you wish...
+
+name: "C+ Infra "
+root: ~/Code/CPlus/infrastructure
+startup_window: shell
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - nvim
+  - shell: git pull
