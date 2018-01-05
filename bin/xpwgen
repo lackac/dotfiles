@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'securerandom'
+
+wordlist = File.readlines(File.expand_path("../wordlist", __FILE__)).map(&:chomp)
+
+count = (ARGV.first || 1).to_i
+
+count.times do
+  words = wordlist.sample(4, random: SecureRandom)
+  puts words.join('-')
+end

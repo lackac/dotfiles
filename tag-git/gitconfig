@@ -24,7 +24,10 @@
 [branch]
 	autosetuprebase = always
 [push]
-	default = tracking
+	default = upstream
+	followTags = true
+[merge]
+	conflictstyle = diff3
 
 [include]
 	path = .gitconfig.private

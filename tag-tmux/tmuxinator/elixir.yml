@@ -2,7 +2,7 @@
 # you can make as many tabs as you wish...
 
 name: Elixir
-root: ~/Code/sandbox/elixir/programming_elixir
+root: ~/Code/sandbox/elixir
 windows:
   - editor: nvim
   - iex:

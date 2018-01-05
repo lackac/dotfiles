@@ -1,6 +1,6 @@
 #!/bin/sh
 
-vim +PlugInstall +qa
+#vim +PlugInstall +qa
 
 for rcfile in $(ls ~/.zprezto/runcoms/*); do
   filename="$(basename $rcfile)"

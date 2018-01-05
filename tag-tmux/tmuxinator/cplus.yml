@@ -1,16 +1,16 @@
 # ~/.tmuxinator/cplus.yml
 # you can make as many windows as you wish...
 
-project_name: cplus
-project_root: ~/Code/CPlus/cplus
+name: C+/cplus 
+root: ~/Code/CPlus/cplus
 windows:
-  - editor:
+  - :
       layout: main-horizontal
       panes:
         - nvim
-  - shell:
-  - collectplus:
+  - C+:
       layout: even-horizontal
       panes:
         - cd ~/Code/CPlus/collectplus
         - cd ~/Code/CPlus/collectplus
+  - shell: git pull

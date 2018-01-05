@@ -1,8 +1,8 @@
-# ~/.tmuxinator/ps-platform.yml
+# ~/.tmuxinator/ps-health-frontend.yml
 # you can make as many windows as you wish...
 
-name: PS/platform 
-root: ~/Code/postshift/platform
+name: "PS/health "
+root: ~/Code/postshift/health-frontend
 startup_window: shell
 windows:
   - :
@@ -12,7 +12,12 @@ windows:
   - :
   - shell: git pull
   - :
+      index: 8
+      layout: main-horizontal
+      panes:
+        - ember serve --port 5021
+  - ~:
       index: 9
       layout: main-horizontal
       panes:
-        - npm start
+        - PORT=5022 node proxy

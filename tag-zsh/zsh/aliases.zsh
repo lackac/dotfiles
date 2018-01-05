@@ -1,7 +1,7 @@
 alias vim=nvim
+alias mux=tmuxinator
 
 alias psg='ps aux | grep'
-alias crontab='EDITOR=nvim crontab'
 alias mwget='wget -v -c -x -r -l 0 -L -np'
 alias :q=exit
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
@@ -12,7 +12,7 @@ alias glb='gl --branches'
 alias glp='git log -p --decorate --word-diff'
 alias gco='git checkout'
 alias gcm='git checkout master'
-alias gcd='git checkout develop'
+alias gcd='git checkout dev'
 alias gcb='git checkout -b'
 alias gc='git commit -v'
 alias gca='git commit -v -a'

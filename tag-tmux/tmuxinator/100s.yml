@@ -1,0 +1,16 @@
+# ~/.tmuxinator/100s.yml
+# you can make as many windows as you wish...
+
+name: 100S 
+root: ~/Code/100Starlings/100s
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - nvim
+  - :
+      layout: even-vertical
+      panes:
+        -
+        -
+  - shell: git pull

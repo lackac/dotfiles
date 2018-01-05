@@ -1,27 +1,10 @@
-# When you're using Rails 2 console, show queries in the console
-extend_console 'rails2', (ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')), false do
-  require 'logger'
-  RAILS_DEFAULT_LOGGER = Logger.new(STDOUT)
-end
-
-# When you're using Rails 3 console, show queries in the console
-extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
+# When you're using Rails console, show queries in the console
+extend_console "rails", defined?(ActiveSupport::Notifications), false do
   Pry.config.prompt_name = "#{Rails.application.class.parent_name.downcase}:#{Rails.env.first(3)}"
-
-  $odd_or_even_queries = false
-  ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
-    $odd_or_even_queries = !$odd_or_even_queries
-    color = $odd_or_even_queries ? ANSI_CODES[:CYAN] : ANSI_CODES[:MAGENTA]
-    event = ActiveSupport::Notifications::Event.new(*args)
-    time  = "%.1fms" % event.duration
-    name  = event.payload[:name]
-    sql   = event.payload[:sql].gsub("\n", " ").squeeze(" ")
-    puts "  #{ANSI_CODES[:UNDERLINE]}#{color}#{name} (#{time})#{ANSI_CODES[:RESET]}  #{sql}"
-  end
 
   extend Rails::ConsoleMethods if defined? Rails::ConsoleMethods
 
-  extend_console 'routes', defined?(Hirb) && defined?(Journey::Route), false do
+  extend_console 'routes', defined?(Hirb) && defined?(ActionDispatch::Journey::Route), false do
     # hirb view for a route
     class Hirb::Helpers::Route < Hirb::Helpers::AutoTable
       def self.render(route, options = {})
@@ -33,7 +16,7 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
           super output, options.merge({
             :headers     => [
               "#{"##{index} " if index}#{route.name if route.name}",
-              "#{route.verb ? route.verb.source[/\w+/] : 'ANY'} #{route.path.spec}"
+              "#{route.verb.presence || "ANY"} #{route.path.spec}"
             ],
             :unicode     => true,
             :description => nil
@@ -41,7 +24,7 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
         end
       end
     end
-    Hirb.add_view Journey::Route, :class => Hirb::Helpers::Route
+    Hirb.add_view ActionDispatch::Journey::Route, :class => Hirb::Helpers::Route
 
     # short and long route list
     def routes(long_output = false)
@@ -50,8 +33,8 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
         true
       else
         output = Rails.application.routes.routes.each_with_index.map do |route, i|
-          verb = route.verb ? route.verb.source[/\w+/] : 'ANY'
-          [i, route.name || '', verb, route.path.spec]
+          verb = route.verb.presence || "ANY"
+          [i, route.name || '', verb, route.path.spec.to_s]
         end
         Hirb::Console.render_output output,
           :class   => Hirb::Helpers::AutoTable,
@@ -61,7 +44,7 @@ extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
 
     # get a specific route via index or name
     def route(index_or_name)
-      route = case index_or_name
+      case index_or_name
       when Integer
         Rails.application.routes.routes.to_a[index_or_name]
       when Symbol # named route
