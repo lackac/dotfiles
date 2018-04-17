@@ -29,6 +29,9 @@ if has("autocmd")
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json setf javascript
 
+  " Use gv as GraphViz extension
+  au BufNewFile,BufRead *.gv setf dot
+
   " make Python follow PEP8 for whitespace ( http://www.python.org/dev/peps/pep-0008/ )
   au FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4
 
