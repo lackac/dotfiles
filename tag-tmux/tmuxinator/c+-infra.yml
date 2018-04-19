@@ -1,12 +1,16 @@
-# ~/.tmuxinator/c+-infra.yml
+# ~/.tmuxinator/c+-tf.yml
 # you can make as many windows as you wish...
 
-name: "C+ Infra "
-root: ~/Code/CPlus/infrastructure
+name: "C+ Terraform "
+root: ~/Code/CPlus/terraform-blueprints
 startup_window: shell
 windows:
   - :
       layout: main-horizontal
       panes:
         - nvim
+  - base:
+      root: base
   - shell: git pull
+  - tubes:
+      root: tubes

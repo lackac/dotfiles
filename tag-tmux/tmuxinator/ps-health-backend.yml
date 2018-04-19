@@ -13,10 +13,11 @@ windows:
   - shell: git pull
   - :
       index: 7
-      layout: main-horizontal
       panes:
         - ngrok http --region=eu --subdomain=health-shiftbase-lackac 3021
+        - ngrok http --subdomain=msteams-health-shiftbase-lackac 3022
         - puma --port 3021 --thread 0:5 --log-requests
+        - puma --port 3022 --thread 0:5 --log-requests
   - :
       index: 8
       layout: main-horizontal

@@ -3,13 +3,14 @@
 
 name: 100S 
 root: ~/Code/100Starlings/100s
+startup_window: shell
 windows:
   - :
       layout: main-horizontal
       panes:
         - nvim
   - :
-      layout: even-vertical
+      layout: even-horizontal
       panes:
         -
         -

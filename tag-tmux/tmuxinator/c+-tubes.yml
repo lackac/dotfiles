@@ -14,16 +14,14 @@ windows:
       panes:
         - iex -S mix
   - shell: git pull
-  - warehouse: cd apps/warehouse
-  - importer: cd apps/importer
-  - :
-      index: 8
-      layout: main-horizontal
-      panes:
-        - cd ~/Code/getredash/redash && docker-compose -f docker-compose.production.yml up
-        - ssh nat-eu.cplus -L 5439:data-warehouse.czm6beo87frd.eu-west-1.redshift.amazonaws.com:5439
+  - Control:
+    root: apps/control
+  - Importer:
+    root: apps/importer
+  - Warehouse:
+    root: apps/warehouse
   - :
-      index: 9
-      layout: main-horizontal
-      panes:
-        -
+    index: 9
+    layout: main-horizontal
+    panes:
+      -
