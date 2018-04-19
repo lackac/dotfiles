@@ -32,6 +32,7 @@ Plug 'rizzatti/dash.vim'
 Plug 'vim-scripts/dbext.vim'                              " database access to many dbms
 Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Shougo/deoplete.nvim'                               " asynchronous completion framework for neovim
+Plug 'tpope/vim-dispatch'                                 " used by vim-test for figuring out makeprg, not used directly
 Plug 'junegunn/vim-easy-align'                            " simple, easy-to-use alignment plugin
 Plug 'editorconfig/editorconfig-vim'
 "Plug 'mattn/emmet-vim'                                    " TODO: configure; greatly improve HTML & CSS workflow
@@ -48,6 +49,7 @@ Plug 'lucidstack/hex.vim'                                 " nifty functions for 
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'ledger/vim-ledger'                                  " ledger filetype
 Plug 'pbrisbin/vim-mkdir'                                 " automatically create any non-existent directories before writing the buffer
+Plug 'sbdchd/neoformat'                                   " automatic code formatting
 Plug 'neomake/neomake'                                    " async :make and linting framework for Neovim/Vim
 Plug 'chrisbra/NrrwRgn'                                   " focus on a selected region
 Plug 'tpope/vim-obsession'                                " continuously updated session files
@@ -64,8 +66,10 @@ Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'janko-m/vim-test'                                   " Flexible test runner that supports multiple frameworks and strategies
 Plug 'tomtom/tlib_vim'                                    " some utility functions for vim
 Plug 'christoomey/vim-tmux-navigator'                     " seamless navigation between tmux panes and vim splits
+Plug 'freitass/todo.txt-vim'                              " Todo.txt support
 Plug 'tpope/vim-unimpaired'                               " pairs of handy bracket mappings
 Plug 'benmills/vimux'                                     " TODO: decide this or dispatch
 Plug 'tpope/vim-vinegar'                                  " enhances netrw to make it more useful, trigger by pressing '-'
@@ -85,7 +89,6 @@ Plug 'dsawardekar/ember.vim'
 Plug 'sunaku/vim-ruby-minitest'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-rake'
-Plug 'thoughtbot/vim-rspec'
 
 """ Let's be sensible
 

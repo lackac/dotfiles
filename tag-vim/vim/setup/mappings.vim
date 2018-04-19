@@ -1,19 +1,17 @@
 """ General Mappings (Normal, Visual, Operator-pending)
 
-" help with the transitional period
-nmap , :echoe "You've changed \<leader\> to \<space\>, remember?"<CR>
-
 " format the entire file
 nmap <leader>fef ggVG=
-
-" format paragraph
-nmap <leader>q gqip
 
 " cd to the directory containing the file in the buffer
 nmap <silent> <leader>cd :lcd %:h<CR>
 
 " create the directory containing the file in the buffer
 nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
+
+" open the quickfix and location lists
+nmap <leader>q :copen<cr>
+nmap <leader>l :lopen<cr>
 
 " some helpers to edit mode
 " http://vimcasts.org/e/14
@@ -41,6 +39,9 @@ nmap <leader>/ :set invhlsearch hlsearch?<CR>
 
 " yank visual to clipboard
 vmap <C-c> "*y
+
+" fix syntax highlighting
+map <C-s> :syntax sync fromstart<cr>
 
 " jump between parens with <tab>
 nmap <tab> %

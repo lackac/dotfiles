@@ -25,7 +25,12 @@ nmap <leader>gA :Gcommit --amend -v<CR>
 nmap <leader>gv :Gcommit -v<CR>
 nmap <leader>gp :Git push<CR>
 
-xmap <leader>nr <Plug>NrrwrgnDo
+nmap <leader>mp :VimuxPromptCommand<cr>
+nmap <leader>ml :VimuxRunLastCommand<cr>
+nmap <leader>mi :VimuxInspectRunner<cr>
+nmap <leader>mx :VimuxCloseRunner<cr>
+nmap <leader>ms :VimuxInterruptRunner<cr>
+nmap <leader>mc :VimuxRunCommand "cucumber <c-r>=expand("%")<cr>"<cr>
 
 imap <expr><Tab> pumvisible() ? "\<C-n>" :
       \ neosnippet#expandable_or_jumpable() ?
@@ -33,17 +38,14 @@ imap <expr><Tab> pumvisible() ? "\<C-n>" :
 imap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 imap <expr><CR> pumvisible() && neosnippet#expandable() ?
       \ "\<Plug>(neosnippet_expand)" : "\<CR>\<Plug>DiscretionaryEnd"
+smap <expr><Tab> neosnippet#expandable_or_jumpable() ?
+      \   "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
 
-nmap <leader>rt :call RunCurrentSpecFile()<CR>
-nmap <leader>rs :call RunNearestSpec()<CR>
-nmap <leader>rl :call RunLastSpec()<CR>
-
-nmap <leader>tp :VimuxPromptCommand<cr>
-nmap <leader>tl :VimuxRunLastCommand<cr>
-nmap <leader>ti :VimuxInspectRunner<cr>
-nmap <leader>tx :VimuxCloseRunner<cr>
-nmap <leader>ts :VimuxInterruptRunner<cr>
-nmap <leader>tc :VimuxRunCommand "cucumber <c-r>=expand("%")<cr>"<cr>
+nmap <leader>tn :TestNearest<CR>
+nmap <leader>tf :TestFile<CR>
+nmap <leader>ts :TestSuite<CR>
+nmap <leader>tl :TestLast<CR>
+nmap <leader>tv :TestVisit<CR>
 
 nmap <leader>z :Goyo<cr>
 

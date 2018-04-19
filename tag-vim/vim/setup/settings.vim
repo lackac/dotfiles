@@ -1,11 +1,12 @@
 """ Basic Setup
 
-let mapleader = " "   " use space as leader
-set nocompatible      " use vim, no vi defaults
-set relativenumber    " show relative line numbers
-set number            " show line number on current line
-set encoding=utf-8    " set default encoding to UTF-8
-set hidden            " don't unload buffer when it is abandoned
+let mapleader = " "      " use space as leader
+let maplocalleader = "," " use , as local leader
+set nocompatible         " use vim, no vi defaults
+set relativenumber       " show relative line numbers
+set number               " show line number on current line
+set encoding=utf-8       " set default encoding to UTF-8
+set hidden               " don't unload buffer when it is abandoned
 set wildmode=longest:full,full " shell like autocompletion for paths
 
 """ Layout

@@ -26,8 +26,8 @@ let g:dbext_default_profile_shiftbase_auth = 'type=PGSQL:dbname=shiftbase-auth'
 let g:dbext_default_profile_shiftbase_health = 'type=PGSQL:dbname=shiftbase-health'
 let g:dbext_default_profile_shiftbase_skills = 'type=PGSQL:dbname=shiftbase-skills'
 let g:dbext_default_profile_wesayy = 'type=PGSQL:dbname=wesayy_development'
-let g:dbext_default_profile_redshift_warehouse = 'type=PGSQL:port=5439:dbname=ds:user=dev'
-let g:dbext_default_profile_redshift_warehouse_admin = 'type=PGSQL:port=5439:dbname=ds:user=admin'
+let g:dbext_default_profile_redshift_warehouse = 'type=PGSQL:host=data-warehouse.czm6beo87frd.eu-west-1.redshift.amazonaws.com:port=5439:dbname=ds:user=dev'
+let g:dbext_default_profile_redshift_warehouse_admin = 'type=PGSQL:host=data-warehouse.czm6beo87frd.eu-west-1.redshift.amazonaws.com:port=5439:dbname=dev:user=admin'
 let g:dbext_default_profile_mysql = 'type=MYSQL:dbname=sandbox:user=root'
 let g:dbext_default_profile_cplus = 'type=MYSQL:dbname=collectplus:user=root'
 
@@ -52,9 +52,37 @@ augroup markdown
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
 augroup END
 
-autocmd! BufWritePost * Neomake
+augroup elixir
+  autocmd!
+  autocmd BufWritePre *.ex,*.exs try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | endtry
+augroup END
 
-let g:rspec_command = 'call VimuxRunCommand("rspec {spec}")'
+call neomake#configure#automake('w')
+function! OnNeomakeJobFinished() abort
+  let context = g:neomake_hook_context
+  if context.jobinfo.exit_code != 0
+    echom printf('The job for maker %s exited non-zero: %s',
+    \ context.jobinfo.maker.name, context.jobinfo.exit_code)
+  else
+    syntax sync fromstart
+  endif
+endfunction
+augroup my_neomake_hooks
+  au!
+  autocmd User NeomakeJobFinished call OnNeomakeJobFinished()
+augroup END
+
+function! CustomTestTransform(cmd) abort
+  return substitute(a:cmd, 'mix test apps/\([^/]*/\)', 'cd apps/\1 \&\& mix test ', '')
+endfunction
+
+let g:test#strategy = "neomake"
+let g:test#custom_transformations = {'custom': function('CustomTestTransform')}
+let g:test#transformation = 'custom'
+
+let g:neosnippet#snippets_directory = "~/.vim/snippets"
+
+let g:nrrw_rgn_nomap_nr = 1
 
 let g:vitality_fix_focus = 0 " don't let vitality mess up things with focus handling
 
