@@ -4,7 +4,9 @@ alias mux=tmuxinator
 alias psg='ps aux | grep'
 alias mwget='wget -v -c -x -r -l 0 -L -np'
 alias :q=exit
+
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
+alias ql="qlmanage -p &>/dev/null"
 
 alias gst='git status -sb'
 alias gl='git log --decorate --graph --pretty="%C(auto)%h %d %s %Cblue%ad%Creset" --date=relative'
