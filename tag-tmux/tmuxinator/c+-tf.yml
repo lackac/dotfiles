@@ -12,5 +12,7 @@ windows:
   - base:
       root: base
   - shell: git pull
+  - codepipeline :
+      root: codepipeline
   - tubes:
       root: tubes
