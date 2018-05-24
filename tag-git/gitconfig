@@ -5,6 +5,7 @@
 [user]
 	name = Laszlo Bacsi
 	email = lackac@lackac.hu
+	signingkey = lackac@lackac.hu
 [alias]
 	co = checkout
 	ci = commit
@@ -54,8 +55,11 @@
 [hub]
 	protocol = https
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
 	required = true
+	process = git-lfs filter-process
 [credential]
 	helper = osxkeychain
+[commit]
+	gpgsign = true
