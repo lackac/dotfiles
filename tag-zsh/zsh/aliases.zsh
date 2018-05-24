@@ -9,7 +9,7 @@ alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v exten
 alias ql="qlmanage -p &>/dev/null"
 
 alias gst='git status -sb'
-alias gl='git log --decorate --graph --pretty="%C(auto)%h %d %s %Cblue%ad%Creset" --date=relative'
+alias gl='git log --decorate --graph --pretty="%C(auto)%h%d %C(bold)%s %C(blue)%ar%Creset %ad" --date=iso'
 alias glb='gl --branches'
 alias glp='git log -p --decorate --word-diff'
 alias gco='git checkout'
