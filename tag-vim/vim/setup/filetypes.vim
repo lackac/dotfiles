@@ -16,6 +16,8 @@ endfunction
 ""
 
 if has("autocmd")
+  " .envrc files are shell scripts
+  au BufNewFile,BufRead .envrc setf sh
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
 
