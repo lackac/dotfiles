@@ -84,6 +84,27 @@ let g:neosnippet#snippets_directory = "~/.vim/snippets"
 
 let g:nrrw_rgn_nomap_nr = 1
 
+let g:startify_lists = [
+      \ { 'type': 'dir',       'header': ['MRU '. simplify(substitute(getcwd(), $HOME, '~', ''))] },
+      \ { 'type': 'sessions',  'header': ['Sessions'] },
+      \ { 'type': 'bookmarks', 'header': ['Bookmarks'] },
+      \ { 'type': 'commands',  'header': ['Commands'] },
+      \ ]
+let g:startify_bookmarks = [
+      \ '~/.vim/setup/settings.vim',
+      \ '~/.vim/setup/mappings.vim',
+      \ '~/.vim/setup/plugins.vim',
+      \ '~/.vim/setup/plugin_settings.vim',
+      \ '~/.vim/setup/plugin_mappings.vim',
+      \ ]
+let g:startify_commands = [
+      \ { 'U': ':PlugUpdate' },
+      \ { 'I': ':PlugInstall' },
+      \ ]
+let g:startify_files_number = 7
+let g:startify_update_oldfiles = 1
+let g:startify_change_to_vcs_root = 1
+
 let g:vitality_fix_focus = 0 " don't let vitality mess up things with focus handling
 
 "autocmd FileType ruby nmap <buffer> <C-d> <Plug>(xmpfilter-mark)

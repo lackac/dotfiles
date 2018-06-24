@@ -61,6 +61,7 @@ Plug 'ngmy/vim-rubocop'
 Plug 'duff/vim-scratch'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
+Plug 'mhinz/vim-startify'                                 " start screen
 Plug 'tpope/vim-surround'                                 " quoting/parenthesizing made simple
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-line'
