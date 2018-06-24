@@ -17,15 +17,17 @@ end
 
 filter = ARGV.first
 {
-  "Seti-UI"                 => 0xe5fa..0xe62b,
+  "Seti-UI"                 => 0xe5fa..0xe62e,
   "Devicons"                => 0xe700..0xe7c5,
   "Font Awesome"            => 0xf000..0xf2e0,
   "Font Awesome Extension"  => 0xe200..0xe2a9,
   "Octicons"                => [0x2192, 0x2665, 0x26a1] + [*0xf400..0xf4a8] + [0xf67c],
-  "Powerline Extra Symbols" => [*0xe0a0..0xe0a3] + [*0xe0b0..0xe0d4],
+  "Powerline Extra Symbols" => [*0xe0a0..0xe0a3] + [*0xe0b0..0xe0bf] + [*0xe0c0..0xe0c8] + [*0xe0cc..0xe0cf] + [*0xe0d0..0xe0d2] + [0xe0d4],
   "IEC Power Symbols"       => [*0x23fb..0x23fe] + [0x2b58],
-  "Font Linux"              => 0xf300..0xf313,
-  "Pomicons"                => 0xe000..0xe00a
+  "Font Linux"              => 0xf300..0xf31c,
+  "Pomicons"                => 0xe000..0xe00a,
+  "Material"                => [0xf001, 0xf847] + [*0xf500..0xfd46],
+  "Weather"                 => 0xe300..0xe3e3,
 }.each do |section, codepoints|
   next if filter && !section.downcase.index(filter.downcase)
   puts "\e[1;34m#{section}\e[0m"
