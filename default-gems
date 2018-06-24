@@ -1,0 +1,17 @@
+bundler
+pry
+guard
+guard-compat
+guard-minitest
+listen
+lunchy
+mailcatcher
+minitest
+nokogiri
+overcommit
+pry
+puma
+rake
+rspec
+rubocop
+tmuxinator
