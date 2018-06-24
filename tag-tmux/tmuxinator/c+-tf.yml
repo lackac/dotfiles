@@ -10,9 +10,11 @@ windows:
       panes:
         - nvim
   - base:
-      root: base
+      root: ~/Code/CPlus/terraform-blueprints/base
   - shell: git pull
   - codepipeline :
-      root: codepipeline
+      root: ~/Code/CPlus/terraform-blueprints/codepipeline
   - tubes:
-      root: tubes
+      root: ~/Code/CPlus/terraform-blueprints/tubes
+  - packer:
+      root: ~/Code/CPlus/terraform-blueprints/packer
