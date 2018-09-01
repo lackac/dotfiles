@@ -30,7 +30,8 @@ if has('python')
 end
 Plug 'rizzatti/dash.vim'
 Plug 'vim-scripts/dbext.vim'                              " database access to many dbms
-Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
+" it's a bit annoying at times, let's see if I can live without it
+"Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Shougo/deoplete.nvim'                               " asynchronous completion framework for neovim
 Plug 'tpope/vim-dispatch'                                 " used by vim-test for figuring out makeprg, not used directly
 Plug 'junegunn/vim-easy-align'                            " simple, easy-to-use alignment plugin

@@ -18,12 +18,25 @@ endfunction
 if has("autocmd")
   " .envrc files are shell scripts
   au BufNewFile,BufRead .envrc setf sh
+
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
 
-  " Make sure all markdown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
-  au FileType markdown call s:setupWrapping()
+  augroup filetype_elixir
+    autocmd!
+    " (disabled for slowness) Use syntax based folding for Elixir files
+    "autocmd FileType elixir setlocal foldmethod=syntax
+    " Always sync syntax from the start of the file
+    autocmd FileType elixir autocmd BufEnter * :syntax sync fromstart
+    " Run formatter before save and join it with last operation
+    autocmd BufWritePre *.ex,*.exs try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | endtry
+  augroup END
+
+  augroup markdown
+    autocmd!
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+    autocmd FileType markdown call s:setupWrapping()
+  augroup END
 
   " Make it easier to edit Yaml files with long lines
   au FileType yaml call s:setupWrapping()

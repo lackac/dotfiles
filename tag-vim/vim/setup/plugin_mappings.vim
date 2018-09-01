@@ -41,6 +41,8 @@ imap <expr><CR> pumvisible() && neosnippet#expandable() ?
 smap <expr><Tab> neosnippet#expandable_or_jumpable() ?
       \   "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
 
+nmap <leader>S :Startify<CR>
+
 nmap <leader>tn :TestNearest<CR>
 nmap <leader>tf :TestFile<CR>
 nmap <leader>ts :TestSuite<CR>

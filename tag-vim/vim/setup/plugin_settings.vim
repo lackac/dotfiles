@@ -47,16 +47,6 @@ call expand_region#custom_text_objects('ruby', {
 
 let g:gutentags_cache_dir = '~/.tags_cache'
 
-augroup markdown
-  autocmd!
-  autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
-augroup END
-
-augroup elixir
-  autocmd!
-  autocmd BufWritePre *.ex,*.exs try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | endtry
-augroup END
-
 call neomake#configure#automake('w')
 function! OnNeomakeJobFinished() abort
   let context = g:neomake_hook_context
