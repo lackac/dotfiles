@@ -14,12 +14,12 @@ windows:
       panes:
         - iex -S mix
   - shell: git pull
-  - Control:
-    root: apps/control
-  - Importer:
-    root: apps/importer
-  - Warehouse:
-    root: apps/warehouse
+  - flow :
+    root: ~/Code/sandbox/flow
+    layout: even-vertical
+    panes:
+      - nvim
+      - iex -S mix
   - :
     index: 9
     layout: main-horizontal
