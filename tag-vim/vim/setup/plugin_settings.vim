@@ -20,17 +20,6 @@ if has('python')
   let g:ctrlp_match_func = { 'match': 'matcher#cmatch' }
 endif
 
-"let g:dbext_default_profile = 'psql'
-let g:dbext_default_profile_psql = 'type=PGSQL:dbname=sandbox'
-let g:dbext_default_profile_shiftbase_auth = 'type=PGSQL:dbname=shiftbase-auth'
-let g:dbext_default_profile_shiftbase_health = 'type=PGSQL:dbname=shiftbase-health'
-let g:dbext_default_profile_shiftbase_skills = 'type=PGSQL:dbname=shiftbase-skills'
-let g:dbext_default_profile_wesayy = 'type=PGSQL:dbname=wesayy_development'
-let g:dbext_default_profile_redshift_warehouse = 'type=PGSQL:host=data-warehouse.czm6beo87frd.eu-west-1.redshift.amazonaws.com:port=5439:dbname=ds:user=dev'
-let g:dbext_default_profile_redshift_warehouse_admin = 'type=PGSQL:host=data-warehouse.czm6beo87frd.eu-west-1.redshift.amazonaws.com:port=5439:dbname=dev:user=admin'
-let g:dbext_default_profile_mysql = 'type=MYSQL:dbname=sandbox:user=root'
-let g:dbext_default_profile_cplus = 'type=MYSQL:dbname=collectplus:user=root'
-
 let g:deoplete#enable_at_startup = 1
 
 call expand_region#custom_text_objects({
