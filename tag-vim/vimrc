@@ -6,3 +6,4 @@ source ~/.vim/setup/mappings.vim
 source ~/.vim/setup/plugin_settings.vim
 source ~/.vim/setup/plugin_mappings.vim
 source ~/.vim/setup/ignore.vim
+source ~/.vim/setup/utils.vim

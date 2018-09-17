@@ -77,7 +77,9 @@ Plug 'benmills/vimux'                                     " TODO: decide this or
 Plug 'tpope/vim-vinegar'                                  " enhances netrw to make it more useful, trigger by pressing '-'
 Plug 'sjl/vitality.vim'                                   " TODO: review if this is still necessary; make vim play nicely with iterm 2 and tmux
 Plug 'mattn/webapi-vim'                                   " an interface to web apis, used by other plugins
-Plug 'vim-scripts/YankRing.vim'                           " maintains a history of previous yanks, changes and deletes
+" trying to live without this for a while - alternative process for cycling:
+" https://www.reddit.com/r/vim/comments/4u5d0n/alternative_to_yankring/d5nf3ek/
+"Plug 'vim-scripts/YankRing.vim'                           " maintains a history of previous yanks, changes and deletes
 Plug 'itspriddle/ZoomWin'                                 " zoom in/out of windows
 Plug 't9md/vim-ruby-xmpfilter'                            " TODO: review using this with seeing_is_believing; helper for ruby's xmpfilter or seeing_is_believing
 Plug 'amix/vim-zenroom2'                                  " companion to goyo which emulates an iA Writer environment
