@@ -7,6 +7,8 @@ let g:db_shiftbase_skills = 'postgresql:///shiftbase-skills'
 let g:db_wesayy = 'postgresql:///wesayy_development'
 let g:db_redshift_warehouse = 'postgresql://dev@data-warehouse.czm6beo87frd.eu-west-1.redshift.amazonaws.com:5439/ds'
 let g:db_redshift_warehouse_admin = 'postgresql://admin@data-warehouse.czm6beo87frd.eu-west-1.redshift.amazonaws.com:5439/dev'
+let g:db_redshift_warehouse_staging = 'postgresql://tubes@data-warehouse-staging.czm6beo87frd.eu-west-1.redshift.amazonaws.com:5439/ds'
+let g:db_redshift_warehouse_staging_admin = 'postgresql://admin@data-warehouse-staging.czm6beo87frd.eu-west-1.redshift.amazonaws.com:5439/ds'
 let g:db_mysql = 'mysql://root@localhost/sandbox'
 let g:db_cplus = 'mysql://root@localhost/collectplus'
 
