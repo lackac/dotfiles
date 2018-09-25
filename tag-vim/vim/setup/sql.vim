@@ -14,7 +14,7 @@ let g:db_cplus = 'mysql://root@localhost/collectplus'
 autocmd BufRead,BufNewFile ~/Code/CPlus/tubes/db/*.sql let b:db = g:db_redshift_warehouse
 
 " sql query text object
-vnoremap aq <esc>:call search(";", "cWz")<cr>:call search(";\\<bar>\\%^", "bsWz")<cr>:call search("\\v\\c^(select<bar>with<bar>insert<bar>update<bar>delete<bar>create<bar>truncate<bar>set<bar>analyze<bar>vacuum)\>", "Wz")<cr>vg`'
+vnoremap aq <esc>:call search(";", "cWz")<cr>:call search(";\\<bar>\\%^", "bsWz")<cr>:call search("\\v\\c^(select<bar>with<bar>insert<bar>update<bar>delete<bar>create<bar>drop<bar>truncate<bar>set<bar>analyze<bar>vacuum)\>", "Wz")<cr>vg`'
 omap aq :normal vaq<cr>
 
 " setup b:db and run queries with it

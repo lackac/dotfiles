@@ -29,7 +29,7 @@ if has('python')
   Plug 'JazzCore/ctrlp-cmatcher', { 'do': './install.sh' }" better and faster fuzzy matching
 end
 Plug 'rizzatti/dash.vim'
-Plug 'tpope/vim-dadbod'                                   " modern database interface
+Plug 'lackac/vim-dadbod', { 'branch': 'dev' }             " modern database interface
 " it's a bit annoying at times, let's see if I can live without it
 "Plug 'Raimondi/delimitMate'                               " insert mode auto-completion for quotes, parens, brackets, etc.
 Plug 'Shougo/deoplete.nvim'                               " asynchronous completion framework for neovim
