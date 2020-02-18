@@ -1,0 +1,20 @@
+local basedir="$HOME/Code/sandbox"
+
+if [[ $1 == "list" ]]; then
+  tree -dL 2 "$basedir"
+  return;
+fi
+
+local playground=$(echo $1 | awk -F'/' '{print $1}')
+local sandbox=$2
+[[ $sandbox == "" ]] && sandbox=$(echo $1 | awk -F'/' '{print $2}')
+
+if [[ -d "$basedir/$playground/$sandbox" ]]; then
+  cd "$basedir/$playground/$sandbox"
+else
+  local match=$(tree -fidL 2 --noreport "$basedir" | grep "/$playground$" | head -1)
+  if [[ $match != "" ]]; then
+    cd "$match"
+    [[ -n $sandbox ]] && mkdir "$sandbox" && cd "$sandbox" || true
+  fi
+fi

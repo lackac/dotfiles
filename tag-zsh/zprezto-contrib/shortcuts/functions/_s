@@ -1,0 +1,5 @@
+#compdef s
+
+local paths
+paths=(~/Code/sandbox/* ~/Code/sandbox)
+_files -W paths -/

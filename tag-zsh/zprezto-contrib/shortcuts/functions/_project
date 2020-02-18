@@ -1,0 +1,5 @@
+#compdef project
+
+local paths
+paths=(~/Dropbox/Projects/* ~/Dropbox/Projects)
+_files -W paths -/

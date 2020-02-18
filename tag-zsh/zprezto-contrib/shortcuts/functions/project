@@ -1,0 +1,17 @@
+basedir="$HOME/Dropbox/Projects"
+
+if [[ $1 == "list" ]]; then
+  tree -dL 2 "$basedir"
+  return;
+fi
+
+local client=$(echo $1 | awk -F'/' '{print $1}')
+local project=$2
+[[ $project == "" ]] && project=$(echo $1 | awk -F'/' '{print $2}')
+
+if [[ -d "$basedir/$client/$project" ]]; then
+  cd "$basedir/$client/$project"
+else
+  local match=$(tree -fidL 2 --noreport "$basedir" | grep "/$client$" | head -1)
+  [[ $match != "" ]] && cd "$match"
+fi
