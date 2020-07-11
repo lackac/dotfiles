@@ -2,6 +2,9 @@
 # Loads and configures various tools and shortcuts
 #
 
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+
 # direnv
 if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
@@ -36,4 +39,9 @@ fi
 # k.sh
 if [[ -s $Code/supercrabtree/k/k.sh ]]; then
   source $Code/supercrabtree/k/k.sh
+fi
+
+# gigalixir completion
+if (( $+commands[gigalixir] )); then
+  eval "$(_GIGALIXIR_COMPLETE=source gigalixir)"
 fi
