@@ -20,6 +20,7 @@ Plug 'rking/ag.vim'
 Plug 'vim-airline/vim-airline'                            " lean & mean status/tabline for vim that's light as air
 Plug 'vim-airline/vim-airline-themes'
 Plug 'slashmili/alchemist.vim'                            " elixir completion, documentation lookup, other integrations
+Plug 'nathangrigg/vim-beancount'                          " ftplugin and more for beancount
 Plug 'tpope/vim-commentary'                               " toggle commenting with gc
 Plug 'ap/vim-css-color'
 Plug 'kien/ctrlp.vim'                                     " fuzzy file, buffer, mru, tag, etc finder

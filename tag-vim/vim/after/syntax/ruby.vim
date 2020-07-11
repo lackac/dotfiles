@@ -1,6 +1,6 @@
 let s:bcs = b:current_syntax
 unlet b:current_syntax
-syntax include @SQL syntax/plsql.vim
+syntax include @SQL syntax/sql.vim
 unlet b:current_syntax
 syntax include @JS syntax/javascript.vim
 let b:current_syntax = s:bcs
