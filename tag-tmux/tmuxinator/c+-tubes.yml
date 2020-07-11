@@ -1,7 +1,7 @@
 # ~/.tmuxinator/c+-tubes.yml
 # you can make as many tabs as you wish...
 
-name: "C+ Tubes "
+name: "C+ Tubes "
 root: ~/Code/CPlus/tubes
 startup_window: shell
 windows:
@@ -14,14 +14,22 @@ windows:
       panes:
         - iex -S mix
   - shell: git pull
-  - flow :
-    root: ~/Code/sandbox/flow
-    layout: even-vertical
-    panes:
-      - nvim
-      - iex -S mix
+  - staging:
+      index: 7
+      panes:
+        - ssh staging.tubes
+        - logs:
+          - ssh staging.tubes
+          - journalctl --unit tubes -f -n 100
+  - production:
+      index: 8
+      panes:
+        - ssh production.tubes
+        - logs:
+          - ssh production.tubes
+          - journalctl --unit tubes -f -n 100
   - :
-    index: 9
-    layout: main-horizontal
-    panes:
-      -
+      index: 9
+      layout: main-horizontal
+      panes:
+        -
