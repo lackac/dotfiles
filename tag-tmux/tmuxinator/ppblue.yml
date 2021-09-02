@@ -4,7 +4,7 @@
 name: PPBlue
 root: ~/Code/CPlus/paypoint-blue
 windows:
-  - vim: nvim
+  - vim: vim
   - console:
       layout: main-horizontal
       panes:

@@ -8,7 +8,7 @@ windows:
   - :
       layout: main-horizontal
       panes:
-        - nvim
+        - vim
   - base:
       root: ~/Code/CPlus/terraform-blueprints/base
   - shell: git pull

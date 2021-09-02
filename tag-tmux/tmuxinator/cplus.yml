@@ -7,7 +7,7 @@ windows:
   - :
       layout: main-horizontal
       panes:
-        - nvim
+        - vim
   - C+:
       layout: even-horizontal
       panes:

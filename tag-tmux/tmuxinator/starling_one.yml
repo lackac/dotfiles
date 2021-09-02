@@ -1,0 +1,21 @@
+# ~/.tmuxinator/starling_one.yml
+# you can make as many windows as you wish...
+
+name: Starling One
+root: "~/Dropbox/Work/Starling One/ledger"
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - vim
+  - :
+      layout: even-horizontal
+      panes:
+        -
+        -
+  - shell:
+  - :
+      index: 8
+      layout: main-horizontal
+      panes:
+        - guard

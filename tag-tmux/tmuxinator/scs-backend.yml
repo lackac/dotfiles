@@ -1,18 +1,18 @@
-# ~/.tmuxinator/ps-auth.yml
+# ~/.tmuxinator/scs-backend.yml
 # you can make as many windows as you wish...
 
-name: PS/auth 
-root: ~/Code/postshift/auth
+name: "SCS Backend "
+root: ~/Code/Sensata/scs-backend
 startup_window: shell
 windows:
   - :
       layout: main-horizontal
       panes:
         - vim
-  - : rails console
+  - ﲵ: iex -S mix
   - shell: git pull
-  - :
-      index: 9
+  - :
+      index: 8
       layout: main-horizontal
       panes:
-        - tail -f log/development.log
+        - mix phx.server

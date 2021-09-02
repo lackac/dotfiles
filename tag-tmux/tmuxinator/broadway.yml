@@ -1,0 +1,18 @@
+# ~/.tmuxinator/broadway.yml
+# you can make as many tabs as you wish...
+
+name: Broadway 
+root: ~/Code/plataformatec/broadway
+startup_window: shell
+windows:
+  - : vim
+  - :
+      layout: even-vertical
+      panes:
+        - iex -S mix
+  - shell: git pull
+  - :
+      root: ~/Code/plataformatec/broadway_rabbitmq
+      layout: even-vertical
+      panes:
+        - vim

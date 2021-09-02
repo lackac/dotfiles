@@ -1,0 +1,27 @@
+# ~/.tmuxinator/terrarium.yml
+# you can make as many tabs as you wish...
+
+name: Terrarium 菉
+root: ~/Code/lackac/terrarium
+startup_window: shell
+windows:
+  - : vim
+  - :
+      root: ~/Code/lackac/terrarium/firmware
+      layout: even-vertical
+      panes:
+        - iex -S mix
+  - shell: git pull
+  - host:
+      root: ~/Code/lackac/terrarium/firmware
+  - target:
+      root: ~/Code/lackac/terrarium/firmware
+      layout: even-vertical
+      panes:
+        - export MIX_TARGET=rpi3
+  - firmware:
+      root: ~/Code/lackac/terrarium/firmware
+  - hardware:
+      root: ~/Code/lackac/terrarium/hardware
+  - ui:
+      root: ~/Code/lackac/terrarium/ui

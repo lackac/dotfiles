@@ -1,0 +1,32 @@
+# ~/.tmuxinator/scs-tf.yml
+# you can make as many windows as you wish...
+
+name: "SCS Terraform "
+root: ~/Code/Sensata/scs-terraform
+startup_window: shell
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - vim
+  - Base/OpsWorks:
+      layout: even-horizontal
+      panes:
+        - cd base
+        - cd opsworks
+  - shell: git pull
+  - SCADA:
+      layout: even-horizontal
+      panes:
+        - cd scada/common
+        - cd scada/instance
+  - SCS:
+      layout: even-horizontal
+      panes:
+        - cd frontend
+        - cd staging/backend
+  - packer:
+      layout: even-horizontal
+      panes:
+        - cd packer/scada
+        - cd packer/scs

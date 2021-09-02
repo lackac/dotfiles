@@ -1,11 +1,13 @@
-# ~/.tmuxinator/bibliaolvaso.yml
+# ~/.tmuxinator/scs-chef.yml
 # you can make as many windows as you wish...
 
-project_name: Bibliaolvasó
-project_root: ~/Code/bibliaolvaso/ember-app
+name: "SCS Chef ﲮ"
+root: ~/Code/Sensata/scs-chef-repo
+startup_window: shell
 windows:
-  - editor:
+  - :
       layout: main-horizontal
       panes:
         - vim
+  - knife ﲵ:
   - shell: git pull

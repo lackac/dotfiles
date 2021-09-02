@@ -4,7 +4,7 @@
 name: Elixir 
 root: ~/Code/elixir-lang/elixir
 windows:
-  - editor: nvim
+  - editor: vim
   - iex:
       layout: even-vertical
       panes:

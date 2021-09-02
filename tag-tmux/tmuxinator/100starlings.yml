@@ -4,6 +4,6 @@
 project_name: 100Starlings
 project_root: ~/Code/100Starlings/100starlings.github.io
 windows:
-  - editor: nvim
+  - editor: vim
   - shell:
   - server: jekyll serve -P 7006

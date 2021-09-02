@@ -4,5 +4,5 @@
 name: Ember
 root: ~/Code/sandbox/ember
 windows:
-  - rarwe: cd ~/Code/balinterdi/rarwe-book && nvim
+  - rarwe: cd ~/Code/balinterdi/rarwe-book && vim
   - shell:

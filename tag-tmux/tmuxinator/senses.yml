@@ -7,6 +7,6 @@ windows:
   - editor:
       layout: main-horizontal
       panes:
-        - nvim
+        - vim
   - shell:
   - server: bundle exec middleman server -p7004

@@ -8,7 +8,7 @@ windows:
   - :
       layout: main-horizontal
       panes:
-        - nvim
+        - vim
   - :
   - shell: git pull
   - :

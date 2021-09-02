@@ -1,8 +1,8 @@
-# ~/.tmuxinator/ps-auth.yml
+# ~/.tmuxinator/wesayy.yml
 # you can make as many windows as you wish...
 
-name: PS/auth 
-root: ~/Code/postshift/auth
+name: "WeSayy "
+root: ~/Code/100Starlings/wesayy
 startup_window: shell
 windows:
   - :
