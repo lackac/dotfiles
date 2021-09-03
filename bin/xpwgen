@@ -5,8 +5,26 @@ require 'securerandom'
 wordlist = File.readlines(File.expand_path("../wordlist", __FILE__)).map(&:chomp)
 
 count = (ARGV.first || 1).to_i
+word_count = (ENV["WORD_COUNT"] || 4).to_i
+max_length = ENV["MAX_LENGTH"]&.to_i
+max_tries = 50
 
 count.times do
-  words = wordlist.sample(4, random: SecureRandom)
-  puts words.join('-')
+  tries = 0
+  while true
+    words = wordlist.sample(word_count, random: SecureRandom)
+    phrase = words.join('-')
+    if max_length.nil? || phrase.length <= max_length
+      puts phrase
+      break
+    else
+      tries += 1
+      if tries >= max_tries
+        STDERR.puts "Couldn't find a phrase in #{max_tries} attempts"
+        break
+      else
+        next
+      end
+    end
+  end
 end
