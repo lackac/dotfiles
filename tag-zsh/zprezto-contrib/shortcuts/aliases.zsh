@@ -1,4 +1,4 @@
-alias vim=nvim
+alias vim=lvim
 alias mux=tmuxinator
 
 alias psg='ps aux | grep'

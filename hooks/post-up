@@ -1,15 +1,3 @@
 #!/bin/sh
 
 #vim +PlugInstall +qa
-
-for rcfile in $(ls ~/.zprezto/runcoms/*); do
-  filename="$(basename $rcfile)"
-  dotfile="$HOME/.$filename"
-  [ "$filename" = "README.md" -o -L "$dotfile" ] && continue
-
-  if [ -f "$dotfile" ]; then
-    rm -i "$dotfile"
-  fi
-
-  ln -s "$rcfile" "$dotfile"
-done

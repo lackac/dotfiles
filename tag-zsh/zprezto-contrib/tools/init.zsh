@@ -16,6 +16,10 @@ if [[ -f ${ZDOTDIR:-$HOME}/.asdf/asdf.sh ]]; then
   source ${ZDOTDIR:-$HOME}/.asdf/completions/asdf.bash
 fi
 
+if [[ -f ${ZDOTDIR:-$HOME}/.asdf/plugins/java/set-java-home.zsh ]]; then
+  source ${ZDOTDIR:-$HOME}/.asdf/plugins/java/set-java-home.zsh
+fi
+
 # tmuxinator
 if [[ -s ${ZDOTDIR:-$HOME}/.tmuxinator/scripts/tmuxinator ]]; then
   source ${ZDOTDIR:-$HOME}/.tmuxinator/scripts/tmuxinator
@@ -39,9 +43,4 @@ fi
 # k.sh
 if [[ -s $Code/supercrabtree/k/k.sh ]]; then
   source $Code/supercrabtree/k/k.sh
-fi
-
-# gigalixir completion
-if (( $+commands[gigalixir] )); then
-  eval "$(_GIGALIXIR_COMPLETE=source gigalixir)"
 fi
