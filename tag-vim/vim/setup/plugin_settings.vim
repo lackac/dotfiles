@@ -36,12 +36,18 @@ call expand_region#custom_text_objects('ruby', {
 
 let g:gutentags_cache_dir = '~/.tags_cache'
 
+" This is a workaround for a Phoenix livereload issue when using linters form
+" the Editor. See https://github.com/phoenixframework/phoenix/issues/1165
+let $MIX_ENV = "test"
+
 call neomake#configure#automake('w')
 function! OnNeomakeJobFinished() abort
   let context = g:neomake_hook_context
   if context.jobinfo.exit_code != 0
-    echom printf('The job for maker %s exited non-zero: %s',
-    \ context.jobinfo.maker.name, context.jobinfo.exit_code)
+    echohl WarningMsg |
+      \ echo printf('The job for maker %s exited non-zero: %s',
+      \             context.jobinfo.maker.name, context.jobinfo.exit_code) |
+      \ echohl None
   else
     syntax sync fromstart
   endif
@@ -60,6 +66,22 @@ let g:test#custom_transformations = {'custom': function('CustomTestTransform')}
 let g:test#transformation = 'custom'
 
 let g:neosnippet#snippets_directory = "~/.vim/snippets"
+
+let g:netrw_preview = 1   " open preview in a vertical split
+let g:netrw_alto = 0      " ... right of the netrw window
+let g:netrw_liststyle = 3 " use "tree" listing style
+let g:netrw_winsize = 30  " only use 30% of the columns for the directory listing
+
+augroup netrw
+  autocmd!
+  autocmd FileType netrw call s:RemoveNetrwMap()
+augroup END
+
+function s:RemoveNetrwMap()
+  if hasmapto('<Plug>NetrwRefresh')
+    unmap <buffer> <C-l>
+  endif
+endfunction
 
 let g:nrrw_rgn_nomap_nr = 1
 
