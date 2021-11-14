@@ -3,6 +3,9 @@
 # setup Mac OS related dotfiles
 rcup -t osx
 
+# enable key remapping
+launchctl load $HOME/Library/LaunchAgents/remap-keys.plist
+
 # reconfigure Mac OS settings
 $HOME/.macos
 
