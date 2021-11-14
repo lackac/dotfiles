@@ -1,3 +1,7 @@
+# taps
+tap "nextdns/tap"
+tap "puma/puma"
+
 # command line tools
 brew "awscli"
 brew "coreutils"
@@ -49,7 +53,6 @@ cask "alfred"
 cask "appcleaner"
 cask "flux"
 cask "google-chrome"
-cask "keybase"
 cask "kitty"
 
 # QuickLook plugins
@@ -60,14 +63,14 @@ cask "quicklook-csv"
 cask "quicklook-json"
 
 # Fonts
+tap "homebrew/cask-fonts"
 cask "font-fira-code-nerd-font"
-cask "font-fire-mono-nerd-font"
+cask "font-fira-mono-nerd-font"
 
 # Mac App Store installs
 mas "1Password", id: 1333542190
 mas "Affinity Photo", id: 824183456
 mas "Affinity Designer", id: 824171161
-mas "Caffeine", id: 411246225
 mas "Calca", id: 635758264
 mas "Microsoft Word", id: 462054704
 mas "Microsoft Excel", id: 462058435
