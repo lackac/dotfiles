@@ -48,6 +48,7 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 path=(
   ~/bin
+  ~/.local/bin
   ~/.prygems/bin
   /opt/chef/bin
   /opt/homebrew/bin

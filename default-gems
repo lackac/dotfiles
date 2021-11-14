@@ -1,8 +1,4 @@
 bundler
-pry
-guard
-guard-compat
-guard-minitest
 listen
 lunchy
 mailcatcher

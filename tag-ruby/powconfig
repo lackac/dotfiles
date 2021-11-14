@@ -1,2 +1,0 @@
-export POW_DOMAINS=dev,test
-export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH"
