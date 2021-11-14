@@ -1,11 +1,12 @@
-[color]
-	diff = auto
-	status = auto
-	branch = auto
 [user]
 	name = Laszlo Bacsi
 	email = lackac@lackac.hu
 	signingkey = lackac@lackac.hu
+
+[include]
+	path = .gitconfig.private
+	path = .gitconfig.local
+
 [alias]
 	co = checkout
 	ci = commit
@@ -19,20 +20,24 @@
 	humin = name-rev --refs=refs/heads/* --stdin
 	cl = log -n25 --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset' -- lib
 	start = !git init && git commit --allow-empty -m \"Inception\"
+[branch]
+	autosetuprebase = always
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[commit]
+	gpgsign = true
 [core]
 	excludesfile = ~/.gitignore
 	pager = diff-so-fancy | less --tabs=1,5 -R
-[branch]
-	autosetuprebase = always
+[init]
+	defaultBranch = main
+[merge]
+	conflictstyle = diff3
 [push]
 	default = upstream
 	followTags = true
-[merge]
-	conflictstyle = diff3
-
-[include]
-	path = .gitconfig.private
-	path = .gitconfig.local
 
 [url "git@github.com:"]
 	insteadOf = "gh:"
@@ -48,6 +53,7 @@
 	insteadOf = "gist:"
 [url "git@heroku.com:"]
 	insteadOf = "heroku:"
+
 [rerere]
 	enabled = 1
 [heroku]
@@ -59,11 +65,5 @@
 	smudge = git-lfs smudge -- %f
 	required = true
 	process = git-lfs filter-process
-[credential]
-	helper = osxkeychain
-[commit]
-	gpgsign = true
 [gpg]
 	program = /usr/local/MacGPG2/bin/gpg2
-[init]
-	defaultBranch = main
