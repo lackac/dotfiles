@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+
+# install rcm for managing dotfiles
+brew install rcm
+
+# setup all dotfiles with default configuration
+RCRC="$HOME/.dotfiles/rcrc" rcup
+
+# setup private dotfiles
+if [ ! -d "$HOME/.dotfiles-private" ]; then
+  git clone "https://github.com/lackac/dotfiles-private" "$HOME/.dotfiles-private"
+fi
+rcup -d "$HOME/.dotfiles-private"

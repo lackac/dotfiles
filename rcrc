@@ -1,6 +1,6 @@
 DOTFILES_DIR="~/.dotfiles-private ~/.dotfiles"
 COPY_ALWAYS="ssh/id_* ssh/*_rsa*"
-EXCLUDES="README* Solarized*.*term*"
+EXCLUDES="README* script Solarized*.*term*"
 TAGS="zsh tmux vim git ruby"
 SYMLINK_DIRS="zprezto-contrib"
 UNDOTTED="bin Library"

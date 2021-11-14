@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# setup Mac OS related dotfiles
+rcup -t osx
+
+# reconfigure Mac OS settings
+~/.macos
