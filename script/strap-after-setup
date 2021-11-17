@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# setup prezto for configuring ZSH
+git clone --recurse-submodules https://github.com/sorin-ionescu/prezto.git $HOME/.zprezto
+cd $HOME/.zprezto/modules/prompt/external/pure
+git checkout main
+
 # setup Mac OS related dotfiles
 rcup -t osx
 
