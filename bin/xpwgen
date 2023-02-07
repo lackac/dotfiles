@@ -2,7 +2,9 @@
 
 require 'securerandom'
 
-wordlist = File.readlines(File.expand_path("../wordlist", __FILE__)).map(&:chomp)
+source=ENV.fetch("SOURCE", "wordlist")
+
+wordlist = File.readlines(File.expand_path("../#{source}", __FILE__)).map(&:chomp)
 
 count = (ARGV.first || 1).to_i
 word_count = (ENV["WORD_COUNT"] || 4).to_i
