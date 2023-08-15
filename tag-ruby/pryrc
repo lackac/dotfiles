@@ -3,7 +3,7 @@
 $LOAD_PATH.push(*Dir["#{ENV['HOME']}/.prygems/gems/*/lib"]).uniq!
 
 # vim FTW
-Pry.config.editor = "lvim"
+Pry.config.editor = "nvim"
 
 # Prompt with ruby version
 Pry.config.prompt = Pry::Prompt.new(
