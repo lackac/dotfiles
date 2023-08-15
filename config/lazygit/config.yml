@@ -1,0 +1,13 @@
+gui:
+  showIcons: true
+  nerdFontsVersion: "3"
+  theme:
+    lightTheme: true
+    defaultFgColor:
+      - black
+    activeBorderColor:
+      - black
+      - bold
+    inactiveBorderColor:
+      - "#839496"
+  skipDiscardChangeWarning: true

@@ -1,0 +1,5 @@
+c "$@"
+
+local project=${PWD#$HOME/Code/}
+
+tmuxinator start rails-project $project

@@ -3,30 +3,42 @@ tap "nextdns/tap"
 tap "puma/puma"
 
 # command line tools
+brew "ansible"
 brew "awscli"
 brew "coreutils"
 brew "ctags"
 brew "diff-so-fancy"
 brew "direnv"
+brew "fd"
+brew "fortune"
 brew "fwup"
+brew "gh"
 brew "gist"
+brew "gnupg"
 brew "htop-osx"
 brew "hub"
 brew "hunspell"
 brew "imagemagick"
+brew "ipcalc"
 brew "jq"
+brew "lazygit"
 brew "ledger"
 brew "m-cli"
 brew "mosh"
 brew "neovim"
 brew "nextdns"
+brew "oath-toolkit"
 brew "packer"
+brew "pinentry-mac"
 brew "puma-dev"
 brew "rcm"
 brew "reattach-to-user-namespace"
+brew "ripgrep"
+brew "starship"
 brew "sqlite"
 brew "terminal-notifier"
 brew "terraform"
+brew "terragrunt"
 brew "the_silver_searcher"
 brew "tmux"
 brew "tree"
@@ -45,20 +57,24 @@ brew "gawk"
 # Mac App Store command-line interface
 brew "mas"
 
-## TODO: GitHub, GitUp, Google Drive, Itsycal, Messenger, MS Teams, Multipass,
-# Setapp, Slack, Spotify, Transmission, VLC, Viscosity, Zoom
-
 # Desktop app installs
+cask "1password"
+cask "1password-cli"
 cask "alfred"
 cask "appcleaner"
-cask "flux"
+cask "brave-browser"
 cask "google-chrome"
+cask "google-drive"
+cask "hammerspoon"
+cask "keybase"
 cask "kitty"
+cask "prusaslicer"
+cask "setapp"
+cask "slack"
+cask "viscosity"
+cask "vlc"
 
 # QuickLook plugins
-cask "qlcolorcode"
-cask "qlmarkdown"
-cask "qlstephen"
 cask "quicklook-csv"
 cask "quicklook-json"
 
@@ -68,14 +84,11 @@ cask "font-fira-code-nerd-font"
 cask "font-fira-mono-nerd-font"
 
 # Mac App Store installs
-mas "1Password", id: 1333542190
 mas "Affinity Photo", id: 824183456
 mas "Affinity Designer", id: 824171161
-mas "Calca", id: 635758264
 mas "Microsoft Word", id: 462054704
 mas "Microsoft Excel", id: 462058435
 mas "Pocket", id: 568494494
 mas "Transmit", id: 403388562
 mas "Tweetbot", id: 557168941
 mas "The Unarchiver", id: 425424353
-mas "Unsplash Wallpapers", id: 1284863847

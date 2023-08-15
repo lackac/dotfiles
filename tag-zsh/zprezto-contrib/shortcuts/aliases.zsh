@@ -8,6 +8,12 @@ alias :q=exit
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
 alias ql="qlmanage -p &>/dev/null"
 
+alias cal="gcal -s1 -H '\e[44;37m:\e[0m:\e[42;37m:\e[0m'"
+alias cal-hu="cal -qHU"
+alias cal-en="cal -qGB_EN"
+alias cal-gb=cal-en
+alias cal-uk=cal-en
+
 alias gst='git status -sb'
 alias gl='git log --decorate --graph --pretty="%C(auto)%h%d %C(bold)%s %C(blue)%ar%Creset %ad" --date=iso'
 alias glb='gl --branches'
@@ -35,16 +41,6 @@ alias binit="b install --path vendor && b package --all && echo 'vendor/ruby' >>
 alias nls="npm list | sed -ne 's/^[├└][^ ]* //p'"
 alias nlsg="npm list -g | sed -ne 's/^[├└][^ ]* //p'"
 
-alias hpr='hub pull-request -b dev'
-
-alias kst='knife status'
-alias ks='knife search'
-alias ksn='knife search node'
-alias kn='knife node'
-alias kne='knife node edit'
-alias kns='knife node show'
-alias kcu='knife cookbook upload'
-
 alias fs='foreman start'
 
 alias prygem='gem install -i ~/.prygems'
@@ -55,8 +51,3 @@ alias repl='rlwrap -w-40 -p Green -C coffee jake console'
 
 alias httpc='rlwrap http-console'
 alias wbserv='heel -r output/ --no-highlighting'
-
-# Global aliases
-
-alias -g C='| wc -l'
-alias -g EG='|& egrep'

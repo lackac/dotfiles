@@ -3,16 +3,14 @@ if [[ $1 == "list" ]]; then
   return;
 fi
 
-local user=$(echo $1 | awk -F'/' '{print $1}')
+local user=${1%/*}
 local repo=$2
-[[ $repo == "" ]] && repo=$(echo $1 | awk -F'/' '{print $2}')
+[[ $repo == "" && $1 = */* ]] && repo=${1#*/}
 
-orgs=(lackac r3missions 100Starlings Bibliaolvaso CPlus)
 if [[ $user != "" && $repo != "" && ! -d ~/Code/$user/$repo ]]; then
-  [[ ${orgs[(r)$user]} == $user ]] && local private="-p"
   mkdir -p ~/Code/$user
   cd ~/Code/$user
-  hub clone $private $user/$repo
+  git clone https://github.com/$user/$repo.git
 fi
 
 if [[ -d ~/Code/$user/$repo ]]; then

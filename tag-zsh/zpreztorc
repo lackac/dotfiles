@@ -39,13 +39,11 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'archive' \
   'osx' \
-  'ssh' \
   'git' \
   'completion' \
   'syntax-highlighting' \
   'history' \
   'history-substring-search' \
-  'prompt' \
   'shortcuts' \
   'tools' \
   'temp' \
@@ -126,11 +124,11 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'pure'
+#zstyle ':prezto:module:prompt' theme 'pure'
 
 # Configure pure theme
-zstyle ':prompt:pure:prompt:success' color green
-zstyle ':prompt:pure:git:dirty' color yellow
+#zstyle ':prompt:pure:prompt:success' color green
+#zstyle ':prompt:pure:git:dirty' color yellow
 
 # Set the working directory prompt display length.
 # By default, it is set to 'short'. Set it to 'long' (without '~' expansion)
@@ -173,7 +171,7 @@ zstyle ':prompt:pure:git:dirty' color yellow
 #
 
 # Set the SSH identities to load into the agent.
-zstyle ':prezto:module:ssh:load' identities 'id_rsa' 'strong_rsa'
+#zstyle ':prezto:module:ssh:load' identities 'id_rsa' 'strong_rsa'
 
 #
 # Syntax Highlighting

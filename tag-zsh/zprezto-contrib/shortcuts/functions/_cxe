@@ -1,0 +1,5 @@
+#compdef cxe
+
+local paths
+paths=(~/Code/* ~/Code)
+_files -W paths -/

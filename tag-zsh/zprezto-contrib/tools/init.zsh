@@ -5,6 +5,11 @@
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
+# starship
+if (( $+commands[starship] )); then
+  eval "$(starship init zsh)"
+fi
+
 # direnv
 if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
@@ -20,19 +25,15 @@ if [[ -f ${ZDOTDIR:-$HOME}/.asdf/plugins/java/set-java-home.zsh ]]; then
   source ${ZDOTDIR:-$HOME}/.asdf/plugins/java/set-java-home.zsh
 fi
 
-# tmuxinator
-if [[ -s ${ZDOTDIR:-$HOME}/.tmuxinator/scripts/tmuxinator ]]; then
-  source ${ZDOTDIR:-$HOME}/.tmuxinator/scripts/tmuxinator
-fi
+# Load CLIs based on 100starlings/sub
 
-# 100s
-if [[ -d $Code/100Starlings/100s/bin ]]; then
-  eval "$($Code/100Starlings/100s/bin/100s init -)"
-fi
-
-# cplus
-if [[ -d $Code/CPlus/cplus/bin ]]; then
-  eval "$($Code/CPlus/cplus/bin/cplus init -)"
+if [[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/subs ]]; then
+  for sub in $(grep -v '^#' ${XDG_CONFIG_HOME:-$HOME/.config}/subs); do
+    [[ ${sub:0:1} == "/" ]] || sub=$Code/$sub
+    if [[ -x $sub ]]; then
+      eval "$($sub init -)"
+    fi
+  done
 fi
 
 # aws
@@ -43,4 +44,13 @@ fi
 # k.sh
 if [[ -s $Code/supercrabtree/k/k.sh ]]; then
   source $Code/supercrabtree/k/k.sh
+fi
+
+# 1Password CLI
+if (( $+commands[op] )); then
+  eval "$(op completion zsh)"
+  compdef _op op
+fi
+if [[ -s $HOME/.config/op/plugins.sh ]]; then
+  source $HOME/.config/op/plugins.sh
 fi

@@ -2,14 +2,9 @@
 
 # setup prezto for configuring ZSH
 git clone --recurse-submodules https://github.com/sorin-ionescu/prezto.git $HOME/.zprezto
-cd $HOME/.zprezto/modules/prompt/external/pure
-git checkout main
 
 # setup Mac OS related dotfiles
 rcup -t osx
-
-# enable key remapping
-launchctl load $HOME/Library/LaunchAgents/remap-keys.plist
 
 # reconfigure Mac OS settings
 $HOME/.macos
@@ -39,9 +34,11 @@ asdf plugin add rust
 asdf install rust stable
 asdf global rust stable
 
-# install LunarVim and restore our config
-mkdir -p $HOME/Code/LunarVim
-git clone https://github.com/LunarVim/LunarVim $HOME/Code/LunarVim/LunarVim
-$HOME/Code/LunarVim/LunarVim/utils/installer/install.sh --local --install-dependencies
-rm -rf $HOME/.config/lvim $HOME/.config/lvim.bak
-rcup -t vim
+# setup TPM
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+# install gems for Pry
+gem install -N -i ~/.prygems pry pry-doc pry-remote pry-stack_explorer awesome_print coderay hirb
+
+# change some application configuration
+defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
