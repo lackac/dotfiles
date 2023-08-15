@@ -1,7 +1,7 @@
 # ~/.tmuxinator/sandbox.yml
 # you can make as many tabs as you wish...
 
-name: ﲪ Tesla
+name: 󰞬 Tesla
 root: ~/Code/sandbox/tesla
 windows:
   - editor: vim

@@ -1,9 +1,0 @@
-# ~/.tmuxinator/impact.yml
-# you can make as many windows as you wish...
-
-project_name: IMPACT
-project_root: ~/Code/lackac/impactgeneration.org
-windows:
-  - editor: vim
-  - shell:
-  - server: bundle exec middleman server -p7003

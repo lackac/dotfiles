@@ -1,9 +1,0 @@
-# ~/.tmuxinator/fjk.yml
-# you can make as many windows as you wish...
-
-project_name: FJK
-project_root: ~/Code/lackac/fjk.hu
-windows:
-  - editor: vim
-  - console:
-  - shell: bundle exec middleman server --port 7001

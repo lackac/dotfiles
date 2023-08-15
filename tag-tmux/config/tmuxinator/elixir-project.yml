@@ -1,0 +1,19 @@
+<%
+path, name = @args
+name ||= path.split("/").last
+%>
+
+name: "<%= name %> "
+root: ~/Code/<%= path %>
+startup_window: shell
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - vim
+  - : lazygit
+  - shell: git pull
+  - :
+      layout: even-vertical
+      panes:
+        - iex -S mix

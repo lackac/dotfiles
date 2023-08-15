@@ -1,8 +1,8 @@
 # ~/.tmuxinator/100s.yml
 # you can make as many windows as you wish...
 
-name: 100S 
-root: ~/Code/100Starlings/100s
+name: 🐦 100S 
+root: ~/Code/100Starlings/100s-cli
 startup_window: shell
 windows:
   - :
@@ -16,10 +16,9 @@ windows:
         -
   - shell: git pull
   - ledger:
-      root: ~/Code/100Starlings/100s/ledger
+      root: ~/Code/100Starlings/100s-cli/ledger
   - invoices:
-      root: /Volumes/GoogleDrive/My Drive/Partners/Finance
       layout: even-horizontal
       panes:
-        - root: cd "Invoices Received"
-        - root: cd "Invoices Paid"
+        - root: cd "$FINANCE_PATH/Invoices Received"
+        - root: cd "$FINANCE_PATH/Invoices Paid"

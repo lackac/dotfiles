@@ -1,9 +1,0 @@
-# ~/.tmuxinator/exercism.yml
-# you can make as many tabs as you wish...
-
-name: exercism
-root: ~/Code/lackac/exercises
-windows:
-  - editor: vim
-  - iex: iex
-  - shell:

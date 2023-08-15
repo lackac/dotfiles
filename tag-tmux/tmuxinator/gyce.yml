@@ -1,9 +1,0 @@
-# ~/.tmuxinator/gyce.yml
-# you can make as many windows as you wish...
-
-project_name: GYC Europe
-project_root: ~/Code/lackac/europe.gycweb.org
-windows:
-  - vim: vim
-  - shell:
-  - server: bin/middleman server -p7002

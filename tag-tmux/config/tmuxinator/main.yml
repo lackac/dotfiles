@@ -1,7 +1,7 @@
 # ~/.tmuxinator/main.yml
 # you can make as many windows as you wish...
 
-name: "  "
+name: " 󰇄 "
 root: ~
 windows:
   - shell:
