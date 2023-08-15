@@ -65,5 +65,5 @@
 	smudge = git-lfs smudge -- %f
 	required = true
 	process = git-lfs filter-process
-[gpg]
-	program = /usr/local/MacGPG2/bin/gpg2
+[author]
+	email = laszlo.bacsi@100starlings.com
