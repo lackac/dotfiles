@@ -131,7 +131,10 @@ return {
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
-      require("ufo").setup({
+
+      local ufo = require("ufo")
+
+      ufo.setup({
         close_fold_kinds = { "imports", "comment" },
         fold_virt_text_handler = virtTextHandler,
         preview = {
@@ -151,11 +154,24 @@ return {
           return ftMap[filetype] or providerSelector
         end,
       })
+
+      local ignore_filetypes = { "neo-tree" }
+
+      -- detach from existing ignored file types
+      vim.tbl_map(function(buf)
+        if
+          vim.api.nvim_buf_is_loaded(buf)
+          and vim.tbl_contains(ignore_filetypes, vim.api.nvim_buf_get_option(buf, "filetype"))
+        then
+          ufo.detach(buf)
+        end
+      end, vim.api.nvim_list_bufs())
+
+      -- detach from buffers with ignored filetypes right after opening them
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "neo-tree" },
+        pattern = ignore_filetypes,
         callback = function()
-          print("FOO")
-          require("ufo").detach()
+          ufo.detach()
           vim.opt_local.foldenable = false
         end,
       })
