@@ -25,7 +25,11 @@ return {
     -- mappings in LazyVim are quite comprehensive already
     -- these are just a few additions
     keys = {
-      { "<leader>fc", Util.telescope("files", { cwd = vim.fn.stdpath("config") }), desc = "Find Configuration Files" },
+      {
+        "<leader>fc",
+        Util.telescope("files", { cwd = vim.fn.stdpath("config"), follow = true }),
+        desc = "Find Configuration Files",
+      },
       { "<leader>sN", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
       { "<leader>snn", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
     },
