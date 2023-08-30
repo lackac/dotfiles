@@ -69,10 +69,31 @@ config = {
       { "awstrack.me links", "https://.*%.awstrack%.me/.-/(.*)", "%1" },
     },
   },
+
+  window = {
+    highlightBorder = true,
+    highlightMouse = true,
+    historyLimit = 100,
+    borderStyle = {
+      width = 2,
+      alpha = 0.6,
+      distance = 6,
+      roundRadius = 12,
+    },
+  },
+
+  network = {
+    home = "Hovirag",
+    inlaws = "Kaktusz",
+    office = "Unifi",
+  },
 }
 
 local modules = {
   require("urls"),
+  require("app_logger"),
+  require("theme"),
+  require("watchables"),
 }
 
 -- start/stop modules
