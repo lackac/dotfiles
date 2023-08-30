@@ -2,8 +2,8 @@
 # you can make as many windows as you wish...
 
 project_name: 100Starlings
-project_root: ~/Code/100Starlings/100starlings.github.io
+project_root: ~/Code/100Starlings/100starlings
 windows:
   - editor: vim
   - shell:
-  - server: jekyll serve -P 7006
+  - server: yarn next dev
