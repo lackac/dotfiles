@@ -15,13 +15,14 @@ local getOSXAppearance = function()
 end
 
 -- get appearance on start
-cache.osxApperance = getOSXAppearance()
+cache.osxAppearance = getOSXAppearance()
 
 module.getHighlightWindowColor = function()
-  local blueColor = { red = 50 / 255, green = 138 / 255, blue = 215 / 255, alpha = 1.0 }
-  local grayColor = { red = 143 / 255, green = 143 / 255, blue = 143 / 255, alpha = 1.0 }
+  local orange = { red = 254 / 255, green = 129 / 255, blue = 8 / 255, alpha = 1.0 }
+  local blue = { red = 50 / 255, green = 138 / 255, blue = 215 / 255, alpha = 1.0 }
+  local gray = { red = 143 / 255, green = 143 / 255, blue = 143 / 255, alpha = 1.0 }
 
-  return cache.osxApperance == "graphite" and grayColor or blueColor
+  return cache.osxAppearance == "graphite" and gray or orange or blue
 end
 
 module.drawBorder = function()

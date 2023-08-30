@@ -50,4 +50,54 @@ module.focusScreen = function(screen)
   hs.eventtap.leftClick(mousePosition)
 end
 
+-- consistently step trough screen based on order in config.wm.displayOrder
+module.stepScreen = function(currentScreen, dir)
+  local currentScreenName = currentScreen:name()
+  local index = hs.fnutils.indexOf(config.wm.displayOrder, currentScreenName)
+
+  if index == nil then
+    return false
+  end
+
+  local screens = {}
+  local screenCount = 0
+  hs.fnutils.each(hs.screen.allScreens(), function(s)
+    screens[s:name()] = s
+    screenCount = screenCount + 1
+  end)
+  -- cycling less than 3 screens is always consistent
+  if screenCount < 3 then
+    return false
+  end
+
+  while true do
+    index = index + dir
+    if index > #config.wm.displayOrder then
+      index = 1
+    end
+    if index <= 0 then
+      index = #config.wm.displayOrder
+    end
+
+    local screenName = config.wm.displayOrder[index]
+    -- circled around to current screen, time to give up
+    if screenName == currentScreenName then
+      return false
+    end
+
+    local screen = screens[screenName]
+    if screen then
+      return screen
+    end
+  end
+end
+
+module.nextScreen = function(screen)
+  return module.stepScreen(screen, 1) or screen:next()
+end
+
+module.prevScreen = function(screen)
+  return module.stepScreen(screen, -1) or screen:previous()
+end
+
 return module

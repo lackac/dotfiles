@@ -1,5 +1,8 @@
 ---@diagnostic disable: duplicate-set-field
 
+local nextScreen = require("ext.screens").nextScreen
+local prevScreen = require("ext.screens").prevScreen
+
 -- ensure IPC is there
 hs.ipc.cliInstall()
 
@@ -57,7 +60,7 @@ hs.grid.pushWindowNextScreen = function(win)
   local noResize = true
   local ensureInScreenBounds = true
 
-  win:moveToScreen(win:screen():next(), noResize, ensureInScreenBounds)
+  win:moveToScreen(nextScreen(win:screen()), noResize, ensureInScreenBounds)
   hs.grid.snap(win)
 end
 
@@ -66,7 +69,7 @@ hs.grid.pushWindowPrevScreen = function(win)
   local noResize = true
   local ensureInScreenBounds = true
 
-  win:moveToScreen(win:screen():previous(), noResize, ensureInScreenBounds)
+  win:moveToScreen(prevScreen(win:screen()), noResize, ensureInScreenBounds)
   hs.grid.snap(win)
 end
 

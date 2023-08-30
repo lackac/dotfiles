@@ -1,4 +1,4 @@
-local focusScreen = require("ext.screen").focusScreen
+local focusScreen = require("ext.screens").focusScreen
 local highlightWindow = require("ext.drawing").highlightWindow
 
 local cache = {

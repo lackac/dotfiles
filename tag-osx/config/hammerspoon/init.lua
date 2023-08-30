@@ -1,12 +1,14 @@
--- utils
-local flatten = require("ext.table").flatten
-
 -- global stuff
 require("console")
 require("overrides")
 
 -- global config
 config = {
+  apps = {
+    terms = { "kitty", "Terminal" },
+    browsers = { "Brave Browser", "Safari", "Google Chrome" },
+  },
+
   urls = {
     defaultBrowser = "Brave Browser",
     defaultHandler = "profile:Default",
@@ -70,14 +72,23 @@ config = {
     },
   },
 
+  wm = {
+    tilingMethod = "grid",
+    displayOrder = {
+      "Built-in Retina Display",
+      "LG SDQHD",
+      "LF32TU87",
+    },
+  },
+
   window = {
     highlightBorder = true,
     highlightMouse = true,
     historyLimit = 100,
     borderStyle = {
-      width = 2,
+      width = 4,
       alpha = 0.6,
-      distance = 6,
+      distance = 4,
       roundRadius = 12,
     },
   },
@@ -89,7 +100,15 @@ config = {
   },
 }
 
+local bindings = require("bindings")
+bindings.enabled = {
+  "focus",
+  "global",
+}
+table.insert(bindings.enabled, config.wm.tilingMethod)
+
 local modules = {
+  bindings,
   require("urls"),
   require("mod.app_logger"),
   require("mod.theme"),
