@@ -91,9 +91,9 @@ config = {
 
 local modules = {
   require("urls"),
-  require("app_logger"),
-  require("theme"),
-  require("watchables"),
+  require("mod.app_logger"),
+  require("mod.theme"),
+  require("mod.watchables"),
 }
 
 -- start/stop modules
