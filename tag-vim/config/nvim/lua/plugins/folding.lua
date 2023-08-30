@@ -127,7 +127,7 @@ return {
     },
     config = function()
       vim.o.fillchars = [[eob: ,fold:┄,foldopen:,foldsep:│,foldclose:]]
-      vim.o.foldcolumn = "auto:9"
+      vim.o.foldcolumn = "auto:5"
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
