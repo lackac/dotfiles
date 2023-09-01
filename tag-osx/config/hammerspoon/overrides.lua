@@ -18,9 +18,11 @@ hs.window.animationDuration = 0.0
 -- hints
 hs.hints.fontName = "Helvetica-Bold"
 hs.hints.fontSize = 22
-hs.hints.hintChars = { "A", "S", "D", "F", "J", "K", "L", "Q", "W", "E", "R", "Z", "X", "C" }
 hs.hints.iconAlpha = 1.0
 hs.hints.showTitleThresh = 0
+-- the following two are kind of mutually exclusive
+-- hs.hints.hintChars = { "A", "S", "D", "F", "J", "K", "L", "Q", "W", "E", "R", "Z", "X", "C" }
+hs.hints.style = "vimperator"
 
 -- detects if window can be resized
 -- this is not ideal, but works

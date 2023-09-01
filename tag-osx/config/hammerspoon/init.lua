@@ -73,7 +73,8 @@ config = {
   },
 
   wm = {
-    tilingMethod = "grid",
+    -- tilingMethod = "grid",
+    tilingMethod = "autogrid",
     displayOrder = {
       "Built-in Retina Display",
       "LG SDQHD",
@@ -101,19 +102,25 @@ config = {
 }
 
 local bindings = require("bindings")
-bindings.enabled = {
-  "focus",
-  "global",
-}
-table.insert(bindings.enabled, config.wm.tilingMethod)
-
 local modules = {
   bindings,
   require("urls"),
   require("mod.app_logger"),
   require("mod.theme"),
+  require("mod.autoborder"),
   require("mod.watchables"),
 }
+
+bindings.enabled = {
+  "focus",
+  "global",
+}
+if config.wm.tilingMethod == "autogrid" then
+  table.insert(bindings.enabled, "grid")
+  table.insert(modules, require("mod.autogrid"))
+else
+  table.insert(bindings.enabled, config.wm.tilingMethod)
+end
 
 -- start/stop modules
 hs.fnutils.each(modules, function(module)
