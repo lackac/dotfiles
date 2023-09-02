@@ -73,12 +73,21 @@ config = {
   },
 
   wm = {
+    tilingMethod = "hhtwm",
     -- tilingMethod = "grid",
-    tilingMethod = "autogrid",
+    -- tilingMethod = "autogrid",
+
+    defaultLayouts = { "monocle", "main-left" },
     displayOrder = {
       "Built-in Retina Display",
       "LG SDQHD",
       "LF32TU87",
+    },
+    displayLayouts = {
+      ["Built-in Retina Display"] = { "monocle", "main-left" },
+      ["LG SDQHD"] = { "main-top", "main-center", "tabbed-top", "monocle" },
+      ["LF32TU87"] = { "main-left", "main-right", "main-center", "tabbed-left", "monocle" },
+      ["HP Z27k G3"] = { "main-left", "main-right", "main-center", "tabbed-left", "monocle" },
     },
   },
 
