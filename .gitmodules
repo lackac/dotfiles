@@ -1,0 +1,15 @@
+[submodule "tag-tmux/config/tmux/plugins/tpm"]
+	path = tag-tmux/config/tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm.git
+[submodule "tag-tmux/config/tmux/plugins/tmux-better-mouse-mode"]
+	path = tag-tmux/config/tmux/plugins/tmux-better-mouse-mode
+	url = https://github.com/nhdaly/tmux-better-mouse-mode.git
+[submodule "tag-tmux/config/tmux/plugins/tmux-yank"]
+	path = tag-tmux/config/tmux/plugins/tmux-yank
+	url = https://github.com/tmux-plugins/tmux-yank
+[submodule "tag-tmux/config/tmux/plugins/tmux-open"]
+	path = tag-tmux/config/tmux/plugins/tmux-open
+	url = https://github.com/tmux-plugins/tmux-open
+[submodule "tag-tmux/config/tmux/plugins/tmux-sensible"]
+	path = tag-tmux/config/tmux/plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible
