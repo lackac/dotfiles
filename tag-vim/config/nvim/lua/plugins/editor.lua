@@ -6,11 +6,16 @@ return {
 
     -- enable faster and more capable fuzzy search with fzf
     dependencies = {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        require("telescope").load_extension("fzf")
-      end,
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+        config = function()
+          require("telescope").load_extension("fzf")
+        end,
+      },
+      {
+        "debugloop/telescope-undo.nvim",
+      },
     },
 
     opts = {
@@ -19,6 +24,9 @@ return {
         selection_caret = " ",
         path_display = { "smart" },
         file_ignore_patterns = { ".git/", "node_modules/", "vendor/" },
+      },
+      extensions = {
+        undo = {},
       },
     },
 
@@ -32,12 +40,14 @@ return {
       },
       { "<leader>sN", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
       { "<leader>snn", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
+      { "<leader>U", "<cmd>Telescope undo<cr>", desc = "Undo tree" },
     },
 
     config = function(_, opts)
       local telescope = require("telescope")
       telescope.setup(opts)
       telescope.load_extension("notify")
+      telescope.load_extension("undo")
     end,
   },
 
