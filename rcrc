@@ -1,6 +1,6 @@
 DOTFILES_DIR="~/.dotfiles-private ~/.dotfiles"
 COPY_ALWAYS="ssh/id_* ssh/*_rsa*"
-EXCLUDES="README* script Solarized*.*term*"
+EXCLUDES="README* script"
 TAGS="zsh tmux vim git ruby"
 SYMLINK_DIRS="zprezto-contrib config/nvim/lua config/hammerspoon/assets config/hammerspoon/bindings config/hammerspoon/hhtwm config/hammerspoon/ext config/hammerspoon/mod"
 UNDOTTED="bin Library"
