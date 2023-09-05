@@ -123,10 +123,10 @@ return function(hhtwm)
       local divs = #windows - 1
       local w = insetFrame.w / divs
 
+      frame.x = frame.x + w * (index - 2) + margin / 2
+      frame.y = frame.y + insetFrame.h * layoutOptions.mainPaneRatio + margin / 2
       frame.w = w - margin
       frame.h = insetFrame.h * (1 - layoutOptions.mainPaneRatio) - margin
-      frame.x = frame.x + w * (index - 2) + margin / 2
-      frame.y = frame.y + insetFrame.y * layoutOptions.mainPaneRatio + margin / 2
     end
 
     return frame
