@@ -119,6 +119,9 @@ module.start = function()
   -- [e]qualize
   bind("e", hhtwm.equalizeLayout)
 
+  -- use [g]olden ratio
+  bind("g", hhtwm.goldenLayout)
+
   -- [l]ayout
   hs.hotkey.bind(ultra, "l", wm.cycleLayout)
 
