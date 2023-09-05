@@ -126,7 +126,8 @@ bindings.enabled = {
 }
 if config.wm.tilingMethod == "autogrid" then
   table.insert(bindings.enabled, "grid")
-  table.insert(modules, require("mod.autogrid"))
+  local autogrid = require("mod.autogrid")
+  table.insert(modules, autogrid)
 else
   table.insert(bindings.enabled, config.wm.tilingMethod)
 end
