@@ -1,5 +1,4 @@
 local highlightWindow = require("ext.drawing").highlightWindow
-local spaces = require("hs.spaces")
 local window = require("ext.window")
 
 local module = {}
@@ -17,32 +16,30 @@ local doWin = function(fn)
   end
 end
 
-local getSpaceIdsTable = function()
-  local allSpaces = spaces.allSpaces() or {}
-  local spacesIds = {}
+local getSpaceIds = function()
+  local spacesLayout = hs.spaces.allSpaces()
+  local spaceIds = {}
 
-  hs.fnutils.each(hs.screen.allScreens(), function(screen)
-    local screenUUID = screen:getUUID()
+  for _, spaces in pairs(spacesLayout) do
+    for _, spaceId in ipairs(spaces) do
+      if hs.spaces.spaceType(spaceId) == "user" then
+        table.insert(spaceIds, spaceId)
+      end
+    end
+  end
 
-    local userSpaces = hs.fnutils.filter(allSpaces[screenUUID] or {}, function(spaceId)
-      return spaces.spaceType(spaceId) == "user"
-    end)
-
-    hs.fnutils.concat(spacesIds, userSpaces or {})
-  end)
-
-  return spacesIds
+  return spaceIds
 end
 
 local throwToSpace = function(win, spaceIdx)
-  local spacesIds = getSpaceIdsTable()
-  local spaceId = spacesIds[spaceIdx]
+  local spaceIds = getSpaceIds()
+  local spaceId = spaceIds[spaceIdx]
 
   if not spaceId then
     return false
   end
 
-  spaces.moveWindowToSpace(win:id(), spaceId)
+  hs.spaces.moveWindowToSpace(win:id(), spaceId)
 end
 
 module.start = function()

@@ -1,4 +1,3 @@
-local spaces = require("hs.spaces")
 local activeScreen = require("ext.screens").activeScreen
 
 local cache = {}
@@ -7,8 +6,8 @@ local module = { cache = cache }
 module.spaceInDirection = function(direction, screen)
   screen = screen or activeScreen()
 
-  local screenSpaces = spaces.spacesForScreen(screen) or {}
-  local activeIdx = hs.fnutils.indexOf(screenSpaces, spaces.activeSpaceOnScreen(screen)) or 1
+  local screenSpaces = hs.spaces.spacesForScreen(screen) or {}
+  local activeIdx = hs.fnutils.indexOf(screenSpaces, hs.spaces.activeSpaceOnScreen(screen)) or 1
   local targetIdx = direction == "west" and activeIdx - 1 or activeIdx + 1
 
   return screenSpaces[targetIdx]
