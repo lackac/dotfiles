@@ -107,6 +107,21 @@ return {
     config = true,
   },
 
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "BufRead",
+    keys = {
+      {
+        "[c",
+        function()
+          require("treesitter-context").go_to_context()
+        end,
+        desc = "Jump to [c]ontext",
+        silent = true,
+      },
+    },
+  },
+
   -- indent objects based on treesitter (replacement of mini.indentscope functionality)
   {
     "kiyoon/treesitter-indent-object.nvim",
