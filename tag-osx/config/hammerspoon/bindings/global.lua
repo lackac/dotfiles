@@ -96,6 +96,8 @@ module.start = function()
     { key = "return", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
     { key = ",", apps = { "System Settings" } },
+    { key = "s", apps = { "Slack" } },
+    { key = "f", apps = { "Finder" } },
   }, function(object)
     hs.hotkey.bind(ultra, object.key, function()
       smartLaunchOrFocus(object.apps)
