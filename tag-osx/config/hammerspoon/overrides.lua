@@ -51,6 +51,9 @@ hs.grid.setGrid("24x15", "1440x900") -- cell: 60 x 60
 hs.grid.setGrid("32x36", "2560x2880") -- cell: 80 x 80
 hs.grid.setGrid("32x36", "2048x2304") -- cell: 64 x 64
 
+-- portrait mode
+hs.grid.setGrid("18x32", "1440x2560") -- cell: 80 x 80
+
 hs.grid.setMargins({ gridMargin, gridMargin })
 
 hs.grid.getMargins = function()
