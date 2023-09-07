@@ -5,7 +5,7 @@ return function(hhtwm)
 
   local getInsetFrame = function(screen)
     local screenFrame = screen:fullFrame()
-    local screenMargin = hhtwm.screenMargin or { top = 0, bottom = 0, right = 0, left = 0 }
+    local screenMargin = hhtwm.option("screenMargin")
 
     return {
       x = screenFrame.x + screenMargin.left,
@@ -20,7 +20,7 @@ return function(hhtwm)
   end
 
   layouts["monocle"] = function(_, _, screen)
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin")
     local insetFrame = getInsetFrame(screen)
 
     local frame = {
@@ -38,7 +38,7 @@ return function(hhtwm)
       return layouts["monocle"](window, windows, screen)
     end
 
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin") or 0
     local insetFrame = getInsetFrame(screen)
 
     local frame = {
@@ -71,7 +71,7 @@ return function(hhtwm)
       return layouts["monocle"](window, windows, screen)
     end
 
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin") or 0
     local insetFrame = getInsetFrame(screen)
 
     local frame = {
@@ -104,7 +104,7 @@ return function(hhtwm)
       return layouts["monocle"](window, windows, screen)
     end
 
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin") or 0
     local insetFrame = getInsetFrame(screen)
 
     local frame = {
@@ -134,7 +134,7 @@ return function(hhtwm)
 
   layouts["main-center"] = function(window, windows, screen, index, layoutOptions)
     local insetFrame = getInsetFrame(screen)
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin") or 0
     local mainColumnWidth = insetFrame.w * layoutOptions.mainPaneRatio + margin / 2
 
     if index == 1 then
@@ -177,7 +177,7 @@ return function(hhtwm)
       return layouts["monocle"](window, windows, screen)
     end
 
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin") or 0
     local insetFrame = getInsetFrame(screen)
 
     local frame = {
@@ -207,7 +207,7 @@ return function(hhtwm)
       return layouts["monocle"](window, windows, screen)
     end
 
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin") or 0
     local insetFrame = getInsetFrame(screen)
 
     local frame = {
@@ -237,7 +237,7 @@ return function(hhtwm)
       return layouts["monocle"](window, windows, screen)
     end
 
-    local margin = hhtwm.margin or 0
+    local margin = hhtwm.option("margin") or 0
     local insetFrame = getInsetFrame(screen)
 
     local frame = {

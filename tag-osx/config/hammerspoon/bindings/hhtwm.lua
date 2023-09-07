@@ -9,7 +9,9 @@ local hhtwm = wm.cache.hhtwm
 local move = function(dir)
   local win = hs.window.frontmostWindow()
 
-  if hhtwm.isFloating(win) then
+  if hhtwm.isTiled(win) then
+    hhtwm.swapInDirection(win, dir)
+  else
     local directions = {
       west = "left",
       south = "down",
@@ -18,8 +20,6 @@ local move = function(dir)
     }
 
     hs.grid["pushWindow" .. capitalize(directions[dir])](win)
-  else
-    hhtwm.swapInDirection(win, dir)
   end
 
   highlightWindow()
@@ -28,10 +28,10 @@ end
 local throw = function(dir)
   local win = hs.window.frontmostWindow()
 
-  if hhtwm.isFloating(win) then
-    hs.grid["pushWindow" .. capitalize(dir) .. "Screen"](win)
-  else
+  if hhtwm.isTiled(win) then
     hhtwm.throwToScreenUsingSpaces(win, dir)
+  else
+    hs.grid["pushWindow" .. capitalize(dir) .. "Screen"](win)
   end
 
   highlightWindow()
@@ -40,12 +40,12 @@ end
 local resize = function(resize)
   local win = hs.window.frontmostWindow()
 
-  if hhtwm.isFloating(win) then
+  if hhtwm.isTiled(win) then
+    hhtwm.resizeLayout(resize)
+  else
     hs.grid["resizeWindow" .. capitalize(resize)](win)
 
     highlightWindow()
-  else
-    hhtwm.resizeLayout(resize)
   end
 end
 
@@ -129,7 +129,7 @@ module.start = function()
   bind("c", function()
     local win = hs.window.frontmostWindow()
 
-    if not hhtwm.isFloating(win) then
+    if hhtwm.isTiled(win) then
       hhtwm.toggleFloat(win)
     end
 
@@ -142,7 +142,7 @@ module.start = function()
   bind("z", function()
     local win = hs.window.frontmostWindow()
 
-    if not hhtwm.isFloating(win) then
+    if hhtwm.isTiled(win) then
       hhtwm.toggleFloat(win)
       hs.grid.maximizeWindow(win)
     else
@@ -169,14 +169,14 @@ module.start = function()
         return
       end
 
-      local isFloating = hhtwm.isFloating(win)
+      local isTiled = hhtwm.isTiled(win)
       local success = hhtwm.throwToSpace(win, n == 0 and 10 or n) -- 0 is 10th space
 
       -- if window switched space, then wait a bit and retile
       if success then
         -- retile and re-highlight window after we switch space
         hs.timer.doAfter(0.3, function()
-          if not isFloating then
+          if isTiled then
             hhtwm.tile()
           end
           highlightWindow(win)

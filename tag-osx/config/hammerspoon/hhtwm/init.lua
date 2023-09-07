@@ -2,18 +2,30 @@
 
 local createLayouts = require("hhtwm.layouts")
 
-local cache = { spaces = {}, layouts = {}, floating = {}, layoutOptions = {} }
-local module = { cache = cache }
+local log = hs.logger.new("hhtwm", "info")
+
+local cache = { spaces = {}, layouts = {}, floating = {}, displayLayouts = {}, options = {}, layoutOptions = {} }
+local module = { cache = cache, log = log }
 
 local layouts = createLayouts(module)
-local log = hs.logger.new("hhtwm", "debug")
 
-local SWAP_BETWEEN_SCREENS = false
+local defaultOptions = {
+  margin = 0,
+  screenMargin = { top = 0, bottom = 0, right = 0, left = 0 },
+  filters = {},
+  swapBetweenScreens = false,
+  onlyFrontmost = true,
+  strictAngle = true,
+}
 
-local getDefaultLayoutOptions = function(golden)
+local defaultLayoutOptions = function(golden)
   return {
     mainPaneRatio = golden and 0.618 or 0.5,
   }
+end
+
+local calcResizeStep = function(_)
+  return 0.1
 end
 
 local ensureSpaceCache = function(spaceId)
@@ -53,31 +65,41 @@ local getSpaceIds = function()
 end
 
 local getScreenBySpaceId = function(spaceId)
-  local spacesLayout = hs.spaces.allSpaces()
-
-  return hs.fnutils.find(hs.screen.allScreens(), function(screen)
-    local spaceUUID = screen:getUUID()
-
-    return hs.fnutils.contains(spacesLayout[spaceUUID], spaceId)
-  end)
+  return hs.screen.findByID(hs.spaces.spaceDisplay(spaceId))
 end
 
-local getCurrentSpacesByScreen = function()
-  local currentSpaces = hs.spaces.activeSpaces()
+module.setDisplayLayouts = function(newLayouts)
+  if type(newLayouts) == "table" then
+    cache.displayLayouts = layouts
+  else
+    log.ef("Wrong type of argument given to %s: %s", debug.getinfo(1, "n").name, hs.inspect(layouts))
+  end
+end
 
-  local spaceIds = {}
+module.setCalcResizeStep = function(calcFun)
+  if type(calcFun) == "function" then
+    calcResizeStep = calcFun
+  else
+    log.ef("Wrong type of argument given to %s: %s", debug.getinfo(1, "n").name, hs.inspect(calcFun))
+  end
+end
 
-  hs.fnutils.each(hs.screen.allScreens(), function(screen)
-    local screenSpaces = hs.spaces.spacesForScreen(screen)
+module.option = function(key)
+  local value = cache.options[key]
+  if value ~= nil then
+    return value
+  else
+    return defaultOptions[key]
+  end
+end
 
-    local visibleSpace = hs.fnutils.find(screenSpaces, function(spaceId)
-      return hs.fnutils.contains(currentSpaces, spaceId)
-    end)
+module.setOptions = function(options)
+  for k, v in pairs(options) do
+    cache.options[k] = v
+  end
 
-    spaceIds[screen:id()] = visibleSpace
-  end)
-
-  return spaceIds
+  log.d("updating hhtwm options", options)
+  hs.settings.set("hhtwm.options", cache.options)
 end
 
 module.findTiledWindow = function(win)
@@ -104,8 +126,6 @@ module.getLayouts = function()
   return layoutNames
 end
 
--- sets layout for space id,
--- defaults to current windows space
 module.setLayout = function(layout, spaceId)
   spaceId = spaceId or getSpaceId()
   if not spaceId then
@@ -124,36 +144,18 @@ module.setLayout = function(layout, spaceId)
   module.tile()
 end
 
--- get layout for space id, priorities:
--- 1. already set layout (cache)
--- 2. layout selected by setLayout
--- 3. layout assigned by tilign.displayLayouts
--- 4. if all else fails - 'monocle'
 module.getLayout = function(spaceId)
   spaceId = spaceId or getSpaceId()
 
-  local layout = hs.spaces.allSpaces() or {}
-  local foundScreenUUID
-
-  for screenUUID, layoutSpaces in pairs(layout) do
-    if not foundScreenUUID then
-      if hs.fnutils.contains(layoutSpaces, spaceId) then
-        foundScreenUUID = screenUUID
-      end
-    end
-  end
-
-  local screen = hs.fnutils.find(hs.screen.allScreens(), function(screen)
-    return screen:getUUID() == foundScreenUUID
-  end)
+  local screenUUID = hs.spaces.spaceDisplay(spaceId)
+  local screen = hs.screen.findByID(screenUUID)
 
   return cache.layouts[spaceId]
-    or (screen and module.displayLayouts and module.displayLayouts[screen:id()])
-    or (screen and module.displayLayouts and module.displayLayouts[screen:name()])
+    or (screen and cache.displayLayouts and cache.displayLayouts[screen:id()])
+    or (screen and cache.displayLayouts and cache.displayLayouts[screen:name()])
     or "monocle"
 end
 
--- resbuild cache.layouts table using provided hhtwm.displayLayouts and hhtwm.defaultLayout
 module.resetLayouts = function()
   for key in pairs(cache.layouts) do
     cache.layouts[key] = nil
@@ -168,12 +170,9 @@ module.resizeLayout = function(resizeOpt)
   end
 
   if not cache.layoutOptions[spaceId] then
-    cache.layoutOptions[spaceId] = getDefaultLayoutOptions()
+    cache.layoutOptions[spaceId] = defaultLayoutOptions()
   end
 
-  local calcResizeStep = module.calcResizeStep or function()
-    return 0.1
-  end
   local screen = getScreenBySpaceId(spaceId)
   local step = calcResizeStep(screen)
   local ratio = cache.layoutOptions[spaceId].mainPaneRatio
@@ -197,7 +196,7 @@ module.equalizeLayout = function(golden)
   end
 
   if cache.layoutOptions[spaceId] then
-    cache.layoutOptions[spaceId] = getDefaultLayoutOptions(golden)
+    cache.layoutOptions[spaceId] = defaultLayoutOptions(golden)
 
     module.tile()
   end
@@ -207,8 +206,6 @@ module.goldenLayout = function()
   module.equalizeLayout(true)
 end
 
--- swap windows in direction
--- works between screens
 module.swapInDirection = function(win, direction)
   win = win or hs.window.frontmostWindow()
 
@@ -216,122 +213,67 @@ module.swapInDirection = function(win, direction)
     return
   end
 
+  local swapBetweenScreens = module.option("swapBetweenScreens")
+
   local winCmd = "windowsTo" .. direction:gsub("^%l", string.upper)
+  local windowsInDirection =
+    cache.filter[winCmd](cache.filter, win, module.option("onlyFrontmost"), module.option("strictAngle"))
 
-  local ONLY_FRONTMOST = true
-  local STRICT_ANGLE = true
-  local windowsInDirection = cache.filter[winCmd](cache.filter, win, ONLY_FRONTMOST, STRICT_ANGLE)
-
-  windowsInDirection = hs.fnutils.filter(windowsInDirection, function(testWin)
-    return testWin:isStandard() and not module.isFloating(testWin)
+  local targets = hs.fnutils.filter(windowsInDirection, function(testWin)
+    return testWin:isStandard()
+      and module.isTiled(testWin)
+      and (swapBetweenScreens or testWin:screen():id() == win:screen():id())
   end)
 
-  if #windowsInDirection >= 1 then
-    local winInDirection = windowsInDirection[1]
-
-    local _, winInDirectionSpaceId, winInDirectionIdx = module.findTiledWindow(winInDirection)
-    local _, winSpaceId, winIdx = module.findTiledWindow(win)
-
-    if
-      hs.fnutils.some({
-        win,
-        winInDirection,
-        winInDirectionSpaceId,
-        winInDirectionIdx,
-        winSpaceId,
-        winIdx,
-      }, function(_)
-        return _ == nil
-      end)
-    then
-      log.e("swapInDirection error", hs.inspect({ winInDirectionSpaceId, winInDirectionIdx, winSpaceId, winIdx }))
-      return
-    end
-
-    local winInDirectionScreen = winInDirection:screen()
-    local winScreen = win:screen()
-
-    -- local winInDirectionFrame  = winInDirection:frame()
-    -- local winFrame             = win:frame()
-
-    -- if swapping between screens is disabled, then return early if screen ids differ
-    if not SWAP_BETWEEN_SCREENS and winScreen:id() ~= winInDirectionScreen:id() then
-      return
-    end
-
-    -- otherwise, move to screen if they differ
-    if winScreen:id() ~= winInDirectionScreen:id() then
-      win:moveToScreen(winInDirectionScreen)
-      winInDirection:moveToScreen(winScreen)
-    end
-
-    ensureSpaceCache(winSpaceId)
-    ensureSpaceCache(winInDirectionSpaceId)
-
-    -- swap frames
-    -- winInDirection:setFrame(winFrame)
-    -- win:setFrame(winInDirectionFrame)
-
-    -- swap positions in arrays
-    cache.spaces[winSpaceId][winIdx] = winInDirection
-    cache.spaces[winInDirectionSpaceId][winInDirectionIdx] = win
-
-    -- ~~no need to retile, assuming both windows were previously tiled!~~
-    module.tile()
-  end
-end
-
--- throw window to screen - de-attach and re-attach
-module.throwToScreen = function(win, direction)
-  win = win or hs.window.frontmostWindow()
-
-  if module.isFloating(win) then
+  if #targets == 0 then
     return
   end
 
-  local directions = {
-    next = "next",
-    prev = "previous",
-  }
+  -- prefer target on same screen
+  local target = hs.fnutils.find(targets, function(testWin)
+    return testWin:screen():id() == win:screen():id()
+  end)
+  target = target or targets[1]
 
-  if not directions[direction] then
-    log.e("can't throw in direction:", direction)
-    return
-  end
+  local _, targetSpaceId, targetIdx = module.findTiledWindow(target)
+  local _, winSpaceId, winIdx = module.findTiledWindow(win)
 
-  local screen = win:screen()
-  local screenInDirection = screen[directions[direction]](screen)
-
-  if screenInDirection then
-    local _, winSpaceId, winIdx = module.findTiledWindow(win)
-
-    if hs.fnutils.some({ winSpaceId, winIdx }, function(_)
+  if
+    hs.fnutils.some({
+      targetSpaceId,
+      targetIdx,
+      winSpaceId,
+      winIdx,
+    }, function(_)
       return _ == nil
-    end) then
-      log.e("throwToScreen error", hs.inspect({ winSpaceId, winIdx }))
-      return
-    end
-
-    -- remove from tiling so we re-tile that window after it was moved
-    if cache.spaces[winSpaceId] then
-      table.remove(cache.spaces[winSpaceId], winIdx)
-    else
-      log.e("throwToScreen no cache.spaces for space id:", winSpaceId)
-    end
-
-    -- move window to screen
-    win:moveToScreen(screenInDirection)
-
-    -- retile to update layouts
-    if hs.window.animationDuration > 0 then
-      hs.timer.doAfter(hs.window.animationDuration * 1.2, module.tile)
-    else
-      module.tile()
-    end
+    end)
+  then
+    log.e("swapInDirection error", hs.inspect({ targetSpaceId, targetIdx, winSpaceId, winIdx }))
+    return
   end
+  ---@cast targetSpaceId -nil
+  ---@cast targetIdx -nil
+  ---@cast winSpaceId -nil
+  ---@cast winIdx -nil
+
+  local targetScreen = target:screen()
+  local winScreen = win:screen()
+
+  if winScreen:id() ~= targetScreen:id() then
+    win:moveToScreen(targetScreen)
+    target:moveToScreen(winScreen)
+  end
+
+  ensureSpaceCache(winSpaceId)
+  ensureSpaceCache(targetSpaceId)
+
+  cache.spaces[winSpaceId][winIdx] = target
+  cache.spaces[targetSpaceId][targetIdx] = win
+
+  module.tile()
 end
 
-module.throwToScreenUsingSpaces = function(win, direction)
+module.throwToScreen = function(win, direction, usingSpaces)
   win = win or hs.window.frontmostWindow()
 
   if module.isFloating(win) then
@@ -350,11 +292,8 @@ module.throwToScreenUsingSpaces = function(win, direction)
 
   local screen = win:screen()
   local screenInDirection = screen[directions[direction]](screen)
-  local currentSpaces = getCurrentSpacesByScreen()
-  local throwToSpaceId = currentSpaces[screenInDirection:id()]
 
-  if not throwToSpaceId then
-    log.e("no space to throw to")
+  if not screenInDirection then
     return
   end
 
@@ -363,38 +302,53 @@ module.throwToScreenUsingSpaces = function(win, direction)
   if hs.fnutils.some({ winSpaceId, winIdx }, function(_)
     return _ == nil
   end) then
-    log.e("throwToScreenUsingSpaces error", hs.inspect({ winSpaceId, winIdx }))
+    log.e("throwToScreen error", hs.inspect({ winSpaceId, winIdx }))
     return
   end
+  ---@cast winSpaceId -nil
+  ---@cast winIdx -nil
 
   -- remove from tiling so we re-tile that window after it was moved
   if cache.spaces[winSpaceId] then
     table.remove(cache.spaces[winSpaceId], winIdx)
   else
-    log.e("throwToScreenUsingSpaces no cache.spaces for space id:", winSpaceId)
+    log.e("throwToScreen no cache.spaces for space id:", winSpaceId)
   end
 
-  local newX = screenInDirection:frame().x
-  local newY = screenInDirection:frame().y
+  if usingSpaces then
+    local targetSpaceId = hs.spaces.activeSpaces()[screenInDirection:getUUID()]
 
-  hs.spaces.moveWindowToSpace(win:id(), throwToSpaceId)
-  win:setTopLeft(newX, newY)
+    local newX = screenInDirection:frame().x
+    local newY = screenInDirection:frame().y
 
-  module.tile()
+    hs.spaces.moveWindowToSpace(win:id(), targetSpaceId)
+    win:setTopLeft(newX, newY)
+  else
+    win:moveToScreen(screenInDirection)
+  end
+
+  if hs.window.animationDuration > 0 then
+    hs.timer.doAfter(hs.window.animationDuration * 1.2, module.tile)
+  else
+    module.tile()
+  end
 end
 
--- throw window to space, indexed
+module.throwToScreenUsingSpaces = function(win, direction)
+  module.throwToScreen(win, direction, true)
+end
+
 module.throwToSpace = function(win, spaceIdx)
   if not win then
     log.e("throwToSpace tried to throw nil window")
     return false
   end
 
-  local spacesIds = getSpaceIds()
-  local spaceId = spacesIds[spaceIdx]
+  local spaceIds = getSpaceIds()
+  local spaceId = spaceIds[spaceIdx]
 
   if not spaceId then
-    log.e("throwToSpace tried to move to non-existing space", spaceId, hs.inspect(spacesIds))
+    log.e("throwToSpace tried to move to non-existing space", spaceId, hs.inspect(spaceIds))
     return false
   end
 
@@ -402,14 +356,10 @@ module.throwToSpace = function(win, spaceIdx)
   local targetScreenFrame = targetScreen:frame()
 
   if module.isFloating(win) then
-    -- adjust frame for new screen offset
-    local newX = win:frame().x - win:screen():frame().x + targetScreen:frame().x
-    local newY = win:frame().y - win:screen():frame().y + targetScreen:frame().y
+    local newX = win:frame().x - win:screen():frame().x + targetScreenFrame.x
+    local newY = win:frame().y - win:screen():frame().y + targetScreenFrame.y
 
-    -- move to space
     hs.spaces.moveWindowToSpace(win:id(), spaceId)
-
-    -- ensure window is visible
     win:setTopLeft(newX, newY)
 
     return true
@@ -423,44 +373,32 @@ module.throwToSpace = function(win, spaceIdx)
     log.e("throwToSpace error", hs.inspect({ winSpaceId, winIdx }))
     return false
   end
+  ---@cast winSpaceId -nil
+  ---@cast winIdx -nil
 
-  -- remove from tiling so we re-tile that window after it was moved
   if cache.spaces[winSpaceId] then
     table.remove(cache.spaces[winSpaceId], winIdx)
   else
     log.e("throwToSpace no cache.spaces for space id:", winSpaceId)
   end
 
-  -- move to space
   hs.spaces.moveWindowToSpace(win:id(), spaceId)
-
-  -- ensure window is visible
   win:setTopLeft(targetScreenFrame.x, targetScreenFrame.y)
 
-  -- retile when finished
   module.tile()
 
   return true
 end
 
-module.isFloating = function(win)
+module.isTiled = function(win)
   local tiledWindow, _, _ = module.findTiledWindow(win)
-  if tiledWindow ~= nil then
-    return false
-  end
-
-  local floatingWindow = hs.fnutils.find(cache.floating, function(floatingWin)
-    return floatingWin:id() == win:id()
-  end)
-  if floatingWindow ~= nil then
-    return true
-  end
-
-  -- if it's not tracked at allthen it's either tracked as floating
-  return tiledWindow == nil
+  return tiledWindow ~= nil
 end
 
--- toggle floating state of window
+module.isFloating = function(win)
+  return not module.isTiled(win)
+end
+
 module.toggleFloat = function(win)
   win = win or hs.window.frontmostWindow()
 
@@ -468,7 +406,17 @@ module.toggleFloat = function(win)
     return
   end
 
-  if module.isFloating(win) then
+  local foundWin, winSpaceId, winIdx = module.findTiledWindow(win)
+
+  if foundWin then
+    if cache.spaces[winSpaceId] then
+      table.remove(cache.spaces[winSpaceId], winIdx)
+    else
+      log.e("window made floating without previous :space()", hs.inspect(foundWin))
+    end
+
+    table.insert(cache.floating, win)
+  else
     local spaceId = hs.spaces.windowSpaces(win)[1]
     local foundIdx
 
@@ -483,61 +431,49 @@ module.toggleFloat = function(win)
     ensureSpaceCache(spaceId)
 
     table.insert(cache.spaces[spaceId], win)
-    table.remove(cache.floating, foundIdx)
-  else
-    local foundWin, winSpaceId, winIdx = module.findTiledWindow(win)
-
-    if cache.spaces[winSpaceId] then
-      table.remove(cache.spaces[winSpaceId], winIdx)
-    else
-      log.e("window made floating without previous :space()", hs.inspect(foundWin))
+    if foundIdx then
+      table.remove(cache.floating, foundIdx)
     end
-
-    table.insert(cache.floating, win)
   end
 
-  -- update tiling
   module.tile()
 end
 
--- internal function for deciding if window should float when recalculating tiling
 local shouldFloat = function(win)
-  -- if window is in tiling cache, then it is not floating
-  local inTilingCache, _, _ = module.findTiledWindow(win)
-  if inTilingCache then
+  local isTiled = module.isTiled(win)
+  if isTiled then
     return false
   end
 
-  -- if window is already tracked as floating, then leave it be
-  local isTrackedAsFloating = hs.fnutils.find(cache.floating, function(floatingWin)
+  local floatingWindow = hs.fnutils.find(cache.floating, function(floatingWin)
     return floatingWin:id() == win:id()
-  end) ~= nil
-  if isTrackedAsFloating then
+  end)
+  if floatingWindow ~= nil then
     return true
   end
 
-  -- otherwise detect if window should be floated/tiled
   return not module.detectTile(win)
 end
 
--- tile windows - combine caches with current state, and apply layout
 module.tile = function()
   -- ignore tiling if we're doing something with a mouse
   if #hs.mouse.getButtons() ~= 0 then
     return
   end
 
-  -- this allows us to have tabs and do proper tiling!
-  local tilingWindows = {}
   local floatingWindows = {}
+  local cacheFlags = {}
 
-  local currentSpaces = hs.spaces.activeSpaces()
-
+  local spaceIds = getSpaceIds()
+  local activeSpaces = hs.spaces.activeSpaces()
   local allWindows = hs.window.allWindows()
-  -- local allWindowsFilter = cache.filter:getWindows()
 
-  -- log.d('allWindows', hs.inspect(allWindows))
-  -- log.d('allWindowsFilter', hs.inspect(allWindowsFilter))
+  -- clean up spaces that don't exist anymore to prevent issues when iterating over windows
+  for spaceId, tiledWindows in pairs(cache.spaces) do
+    if next(tiledWindows) == nil or not hs.fnutils.contains(spaceIds, spaceId) then
+      cache.spaces[spaceId] = nil
+    end
+  end
 
   hs.fnutils.each(allWindows or {}, function(win)
     -- we don't care about minimized or fullscreen windows
@@ -545,64 +481,67 @@ module.tile = function()
       return
     end
 
+    local winSpaces = hs.spaces.windowSpaces(win)
+
     -- we also don't care about special windows that have no spaces
-    if not hs.spaces.windowSpaces(win) or #hs.spaces.windowSpaces(win) == 0 then
+    if not winSpaces or #winSpaces == 0 then
       return
     end
 
     if shouldFloat(win) then
       table.insert(floatingWindows, win)
     else
-      table.insert(tilingWindows, win)
+      local spaceId = winSpaces[1]
+      local spaceCache = cache.spaces[spaceId] or {}
+      local spaceFlags = cacheFlags[spaceId] or {}
+      local trackedWin, trackedSpaceId, trackedIdx = module.findTiledWindow(win)
+
+      log.v(
+        "update cache.spaces",
+        hs.inspect({
+          win = win,
+          spaces = winSpaces,
+          spaceId = spaceId,
+          trackedWin = trackedWin or "none",
+          trackedSpaceId = trackedSpaceId or "none",
+          shouldInsert = not trackedWin or trackedSpaceId ~= spaceId,
+        })
+      )
+
+      if trackedWin then
+        ---@cast trackedIdx -nil
+        if trackedSpaceId == spaceId then
+          spaceFlags[trackedIdx] = true
+        else
+          log.d("moving window to another space", hs.inspect(trackedWin), trackedSpaceId, spaceId)
+          table.insert(spaceCache, win)
+          spaceFlags[#spaceCache] = true
+        end
+      else
+        log.d("inserting new window into cache", hs.inspect(win), spaceId)
+        table.insert(spaceCache, win)
+        spaceFlags[#spaceCache] = true
+      end
+
+      cache.spaces[spaceId] = spaceCache
+      cacheFlags[spaceId] = spaceFlags
     end
-  end)
-
-  -- add new tiling windows to cache
-  hs.fnutils.each(tilingWindows, function(win)
-    local winSpaces = hs.spaces.windowSpaces(win)
-
-    if not win or #winSpaces == 0 then
-      return
-    end
-
-    local spaceId = winSpaces[1]
-    local tmp = cache.spaces[spaceId] or {}
-    local trackedWin, trackedSpaceId, _ = module.findTiledWindow(win)
-
-    -- log.d('update cache.spaces', hs.inspect({
-    --   win = win,
-    --   spaces = winSpaces,
-    --   spaceId = spaceId,
-    --   trackedWin = trackedWin or 'none',
-    --   trackedSpaceId = trackedSpaceId or 'none',
-    --   shouldInsert = not trackedWin or trackedSpaceId ~= spaceId
-    -- }))
-
-    -- window is "new" if it's not in cache at all, or if it changed space
-    if not trackedWin or trackedSpaceId ~= spaceId then
-      -- table.insert(tmp, 1, win)
-      table.insert(tmp, win)
-    end
-
-    cache.spaces[spaceId] = tmp
   end)
 
   -- clean up tiling cache
-  hs.fnutils.each(currentSpaces, function(spaceId)
+  hs.fnutils.each(activeSpaces, function(spaceId)
     local spaceWindows = cache.spaces[spaceId] or {}
+    local spaceFlags = cacheFlags[spaceId] or {}
 
     for i = #spaceWindows, 1, -1 do
-      -- window exists in cache if there's spaceId and windowId match
-      local existsOnScreen = hs.fnutils.find(tilingWindows, function(win)
-        return win:id() == spaceWindows[i]:id() and hs.spaces.windowSpaces(win)[1] == spaceId
-      end)
+      local existsOnScreen = spaceFlags[i]
 
       -- window is duplicated (why?) if it's tracked more than once
       -- this shouldn't happen, but helps for now...
       local duplicateIdx = 0
 
-      for j = 1, #spaceWindows do
-        if spaceWindows[i]:id() == spaceWindows[j]:id() and i ~= j then
+      for j = 1, i - 1 do
+        if spaceWindows[i]:id() == spaceWindows[j]:id() then
           duplicateIdx = j
         end
       end
@@ -620,83 +559,61 @@ module.tile = function()
 
       if not existsOnScreen or duplicateIdx > 0 then
         table.remove(spaceWindows, i)
-      else
-        i = i + 1
       end
     end
-
-    cache.spaces[spaceId] = spaceWindows
   end)
 
-  -- add new windows to floating cache
-  hs.fnutils.each(floatingWindows, function(win)
-    if not module.isFloating(win) then
-      table.insert(cache.floating, win)
-    end
-  end)
-
-  -- clean up floating cache
-  cache.floating = hs.fnutils.filter(cache.floating, function(cacheWin)
-    return hs.fnutils.find(floatingWindows, function(win)
-      return cacheWin:id() == win:id()
-    end)
-  end)
+  cache.floating = floatingWindows
 
   -- apply layout window-by-window
   local moveToFloat = {}
 
-  hs.fnutils.each(currentSpaces, function(spaceId)
+  hs.fnutils.each(activeSpaces, function(spaceId)
     local spaceWindows = cache.spaces[spaceId] or {}
+    local screen = getScreenBySpaceId(spaceId)
+    local layoutName = module.getLayout(spaceId)
 
-    hs.fnutils.each(hs.screen.allScreens(), function(screen)
-      local screenWindows = hs.fnutils.filter(spaceWindows, function(win)
-        return win:screen():id() == screen:id()
-      end)
-      local layoutName = module.getLayout(spaceId)
+    if not layoutName or not layouts[layoutName] then
+      log.e("layout doesn't exist: " .. layoutName)
+    else
+      for index, window in pairs(spaceWindows) do
+        local frame = layouts[layoutName](
+          window,
+          spaceWindows,
+          screen,
+          index,
+          cache.layoutOptions[spaceId] or defaultLayoutOptions()
+        )
 
-      if not layoutName or not layouts[layoutName] then
-        log.e("layout doesn't exist: " .. layoutName)
-      else
-        for index, window in pairs(screenWindows) do
-          local frame = layouts[layoutName](
-            window,
-            screenWindows,
-            screen,
-            index,
-            cache.layoutOptions[spaceId] or getDefaultLayoutOptions()
-          )
-
-          -- only set frame if returned,
-          -- this allows for layout to decide if window should be floating
-          if frame then
-            window:setFrame(frame)
-          else
-            table.insert(moveToFloat, window)
-          end
+        -- only set frame if returned,
+        -- this allows for layout to decide if window should be floating
+        if frame then
+          window:setFrame(frame)
+        else
+          table.insert(moveToFloat, { window, spaceId, index })
         end
       end
-    end)
+    end
   end)
 
-  hs.fnutils.each(moveToFloat, function(win)
-    local _, spaceId, winIdx = module.findTiledWindow(win)
+  hs.fnutils.each(moveToFloat, function(triplet)
+    local win, spaceId, winIdx = table.unpack(triplet)
 
     table.remove(cache.spaces[spaceId], winIdx)
     table.insert(cache.floating, win)
   end)
 end
 
--- tile detection:
--- 1. test tiling.filters if exist
--- 2. check if there's fullscreen button -> yes = tile, no = float
 module.detectTile = function(win)
   local app = win:application():name()
   local role = win:role()
   local subrole = win:subrole()
   local title = win:title()
 
-  if module.filters then
-    local foundMatch = hs.fnutils.find(module.filters, function(obj)
+  local filters = module.option("filters")
+
+  if filters then
+    local foundMatch = hs.fnutils.find(filters, function(obj)
       local appMatches = obj.app == nil or app == nil or string.match(app, obj.app or "")
       local titleMatches = obj.title == nil or title == nil or string.match(title, obj.title or "")
       local roleMatches = obj.role == nil or obj.role == role
@@ -714,7 +631,6 @@ module.detectTile = function(win)
   return shouldTileDefault
 end
 
--- mostly for debugging
 module.reset = function()
   log.d("resetting cache")
   log.d("cache.spaces", hs.inspect(cache.spaces))
@@ -729,28 +645,28 @@ module.reset = function()
 end
 
 local loadSettings = function()
-  -- load from cache
+  local options = hs.settings.get("hhtwm.options")
   local jsonTilingCache = hs.settings.get("hhtwm.tilingCache")
   local jsonFloatingCache = hs.settings.get("hhtwm.floatingCache")
 
   log.d("reading from hs.settings")
+  log.d("hhtwm.options", options)
   log.d("hhtwm.tilingCache", jsonTilingCache)
   log.d("hhtwm.floatingCache", jsonFloatingCache)
 
-  -- decode tiling cache
+  cache.options = options or {}
+
   if jsonTilingCache then
     local tilingCache = hs.json.decode(jsonTilingCache)
     local spacesIds = getSpaceIds()
 
     hs.fnutils.each(tilingCache, function(obj)
-      -- we don't care about spaces that no longer exist
       if hs.fnutils.contains(spacesIds, obj.spaceId) then
         cache.spaces[obj.spaceId] = {}
         cache.layouts[obj.spaceId] = obj.layout
         cache.layoutOptions[obj.spaceId] = obj.layoutOptions
 
         hs.fnutils.each(obj.windowIds, function(winId)
-          -- local win = findWindowById(winId)
           local win = hs.window.get(winId)
 
           log.d("restoring (spaceId, windowId, window)", obj.spaceId, winId, win)
@@ -762,14 +678,12 @@ local loadSettings = function()
     end)
   end
 
-  -- decode floating cache
   if jsonFloatingCache then
     local floatingCache = hs.json.decode(jsonFloatingCache)
 
     hs.fnutils.each(floatingCache, function(winId)
       local win = hs.window.find(winId)
 
-      -- we don't care about windows that no longer exist
       if win then
         table.insert(cache.floating, win)
       end
@@ -777,6 +691,7 @@ local loadSettings = function()
   end
 
   log.d("read from hs.settings")
+  log.d("cache.options", hs.inspect(cache.options))
   log.d("cache.spaces", hs.inspect(cache.spaces))
   log.d("cache.floating", hs.inspect(cache.floating))
 end
@@ -788,7 +703,6 @@ local saveSettings = function()
   end)
 
   for spaceId, spaceWindows in pairs(cache.spaces) do
-    -- only save spaces with windows on them
     if #spaceWindows > 0 then
       local tmp = {}
 
@@ -810,9 +724,11 @@ local saveSettings = function()
   local jsonFloatingCache = hs.json.encode(floatingCache)
 
   log.d("storing to hs.settings")
+  log.d("hhtwm.options", hs.inspect(cache.options))
   log.d("hhtwm.tiling", jsonTilingCache)
   log.d("hhtwm.floating", jsonFloatingCache)
 
+  hs.settings.set("hhtwm.options", cache.options)
   hs.settings.set("hhtwm.tilingCache", jsonTilingCache)
   hs.settings.set("hhtwm.floatingCache", jsonFloatingCache)
 end
@@ -821,36 +737,25 @@ module.start = function()
   -- discover windows on spaces as soon as possible
   -- hs.window.filter.forceRefreshOnSpaceChange = true
 
-  -- start window filter
   cache.filter = hs.window.filter.new():setDefaultFilter():setOverrideFilter({
-    visible = true, -- only allow visible windows
-    fullscreen = false, -- ignore fullscreen windows
-    -- currentSpace = true,  -- only windows on current space
+    visible = true,
+    fullscreen = false,
     allowRoles = { "AXStandardWindow" },
   })
   -- :setSortOrder(hs.window.filter.sortByCreated)
 
-  -- load window/floating status from saved state
   loadSettings()
 
-  -- retile automatically when windows change
   cache.filter:subscribe({ hs.window.filter.windowsChanged }, module.tile)
 
-  -- update on screens change
   cache.screenWatcher = hs.screen.watcher.new(module.tile):start()
 
-  -- tile on start
   module.tile()
 end
 
 module.stop = function()
-  -- store cache so we persist layouts between restarts
   saveSettings()
-
-  -- stop filter
   cache.filter:unsubscribeAll()
-
-  -- stop watching screens
   cache.screenWatcher:stop()
 end
 

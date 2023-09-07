@@ -42,12 +42,14 @@ local setup = function()
     right = halfMargin,
   }
 
-  hhtwm.margin = fullMargin
-  hhtwm.screenMargin = screenMargin
-  hhtwm.filters = filters
-  hhtwm.calcResizeStep = function(screen)
+  hhtwm.setOptions({
+    margin = fullMargin,
+    screenMargin = screenMargin,
+    filters = filters,
+  })
+  hhtwm.setCalcResizeStep(function(screen)
     return 1 / hs.grid.getGrid(screen).w
-  end
+  end)
 
   -- displayLayouts set up from first config.wm.displayLayouts
   local displayLayouts = {}
@@ -56,7 +58,7 @@ local setup = function()
     displayLayouts[displayName] = layouts[1]
   end
 
-  hhtwm.displayLayouts = displayLayouts
+  hhtwm.setDisplayLayouts(displayLayouts)
 end
 
 local screenWatcher = function(_, _, _, prevScreens, screens)
