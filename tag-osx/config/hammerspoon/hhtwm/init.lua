@@ -273,6 +273,19 @@ module.swapInDirection = function(win, direction)
   module.tile()
 end
 
+module.cycleWindowsOnSpace = function(spaceId)
+  spaceId = spaceId or hs.spaces.activeSpaceOnScreen()
+
+  local spaceCache = cache.spaces[spaceId]
+
+  if spaceCache and #spaceCache > 1 then
+    table.insert(spaceCache, 1, spaceCache[#spaceCache])
+    table.remove(spaceCache)
+    module.tile()
+    spaceCache[1]:focus()
+  end
+end
+
 module.throwToScreen = function(win, direction, usingSpaces)
   win = win or hs.window.frontmostWindow()
 

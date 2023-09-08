@@ -122,6 +122,9 @@ module.start = function()
   -- use [g]olden ratio
   bind("g", hhtwm.goldenLayout)
 
+  -- cycle windows on space
+  bind("y", hhtwm.cycleWindowsOnSpace)
+
   -- [l]ayout
   hs.hotkey.bind(ultra, "l", wm.cycleLayout)
 
