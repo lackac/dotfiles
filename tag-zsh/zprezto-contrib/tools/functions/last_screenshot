@@ -1,1 +1,1 @@
-echo ~/Dropbox/Screenshots/$(ls -U ~/Dropbox/Screenshots | tail -1)
+echo $HOME/Documents/Screenshots/$(ls -U $HOME/Documents/Screenshots | tail -1)
