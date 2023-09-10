@@ -121,8 +121,12 @@ local modules = {
 }
 
 bindings.enabled = {
+  "block-hide",
+  "brightness",
+  "ctrl-esc",
   "focus",
   "global",
+  "viscosity",
 }
 if config.wm.tilingMethod == "autogrid" then
   table.insert(bindings.enabled, "grid")
