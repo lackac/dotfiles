@@ -655,29 +655,7 @@ module.tile = function()
 
     for i = #spaceWindows, 1, -1 do
       local existsOnScreen = spaceFlags[i]
-
-      -- window is duplicated (why?) if it's tracked more than once
-      -- this shouldn't happen, but helps for now...
-      local duplicateIdx = 0
-
-      for j = 1, i - 1 do
-        if spaceWindows[i]:id() == spaceWindows[j]:id() then
-          duplicateIdx = j
-        end
-      end
-
-      if duplicateIdx > 0 then
-        log.e(
-          "duplicate idx",
-          hs.inspect({
-            i = i,
-            duplicateIdx = duplicateIdx,
-            spaceWindows = spaceWindows,
-          })
-        )
-      end
-
-      if not existsOnScreen or duplicateIdx > 0 then
+      if not existsOnScreen then
         table.remove(spaceWindows, i)
       end
     end
