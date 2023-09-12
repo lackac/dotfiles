@@ -30,7 +30,7 @@ local updateScreen = function()
   status.connectedScreenNames = hs.fnutils.map(hs.screen.allScreens(), function(screen)
     return screen:name()
   end)
-  status.isLaptopScreenConnected = hs.screen.findByName("Built-in Retina Display") ~= nil
+  status.isLaptopScreenConnected = hs.screen.find("Built%-in") ~= nil
 
   log.d("updated screens:", hs.inspect(status.connectedScreenNames))
 end
