@@ -89,6 +89,48 @@ config = {
       ["LF32TU87"] = { "main-left", "main-right", "main-center", "tabbed-left", "monocle" },
       ["HP Z27k G3"] = { "main-left", "main-right", "main-center", "tabbed-left", "monocle" },
     },
+    managedLayouts = {
+      {
+        ["Built%-in"] = {
+          {
+            layout = "monocle",
+            windows = {
+              "Slack",
+              "Dash",
+              "Finder",
+            },
+          },
+        },
+        ["LG SDQHD"] = {
+          {
+            layout = "main-top",
+            layoutOptions = { mainPaneRatio = 0.618 },
+            windows = { "kitty" },
+          },
+        },
+        ["LF32TU87"] = {
+          {
+            layout = "main-left",
+            layoutOptions = { mainPaneRatio = 0.618 },
+            windows = {
+              { app = "Brave Browser", title = "🐦$", focus = true },
+              { app = "Brave Browser", title = "📦$" },
+              { app = "Brave Browser", title = "🚗$" },
+            },
+          },
+          {
+            layout = "main-left",
+            layoutOptions = { mainPaneRatio = 0.618 },
+            windows = {
+              { app = "Brave Browser", title = "🌳$" },
+              "Calendar",
+              "Messages",
+              "Timing",
+            },
+          },
+        },
+      },
+    },
   },
 
   window = {

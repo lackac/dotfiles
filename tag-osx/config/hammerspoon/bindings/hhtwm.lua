@@ -155,37 +155,16 @@ module.start = function()
     highlightWindow()
   end)
 
-  -- throw window to space (and move)
+  -- apply managed layouts
   for n = 0, 9 do
     local idx = tostring(n)
 
-    -- important: use this with onKeyReleased, not onKeyPressed
-    hs.hotkey.bind({ "ctrl", "shift" }, idx, nil, function()
-      -- remember the window
-      local win = hs.window.focusedWindow()
+    hs.hotkey.bind({ "ctrl", "shift" }, idx, function()
+      local index = n == 0 and 10 or n
+      local layout = config.wm.managedLayouts[index]
 
-      -- switch to that space
-      hs.eventtap.keyStroke({ "ctrl" }, idx)
-
-      -- if there was no window, stop here
-      if not win then
-        return
-      end
-
-      local isTiled = hhtwm.isTiled(win)
-      local success = hhtwm.throwToSpace(win, n == 0 and 10 or n) -- 0 is 10th space
-
-      -- if window switched space, then wait a bit and retile
-      if success then
-        -- retile and re-highlight window after we switch space
-        hs.timer.doAfter(0.3, function()
-          if isTiled then
-            hhtwm.tile()
-          end
-          highlightWindow(win)
-        end)
-      else
-        log.d("throwing window unsuccessful", hs.inspect({ window = win, space = n }))
+      if layout then
+        hhtwm.applyManagedLayout(layout)
       end
     end)
   end

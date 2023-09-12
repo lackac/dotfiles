@@ -468,6 +468,113 @@ local shouldFloat = function(win)
   return not module.detectTile(win)
 end
 
+module.applyManagedLayout = function(layout)
+  -- reset floating cache to allow a complete retiling at the end
+  cache.floating = {}
+
+  local allWindows = cache.filter:getWindows()
+  local windowToFocus = hs.window.focusedWindow()
+
+  for screenName, spaces in pairs(layout) do
+    local screen = hs.screen.find(screenName)
+    log.d("applyManagedLayout -", screenName, hs.inspect(screen))
+    if not screen then
+      goto nextSpace
+    end
+
+    local spaceIds = hs.spaces.spacesForScreen(screen)
+    log.d("applyManagedLayout -- spaces: ", hs.inspect(spaceIds))
+
+    if #spaceIds < #spaces then
+      log.df("applyManagedLayout -- adding %d more spaces", #spaces - #spaceIds)
+      for _ = 1, #spaces - #spaceIds do
+        hs.spaces.addSpaceToScreen(screen, false)
+      end
+      hs.spaces.closeMissionControl()
+      spaceIds = hs.spaces.spacesForScreen(screen)
+    end
+
+    for spaceIdx, spaceLayout in ipairs(spaces) do
+      local spaceId = spaceIds[spaceIdx]
+      log.d("applyManagedLayout --- ", spaceId)
+      local newTilingCache = {}
+
+      if spaceLayout.layout ~= nil then
+        cache.layouts[spaceId] = spaceLayout.layout
+      end
+
+      if spaceLayout.layoutOptions ~= nil then
+        cache.layoutOptions[spaceId] = spaceLayout.layoutOptions
+      end
+
+      for _, windowFilter in ipairs(spaceLayout.windows) do
+        local window = hs.fnutils.find(allWindows, function(win)
+          if type(windowFilter) == "string" then
+            return win:application():name() == windowFilter
+          elseif type(windowFilter) == "table" then
+            return (windowFilter.app == nil or win:application():name() == windowFilter.app)
+              and (windowFilter.title == nil or string.match(win:title(), windowFilter.title))
+          end
+        end)
+        log.d("applyManagedLayout ---- ", hs.inspect(windowFilter), hs.inspect(window))
+
+        if not window then
+          goto nextWindow
+        end
+
+        if window:isMinimized() or window:isFullscreen() then
+          goto nextWindow
+        end
+
+        local winSpaces = hs.spaces.windowSpaces(window)
+
+        if not winSpaces or #winSpaces == 0 then
+          goto nextWindow
+        end
+
+        if windowFilter.focus then
+          windowToFocus = window
+        end
+
+        local trackedWin, trackedSpaceId, trackedIdx = module.findTiledWindow(window)
+
+        if trackedWin then
+          log.d("applyManagedLayout ---- tracked as ", trackedSpaceId, trackedIdx)
+          ---@cast trackedIdx -nil
+          table.remove(cache.spaces[trackedSpaceId], trackedIdx)
+        end
+
+        if spaceId ~= winSpaces[1] then
+          log.df("applyManagedLayout ---- moving window from %d to %d", winSpaces[1], spaceId)
+          hs.spaces.moveWindowToSpace(window, spaceId)
+        end
+
+        table.insert(newTilingCache, window)
+
+        ::nextWindow::
+      end
+
+      -- restore remaining windows from tiling cache
+      if cache.spaces[spaceId] then
+        for _, window in ipairs(cache.spaces[spaceId]) do
+          table.insert(newTilingCache, window)
+        end
+      end
+
+      cache.spaces[spaceId] = newTilingCache
+    end
+
+    ::nextSpace::
+  end
+
+  hs.timer.doAfter(hs.spaces.MCwaitTime, function()
+    module.tile()
+    if windowToFocus then
+      windowToFocus:focus()
+    end
+  end)
+end
+
 module.tile = function()
   -- ignore tiling if we're doing something with a mouse
   if #hs.mouse.getButtons() ~= 0 then
