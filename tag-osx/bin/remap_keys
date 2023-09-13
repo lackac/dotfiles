@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Use Caps Lock as Control
+# Use Caps Lock as Control and Left Control as F19
 hidutil property \
   --set '{"UserKeyMapping": [
     { "HIDKeyboardModifierMappingSrc":0x700000039,
-      "HIDKeyboardModifierMappingDst":0x7000000e0 }
+      "HIDKeyboardModifierMappingDst":0x7000000e0 },
+    { "HIDKeyboardModifierMappingSrc":0x7000000e0,
+      "HIDKeyboardModifierMappingDst":0x70000006e }
   ]}'
 
 # Internal Keyboard specific remappings

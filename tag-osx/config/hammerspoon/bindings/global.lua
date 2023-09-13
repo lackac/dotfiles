@@ -70,9 +70,6 @@ local forceDrop = function()
 end
 
 module.start = function()
-  -- ultra bindings
-  local ultra = { "ctrl", "alt", "cmd" }
-
   -- ctrl + tab as alternative to cmd + tab
   hs.hotkey.bind({ "ctrl" }, "tab", window.windowHints)
 
@@ -85,10 +82,10 @@ module.start = function()
     { key = "d", fn = forceDrop },
     { key = "v", fn = forcePaste },
 
-    { key = "t", fn = system.toggleTheme },
-    { key = "w", fn = system.toggleWiFi },
+    { key = "t", mod = { "shift" }, fn = system.toggleTheme },
+    { key = "w", mod = { "shift" }, fn = system.toggleWiFi },
   }, function(object)
-    hs.hotkey.bind(ultra, object.key, object.fn)
+    hyper:bind(object.mod or {}, object.key, object.fn)
   end)
 
   -- apps
@@ -99,7 +96,7 @@ module.start = function()
     { key = "s", apps = { "Slack" } },
     { key = "f", apps = { "Finder" } },
   }, function(object)
-    hs.hotkey.bind(ultra, object.key, function()
+    hyper:bind({}, object.key, function()
       smartLaunchOrFocus(object.apps)
     end)
   end)

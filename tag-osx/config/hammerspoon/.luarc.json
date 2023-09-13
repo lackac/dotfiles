@@ -3,7 +3,7 @@
   "diagnostics": {
     "globals": [
       "hs",
-      "hhtwm",
+      "hyper",
       "config",
       "inspect",
       "dumpWindows",

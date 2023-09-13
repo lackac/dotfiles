@@ -163,6 +163,7 @@ local modules = {
 }
 
 bindings.enabled = {
+  "hyper",
   "block-hide",
   "brightness",
   "ctrl-esc",
