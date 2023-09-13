@@ -1,6 +1,7 @@
 local windowMetadata = require("ext.window").windowMetadata
 
-inspect = hs.inspect
+hs.console.toolbar(nil)
+hs.console.consoleFont("FiraCode Nerd Font")
 
 dumpWindows = function()
   local windowList = {}
@@ -38,5 +39,3 @@ timestamp = function(date)
   date = date or hs.timer.secondsSinceEpoch()
   return os.date("%F %T" .. ((tostring(date):match("(%.%d+)$")) or ""), math.floor(date))
 end
-
-hs.console.toolbar(nil)

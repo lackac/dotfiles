@@ -65,7 +65,7 @@ local forceDrop = function()
   if #arguments > 0 then
     hs.task.new(DROP_CLI_PATH, logDrop, arguments):start()
   else
-    log.e("emtpy arguments", inspect(data))
+    log.e("emtpy arguments", hs.inspect(data))
   end
 end
 

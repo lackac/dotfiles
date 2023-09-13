@@ -5,7 +5,6 @@
       "hs",
       "hyper",
       "config",
-      "inspect",
       "dumpWindows",
       "dumpScreens",
       "timestamp"
