@@ -13,6 +13,10 @@ hidutil property \
 hidutil property \
   --matching '{"ProductID": 0x0, "VendorID": 0x0}' \
   --set '{"UserKeyMapping": [
+    { "HIDKeyboardModifierMappingSrc":0x700000039,
+      "HIDKeyboardModifierMappingDst":0x7000000e0 },
+    { "HIDKeyboardModifierMappingSrc":0x7000000e0,
+      "HIDKeyboardModifierMappingDst":0x70000006e },
     { "HIDKeyboardModifierMappingSrc":0x700000064,
       "HIDKeyboardModifierMappingDst":0x700000035 },
     { "HIDKeyboardModifierMappingSrc":0x700000035,
