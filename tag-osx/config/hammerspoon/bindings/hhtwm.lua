@@ -52,9 +52,6 @@ end
 module.start = function()
   wm.start()
 
-  -- ultra bindings
-  local ultra = { "ctrl", "alt", "cmd" }
-
   local bind = function(key, fn)
     hs.hotkey.bind({ "ctrl", "shift" }, key, fn, nil, fn)
   end
@@ -126,7 +123,7 @@ module.start = function()
   bind("y", hhtwm.cycleWindowsOnSpace)
 
   -- [l]ayout
-  hs.hotkey.bind(ultra, "l", wm.cycleLayout)
+  hyper:bind({}, "l", wm.cycleLayout)
 
   -- [c]enter window
   bind("c", function()
