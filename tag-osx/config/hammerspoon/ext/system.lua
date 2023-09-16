@@ -71,12 +71,4 @@ module.toggleTheme = function()
     :send()
 end
 
-module.restartHammerspoon = function(relaunch)
-  if relaunch then
-    hs.relaunch()
-  else
-    hs.reload()
-  end
-end
-
 return module

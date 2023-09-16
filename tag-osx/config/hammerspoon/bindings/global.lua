@@ -77,13 +77,14 @@ module.start = function()
   hs.fnutils.each({
     { key = "/", fn = system.toggleConsole },
     { key = "q", fn = system.displaySleep },
-    { key = "r", fn = system.restartHammerspoon },
+    { key = "r", fn = hs.reload },
+    { key = "r", mod = { "shift" }, fn = hs.relaunch },
 
     { key = "d", fn = forceDrop },
     { key = "v", fn = forcePaste },
 
     { key = "t", mod = { "shift" }, fn = system.toggleTheme },
-    { key = "w", mod = { "shift" }, fn = system.toggleWiFi },
+    { key = "w", fn = system.toggleWiFi },
   }, function(object)
     hyper:bind(object.mod or {}, object.key, object.fn)
   end)
