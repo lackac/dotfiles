@@ -1,8 +1,10 @@
 -- hhtwm - hackable hammerspoon tiling wm
 
+local screens = require("ext.screens")
+
 local createLayouts = require("hhtwm.layouts")
 
-local log = hs.logger.new("hhtwm", "info")
+local log = hs.logger.new("hhtwm", "debug")
 
 local cache = { spaces = {}, layouts = {}, floating = {}, displayLayouts = {}, options = {}, layoutOptions = {} }
 local module = { cache = cache, log = log }
@@ -294,8 +296,8 @@ module.throwToScreen = function(win, direction, usingSpaces)
   end
 
   local directions = {
-    next = "next",
-    prev = "previous",
+    next = "nextScreen",
+    prev = "prevScreen",
   }
 
   if not directions[direction] then
@@ -304,7 +306,7 @@ module.throwToScreen = function(win, direction, usingSpaces)
   end
 
   local screen = win:screen()
-  local screenInDirection = screen[directions[direction]](screen)
+  local screenInDirection = screens[directions[direction]](screen)
 
   if not screenInDirection then
     return
