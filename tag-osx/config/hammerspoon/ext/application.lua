@@ -93,8 +93,13 @@ module.smartLaunchOrFocus = function(launchApps)
     local currentIndex = hs.fnutils.indexOf(runningWindows, frontmostWindow)
 
     if not currentIndex then
-      -- if none of them is selected focus the first one
-      forceFocus(runningWindows[1])
+      -- if none of them are try to focus the last one used
+      currentIndex = hs.fnutils.indexOf(runningWindows, runningWindows[1]:application():mainWindow())
+      if currentIndex then
+        forceFocus(runningWindows[currentIndex])
+      else -- or the first window that matched
+        forceFocus(runningWindows[1])
+      end
     else
       -- otherwise cycle through all the windows
       local newIndex = currentIndex + 1
