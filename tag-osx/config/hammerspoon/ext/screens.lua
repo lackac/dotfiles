@@ -1,3 +1,5 @@
+local config = require("config")
+
 local module = {}
 
 -- grabs screen with active window, unless it's Finder's desktop

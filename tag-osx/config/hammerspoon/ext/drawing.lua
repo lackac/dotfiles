@@ -1,3 +1,5 @@
+local config = require("config")
+
 local cache = { borderDrawings = {}, borderDrawingFadeOuts = {} }
 local module = { cache = cache }
 

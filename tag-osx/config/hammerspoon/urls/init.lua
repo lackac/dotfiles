@@ -1,5 +1,8 @@
+local config = require("config")
+
 local cache = { handlers = {}, ruleFiles = {}, ruleFileWatchers = {} }
 local module = { cache = cache }
+
 local log = hs.logger.new("urlevent", "warning")
 
 local function appID(app)

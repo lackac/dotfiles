@@ -1,8 +1,10 @@
 local windowMetadata = require("ext.window").windowMetadata
+local config = require("config")
 
-local log = hs.logger.new("app-logger", "debug")
 local cache = {}
 local module = { cache = cache }
+
+local log = hs.logger.new("app-logger", "debug")
 
 module.sleepWatcher = function(_, _, _, _, event)
   if event == hs.caffeinate.watcher.systemWillSleep or event == hs.caffeinate.watcher.systemWillPowerOff then

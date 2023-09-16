@@ -3,6 +3,8 @@ local log = hs.logger.new("watchables", "debug")
 local isDarkModeEnabled = require("ext.system").isDarkModeEnabled
 local debounce = require("ext.utils").debounce
 
+local config = require("config")
+
 local cache = { status = status }
 local module = { cache = cache }
 

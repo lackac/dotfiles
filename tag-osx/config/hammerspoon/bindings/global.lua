@@ -2,6 +2,7 @@ local smartLaunchOrFocus = require("ext.application").smartLaunchOrFocus
 local system = require("ext.system")
 local window = require("ext.window")
 local unescape = require("ext.utils").unescape
+local config = require("config")
 
 local module = {}
 local log = hs.logger.new("drop-cli", "debug")

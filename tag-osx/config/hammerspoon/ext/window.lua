@@ -1,5 +1,6 @@
 local focusScreen = require("ext.screens").focusScreen
 local highlightWindow = require("ext.drawing").highlightWindow
+local config = require("config")
 
 local cache = {
   windowPositions = hs.settings.get("windowPositions") or {},

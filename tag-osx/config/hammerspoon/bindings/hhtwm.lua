@@ -1,7 +1,7 @@
 local capitalize = require("ext.utils").capitalize
 local highlightWindow = require("ext.drawing").highlightWindow
-local log = hs.logger.new("hhtwm-bindings", "debug")
 local wm = require("mod.wm")
+local config = require("config")
 
 local module = {}
 local hhtwm = wm.cache.hhtwm

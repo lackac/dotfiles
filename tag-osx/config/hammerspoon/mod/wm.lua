@@ -2,6 +2,7 @@ local activeScreen = require("ext.screens").activeScreen
 local table = require("ext.table")
 local hhtwm = require("hhtwm")
 local log = hs.logger.new("wm", "debug")
+local config = require("config")
 
 local cache = { hhtwm = hhtwm }
 local module = { cache = cache }
