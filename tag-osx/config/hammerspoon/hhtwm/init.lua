@@ -848,7 +848,8 @@ module.start = function()
 
   cache.filter:subscribe({ hs.window.filter.windowsChanged }, module.tile)
 
-  cache.screenWatcher = hs.screen.watcher.new(module.tile):start()
+  -- also handled in wm, disabling here to avoid conflict
+  --cache.screenWatcher = hs.screen.watcher.new(module.tile):start()
 
   module.tile()
 end
@@ -856,7 +857,7 @@ end
 module.stop = function()
   saveSettings()
   cache.filter:unsubscribeAll()
-  cache.screenWatcher:stop()
+  --cache.screenWatcher:stop()
 end
 
 return module
