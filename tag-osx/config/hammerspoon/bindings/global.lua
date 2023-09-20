@@ -71,6 +71,15 @@ local forceDrop = function()
 end
 
 module.start = function()
+  -- Alfred replacement implemented fully in Hammerspoon
+  require("chad"):start()
+  hs.hotkey.bind({ "ctrl" }, "space", function()
+    require("chad").toggle()
+  end)
+  hs.hotkey.bind({ "ctrl", "shift", "cmd" }, "space", function()
+    require("chad").reload()
+  end)
+
   -- ctrl + tab as alternative to cmd + tab
   hs.hotkey.bind({ "ctrl" }, "tab", window.windowHints)
 
@@ -104,6 +113,8 @@ module.start = function()
   end)
 end
 
-module.stop = function() end
+module.stop = function()
+  require("chad"):stop()
+end
 
 return module
