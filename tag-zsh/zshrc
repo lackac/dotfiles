@@ -10,6 +10,24 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+
+  # Dedicated completion key
+  export FZF_COMPLETION_TRIGGER=''
+  bindkey '^T' fzf-completion
+  bindkey '^I' $fzf_default_completion
+
+  # Open in tmux popup by default
+  export FZF_TMUX_OPTS="-p80%,60%"
+  # Preview in Ctrl-T
+  export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+  # Full command on preview window
+  export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+  # Preview directory contents in Alt-C chooser
+  export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+fi
+
 # Customize to your needs...
 
 if [[ -s ${ZDOTDIR:-$HOME}/.zshrc.local ]]; then
