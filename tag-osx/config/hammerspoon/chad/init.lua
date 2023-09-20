@@ -54,6 +54,10 @@ module.queryChanged = function(query, timeout)
   if timeout then
     log.v("delayed query: " .. hs.inspect(query))
     chooser:refreshChoicesCallback()
+  elseif query == "" then
+    -- shortcut when emptying the query to avoid delay
+    latestQuery = query
+    chooser:refreshChoicesCallback()
   else
     log.v("query: " .. hs.inspect(query))
     latestQuery = query
@@ -63,28 +67,39 @@ end
 
 module.compileChoices = function()
   local mapOfChoices = {}
+  local numberOfPlugins = 0
   local numberOfSources = 0
+  local totalChoices = 0
   local useFzf = false
 
   log.v("compiling choices from plugins")
   for requireName, plugin in pairs(plugins) do
     if plugin.keyword == activeKeyword then
+      numberOfPlugins = numberOfPlugins + 1
       local pluginChoices = plugin.compileChoices(latestQuery)
       useFzf = useFzf or plugin.useFzf
       if #pluginChoices > 0 then
         -- considering this a plain list of choices and adding to our map
         mapOfChoices[requireName] = pluginChoices
         numberOfSources = numberOfSources + 1
+        totalChoices = totalChoices + #pluginChoices
       else
         -- must be either empty or a map of tables, this works either way
         for k, v in pairs(pluginChoices) do
           mapOfChoices[k] = v
           numberOfSources = numberOfSources + 1
+          totalChoices = totalChoices + #v
         end
       end
     end
   end
-  log.v("compiled choices from plugins", hs.inspect({ sources = numberOfSources, useFzf = useFzf }))
+  log.vf(
+    "compiled %d choices from %d sources of %d plugins, %sgoing to use fzf",
+    totalChoices,
+    numberOfSources,
+    numberOfPlugins,
+    useFzf and "" or "not "
+  )
 
   if numberOfSources == 1 and not useFzf then
     -- special case, likely plugin with keyword
