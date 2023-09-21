@@ -1,5 +1,7 @@
 -- Alfred replacement implemented fully in Hammerspoon
 
+local drawBorder = require("ext.drawing").drawBorder
+
 local module = {};
 
 (function()
@@ -162,10 +164,12 @@ end
 
 module.shown = function()
   log.v("shown")
+  drawBorder()
 end
 
 module.hidden = function()
   log.v("hidden")
+  drawBorder()
 end
 
 module.invalid = function(choice)
