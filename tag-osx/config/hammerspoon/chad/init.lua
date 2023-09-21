@@ -1,6 +1,7 @@
 -- Alfred replacement implemented fully in Hammerspoon
 
 local drawBorder = require("ext.drawing").drawBorder
+local fzfFilter = require("ext.fzf").filter
 
 local module = {};
 
@@ -16,8 +17,6 @@ local log = hs.logger.new(module.name, "verbose")
 local chooser
 local plugins = {}
 local activeKeyword
-
-local FZF_PATH = "/opt/homebrew/bin/fzf"
 
 local function loadPlugin(pluginName)
   local requireName = module.name .. "." .. pluginName
@@ -110,41 +109,21 @@ module.compileChoices = function()
     end
   end
 
-  -- use fzf to combine sources
-  local fzfInputPath = hs.fs.temporaryDirectory() .. "fzf-input-" .. hs.host.uuid()
-  local fzfInput = io.open(fzfInputPath, "w")
-  if not fzfInput then
-    log.ef("can't open fzf input file for writing: %s", fzfInputPath)
-    return {}
-  end
-
   local lookup = {}
-  for _, choices in pairs(mapOfChoices) do
-    for _, choice in ipairs(choices) do
-      fzfInput:write(choice.id .. "\t" .. choice.text .. "\n")
-      lookup[choice.id] = choice
-    end
-  end
-  fzfInput:close()
-
-  local command =
-    string.format("%s -i --delimiter '\t' --with-nth -1 --filter '%s' < %s", FZF_PATH, latestQuery, fzfInputPath)
-  local fzf = io.popen(command)
-  if not fzf then
-    log.ef("can't read output of fzf")
-    os.remove(fzfInputPath)
-    return {}
-  end
-
   local choices = {}
-  for line in fzf:lines() do
+  fzfFilter(latestQuery, function(file)
+    for _, choicesInSource in pairs(mapOfChoices) do
+      for _, choice in ipairs(choicesInSource) do
+        file:write(choice.id .. "\t" .. choice.text .. "\n")
+        lookup[choice.id] = choice
+      end
+    end
+  end, function(line)
     local id = line:match("([^\t]*)")
     if id and lookup[id] then
       table.insert(choices, lookup[id])
     end
-  end
-  fzf:close()
-  os.remove(fzfInputPath)
+  end)
 
   return choices
 end
