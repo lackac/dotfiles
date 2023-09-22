@@ -9,16 +9,14 @@ windows:
       layout: main-horizontal
       panes:
         - vim
-  - :
-      layout: even-horizontal
-      panes:
-        -
-        -
+  - : lazygit
   - shell: git pull
   - ledger:
       root: ~/Code/100Starlings/100s-cli/ledger
   - invoices:
       layout: even-horizontal
+      env:
+        ASDF_RUBY_VERSION: 2.7.7
       panes:
         - root: cd "$FINANCE_PATH/Invoices Received"
         - root: cd "$FINANCE_PATH/Invoices Paid"
