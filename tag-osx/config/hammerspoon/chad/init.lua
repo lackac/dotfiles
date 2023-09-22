@@ -15,8 +15,33 @@ end)()
 local log = hs.logger.new(module.name, "verbose")
 
 local chooser
+local defaultPlaceholder = ""
+local modal
 local plugins = {}
 local activeKeyword
+local keywords = {}
+
+local latestQuery
+local queryDelay = hs.timer.delayed.new(0.2, function()
+  module.queryChanged(latestQuery, true)
+end)
+
+local function bindKeys()
+  modal:bind({}, "escape", function()
+    if activeKeyword then
+      module.deactivateKeyword()
+    else
+      module.hide()
+    end
+  end)
+
+  modal:bind({}, "tab", function()
+    local cleanedQuery = string.match(latestQuery, "^%s*(%S+)%s*$")
+    if cleanedQuery and keywords[cleanedQuery] then
+      module.activateKeyword(cleanedQuery)
+    end
+  end)
+end
 
 local function loadPlugin(pluginName)
   local requireName = module.name .. "." .. pluginName
@@ -26,7 +51,21 @@ local function loadPlugin(pluginName)
     if type(plugin.start) == "function" then
       plugin.start(module, pluginName)
     end
+
     plugins[requireName] = plugin
+    if plugin.keyword then
+      if keywords[plugin.keyword] then
+        log.wf(
+          "plugin keyword '%s' aleady reserved for plugin '%s' when loading '%s' which could lead to unexpected behaviour",
+          plugin.keyword,
+          keywords[plugin.keyword].requireName,
+          requireName
+        )
+      else
+        keywords[plugin.keyword] = plugin
+      end
+    end
+
     log.d("plugin " .. pluginName .. " loaded")
   else
     log.e("couldn't load plugin " .. pluginName .. "\n" .. plugin)
@@ -45,11 +84,6 @@ local function loadPlugins()
     end
   end
 end
-
-local latestQuery
-local queryDelay = hs.timer.delayed.new(0.2, function()
-  module.queryChanged(latestQuery, true)
-end)
 
 module.queryChanged = function(query, timeout)
   if timeout then
@@ -92,6 +126,12 @@ module.compileChoices = function()
           totalChoices = totalChoices + #v
         end
       end
+    elseif activeKeyword == nil and plugin.keyword and plugin.tip then
+      mapOfChoices["tips"] = mapOfChoices["tips"] or {}
+      plugin.tip.id = plugin.tip.id or plugin.requireName
+      plugin.tip.keyword = plugin.tip.keyword or plugin.keyword
+      plugin.tip.valid = false
+      table.insert(mapOfChoices["tips"], plugin.tip)
     end
   end
   log.vf(
@@ -131,12 +171,14 @@ end
 module.complete = function(choice)
   log.v("complete choice: " .. hs.inspect(choice))
 
-  if choice and choice.source then
-    local plugin = plugins[choice.source]
-    if plugin then
-      plugin.complete(choice)
-    else
-      log.ef("can't find plugin source for choice: %s", hs.inspect(choice.source))
+  if choice then
+    if choice.source then
+      local plugin = plugins[choice.source]
+      if plugin then
+        plugin.complete(choice)
+      else
+        log.ef("can't find plugin source for choice: %s", hs.inspect(choice.source))
+      end
     end
   end
 end
@@ -144,31 +186,71 @@ end
 module.shown = function()
   log.v("shown")
   drawBorder()
+  modal:enter()
 end
 
 module.hidden = function()
   log.v("hidden")
   drawBorder()
+  modal:exit()
 end
 
 module.invalid = function(choice)
   log.v("invalid choice: " .. hs.inspect(choice))
+  if choice then
+    if choice.keyword then
+      module.activateKeyword(choice.keyword)
+    end
+  end
 end
 
 module.rightClicked = function(row)
   log.v("right clicked row: " .. hs.inspect(row))
 end
 
+module.show = function()
+  log.v("showing")
+  activeKeyword = nil
+  chooser:query(nil)
+  chooser:show()
+end
+
+module.hide = function()
+  log.v("hiding")
+  queryDelay:stop()
+  chooser:hide()
+end
+
 module.toggle = function()
   if chooser:isVisible() then
-    log.v("closing")
-    queryDelay:stop()
-    chooser:hide()
+    module.hide()
   else
-    log.v("opening")
+    module.show()
+  end
+end
+
+module.clearQuery = function()
+  chooser:placeholderText(activeKeyword and keywords[activeKeyword].placeholder or defaultPlaceholder)
+  chooser:query(nil)
+  latestQuery = ""
+  chooser:refreshChoicesCallback()
+end
+
+module.activateKeyword = function(keyword)
+  if keywords[keyword] then
+    log.df("activating keyword '%s'", keyword)
+    activeKeyword = keyword
+    module.clearQuery()
+  else
+    log.wf("no such keyword '%s'", keyword)
+  end
+end
+
+module.deactivateKeyword = function()
+  if activeKeyword then
+    log.df("deactivating keyword '%s'", activeKeyword)
     activeKeyword = nil
-    chooser:query(nil)
-    chooser:show()
+    module.clearQuery()
   end
 end
 
@@ -184,6 +266,9 @@ module.start = function()
     :rightClickCallback(module.rightClicked)
 
   loadPlugins()
+
+  modal = hs.hotkey.modal.new()
+  bindKeys()
 
   module.chooser = chooser
 end
@@ -201,6 +286,10 @@ module.stop = function(reload)
     end
   end
   plugins = {}
+  keywords = {}
+
+  modal:exit()
+  modal:delete()
 
   module.chooser = nil
 end
@@ -215,6 +304,9 @@ local function reloadPlugin(pluginName)
     end
     package.loaded[requireName] = nil
     plugins[requireName] = nil
+    if plugin.keyword and keywords[plugin.keyword] == plugin then
+      keywords[plugin.keyword] = nil
+    end
     loadPlugin(pluginName)
   else
     log.wf("couldn't find plugin '%s' to reload", pluginName)
