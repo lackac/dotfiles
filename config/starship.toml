@@ -43,10 +43,10 @@ vimcmd_symbol = "[❮](blue)"
 [git_branch]
 symbol = " "
 format = "[$symbol$branch]($style)"
-style = "bright-black"
+style = "dim-yellow"
 
 [git_status]
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](dim-yellow) ($ahead_behind$stashed)]($style)"
 style = "cyan"
 conflicted = "  "
 deleted = " 󰗨"
