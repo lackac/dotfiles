@@ -74,7 +74,11 @@ end
 
 module.compileChoices = function(query)
   log.v("compileChoices " .. hs.inspect(query))
-  return cache.choices
+  if query ~= "" then
+    return cache.choices
+  else
+    return {}
+  end
 end
 
 module.complete = function(choice)
