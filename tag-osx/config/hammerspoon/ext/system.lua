@@ -71,4 +71,16 @@ module.toggleTheme = function()
     :send()
 end
 
+module.showTrash = function()
+  hs.osascript.applescript([[tell application "Finder" to open trash]])
+  local trashWindows = hs.window.filter.new(false):setAppFilter("Finder", { allowTitles = "Trash" }):getWindows()
+  if trashWindows and #trashWindows > 0 then
+    trashWindows[1]:focus()
+  end
+end
+
+module.emptyTrash = function()
+  hs.osascript.applescript([[tell application "Finder" to empty trash]])
+end
+
 return module
