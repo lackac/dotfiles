@@ -18,7 +18,6 @@ local chooser
 local defaultPlaceholder = ""
 local modal
 local plugins = {}
-local activeKeyword
 local keywords = {}
 
 local latestQuery
@@ -28,7 +27,7 @@ end)
 
 local function bindKeys()
   modal:bind({}, "escape", function()
-    if activeKeyword then
+    if module.activeKeyword then
       module.deactivateKeyword()
     else
       module.hide()
@@ -53,16 +52,17 @@ local function loadPlugin(pluginName)
     end
 
     plugins[requireName] = plugin
-    if plugin.keyword then
-      if keywords[plugin.keyword] then
+    if plugin.keyword or type(plugin.autoActivate) == "string" then
+      local keyword = plugin.keyword or plugin.autoActivate
+      if keywords[keyword] then
         log.wf(
           "plugin keyword '%s' aleady reserved for plugin '%s' when loading '%s' which could lead to unexpected behaviour",
-          plugin.keyword,
-          keywords[plugin.keyword].requireName,
+          keyword,
+          keywords[keyword].requireName,
           requireName
         )
       else
-        keywords[plugin.keyword] = plugin
+        keywords[keyword] = plugin
       end
     end
 
@@ -93,7 +93,7 @@ module.queryChanged = function(query, timeout)
     -- shortcut when emptying the query to avoid delay
     latestQuery = query
     chooser:refreshChoicesCallback()
-  elseif keywords[query] and keywords[query].autoActivate then
+  elseif keywords[query] and (keywords[query].autoActivate == true or keywords[query].autoActivate == query) then
     module.activateKeyword(query)
   else
     log.v("query: " .. hs.inspect(query))
@@ -111,7 +111,10 @@ module.compileChoices = function()
 
   log.v("compiling choices from plugins")
   for requireName, plugin in pairs(plugins) do
-    if plugin.keyword == activeKeyword then
+    if
+      plugin.keyword == module.activeKeyword
+      or type(plugin.autoActivate) == "string" and plugin.autoActivate == module.activeKeyword
+    then
       numberOfPlugins = numberOfPlugins + 1
       local pluginChoices = plugin.compileChoices(latestQuery)
       useFzf = useFzf or plugin.useFzf
@@ -128,10 +131,11 @@ module.compileChoices = function()
           totalChoices = totalChoices + #v
         end
       end
-    elseif activeKeyword == nil and plugin.keyword and plugin.tip then
+    end
+    if module.activeKeyword == nil and plugin.tip then
       mapOfChoices["tips"] = mapOfChoices["tips"] or {}
       plugin.tip.id = plugin.tip.id or plugin.requireName
-      plugin.tip.keyword = plugin.tip.keyword or plugin.keyword
+      plugin.tip.keyword = plugin.tip.keyword or plugin.keyword or plugin.autoActivate
       plugin.tip.valid = false
       table.insert(mapOfChoices["tips"], plugin.tip)
     end
@@ -153,11 +157,23 @@ module.compileChoices = function()
 
   local lookup = {}
   local choices = {}
-  fzfFilter(latestQuery, function(file)
-    for _, choicesInSource in pairs(mapOfChoices) do
+
+  -- special case mainly for the calculator
+  for key, choicesInSource in pairs(mapOfChoices) do
+    if plugins[key] and not plugins[key].useFzf then
       for _, choice in ipairs(choicesInSource) do
-        file:write(choice.id .. "\t" .. choice.text .. "\n")
-        lookup[choice.id] = choice
+        table.insert(choices, choice)
+      end
+    end
+  end
+
+  fzfFilter(latestQuery, function(file)
+    for key, choicesInSource in pairs(mapOfChoices) do
+      if not plugins[key] or plugins[key].useFzf then
+        for _, choice in ipairs(choicesInSource) do
+          file:write(choice.id .. "\t" .. choice.text .. "\n")
+          lookup[choice.id] = choice
+        end
       end
     end
   end, function(line)
@@ -212,7 +228,7 @@ end
 
 module.show = function()
   log.v("showing")
-  activeKeyword = nil
+  module.activeKeyword = nil
   chooser:query(nil)
   chooser:show()
 end
@@ -232,7 +248,7 @@ module.toggle = function()
 end
 
 module.clearQuery = function()
-  chooser:placeholderText(activeKeyword and keywords[activeKeyword].placeholder or defaultPlaceholder)
+  chooser:placeholderText(module.activeKeyword and keywords[module.activeKeyword].placeholder or defaultPlaceholder)
   chooser:query(nil)
   latestQuery = ""
   chooser:refreshChoicesCallback()
@@ -241,7 +257,7 @@ end
 module.activateKeyword = function(keyword)
   if keywords[keyword] then
     log.df("activating keyword '%s'", keyword)
-    activeKeyword = keyword
+    module.activeKeyword = keyword
     module.clearQuery()
   else
     log.wf("no such keyword '%s'", keyword)
@@ -249,9 +265,9 @@ module.activateKeyword = function(keyword)
 end
 
 module.deactivateKeyword = function()
-  if activeKeyword then
-    log.df("deactivating keyword '%s'", activeKeyword)
-    activeKeyword = nil
+  if module.activeKeyword then
+    log.df("deactivating keyword '%s'", module.activeKeyword)
+    module.activeKeyword = nil
     module.clearQuery()
   end
 end
@@ -306,8 +322,9 @@ local function reloadPlugin(pluginName)
     end
     package.loaded[requireName] = nil
     plugins[requireName] = nil
-    if plugin.keyword and keywords[plugin.keyword] == plugin then
-      keywords[plugin.keyword] = nil
+    local keyword = plugin.keyword or plugin.autoActivate
+    if keyword and keywords[keyword] == plugin then
+      keywords[keyword] = nil
     end
     loadPlugin(pluginName)
   else
