@@ -93,6 +93,8 @@ module.queryChanged = function(query, timeout)
     -- shortcut when emptying the query to avoid delay
     latestQuery = query
     chooser:refreshChoicesCallback()
+  elseif keywords[query] and keywords[query].autoActivate then
+    module.activateKeyword(query)
   else
     log.v("query: " .. hs.inspect(query))
     latestQuery = query
