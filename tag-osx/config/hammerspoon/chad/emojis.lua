@@ -1,3 +1,5 @@
+local images = require("ext.images")
+
 local cache = {}
 local module = {
   keyword = ":",
@@ -10,58 +12,25 @@ local module = {
 
 local log
 
-local databaseUrl = "https://unicode.org/Public/emoji/latest/emoji-test.txt"
-local canvas = hs.canvas.new({ x = 0, y = 0, w = 96, h = 96 })
-
-local cachePath = os.getenv("HOME") .. "/Library/Caches/" .. hs.settings.bundleID .. "/emoji"
-hs.fs.mkdir(cachePath)
-
-local function emojiImage(codepoints, emoji)
-  local imagePath = cachePath .. "/" .. codepoints .. ".png"
-  local image = hs.image.imageFromPath(imagePath)
-  if not image then
-    canvas[1] = { type = "text", text = emoji, textSize = 64, frame = { x = "15%", y = "10%", w = "100%", h = "100%" } }
-    image = canvas:imageFromCanvas()
-    image:saveToFile(imagePath)
-  end
-  return image
-end
-
 local function cacheEmojis()
   cache.choices = {}
 
-  log.d("downloading emoji database")
-  hs.http.asyncGet(databaseUrl, nil, function(status, body, _)
-    if status == 200 then
-      log.d("downloaded emoji database")
-      local group
-      local subGroup
+  log.d("caching Emojis")
 
-      for line in body:gmatch("([^\n]*)\n") do
-        local level, groupName = line:match("^# ([sub]*group): (.*)")
-        local codepoints, emoji, description =
-          line:match("^([A-F0-9][A-Z0-9 ]+[A-Z0-9]) *; fully%-qualified *# (%S+) E%d+%.%d+ (.*)$")
-        if level == "group" then
-          group = groupName
-        elseif level == "subgroup" then
-          subGroup = groupName
-        elseif codepoints then
-          codepoints = codepoints:gsub(" ", "-")
-          table.insert(cache.choices, {
-            text = description,
-            subText = group .. " > " .. subGroup,
-            emoji = emoji,
-            id = codepoints,
-            source = module.requireName,
-            image = emojiImage(codepoints, emoji),
-          })
-        end
-      end
-      log.df("cached %d emojis", #cache.choices)
-    else
-      log.ef("couldn't download emoji database: %d\n%s", status, body)
-    end
-  end)
+  local emojis = images.emojis() or {}
+
+  for _, e in ipairs(emojis) do
+    table.insert(cache.choices, {
+      text = e.description,
+      subText = e.group .. " > " .. e.subGroup,
+      emoji = e.emoji,
+      id = e.id,
+      source = module.requireName,
+      image = images.emojiIcon(e.emoji),
+    })
+  end
+
+  log.df("cached %d emojis", #cache.choices)
 end
 
 module.compileChoices = function(query)

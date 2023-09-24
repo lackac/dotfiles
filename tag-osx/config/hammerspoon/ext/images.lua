@@ -27,10 +27,12 @@ local function glyphToCodepoints(glyph)
   return codepoints
 end
 
-local function renderGlyph(glyph, color, cacheDir, attributes)
+local function renderGlyph(glyph, cacheDir, attributes)
+  attributes = attributes or {}
+
   local imagePath = cachePath(cacheDir) .. "/" .. glyphToCodepoints(glyph)
-  if color then
-    imagePath = imagePath .. "-" .. color
+  if attributes.color then
+    imagePath = imagePath .. "-" .. attributes.color
   end
   imagePath = imagePath .. ".png"
 
@@ -42,8 +44,9 @@ local function renderGlyph(glyph, color, cacheDir, attributes)
       textSize = 64,
       frame = { x = "15%", y = "10%", w = "100%", h = "100%" },
     }
-    if color then
-      glyphCanvas[1].textColor = hs.drawing.color.x11[color]
+    if attributes.color then
+      glyphCanvas[1].textColor = hs.drawing.color.x11[attributes.color]
+      attributes.color = nil
     end
     if attributes then
       for k, v in pairs(attributes) do
@@ -84,7 +87,7 @@ module.nerdFontsGlyphs = function()
     return cache.nerdFontsGlyphs
   end
 
-  local settingsKey = "nerdFonts:nameToGlyph"
+  local settingsKey = "ext.images:nerdFontsGlyphs"
   local nameToGlyph = hs.settings.get(settingsKey)
 
   if not nameToGlyph then
@@ -124,9 +127,67 @@ module.nerdFontsIcon = function(glyph, color)
     glyph = module.nerdFontsGlyphs()[glyph]
   end
 
-  local image = renderGlyph(glyph, color, "nerd-fonts", {
+  local image = renderGlyph(glyph, "nerd-fonts", {
+    color = color,
     textFont = "FiraCode Nerd Font",
   })
+  return image
+end
+
+-- Emoji
+local emojiDatabaseUrl = "https://unicode.org/Public/emoji/latest/emoji-test.txt"
+
+module.emojis = function()
+  if cache.emojis then
+    return cache.emojis
+  end
+
+  local settingsKey = "ext.images:emojis"
+  local emojis = hs.settings.get(settingsKey)
+
+  if not emojis then
+    log.d("downloading emoji database")
+    local status, body, _ = hs.http.get(emojiDatabaseUrl)
+
+    if status == 200 then
+      log.d("downloaded emoji database")
+      local group
+      local subGroup
+      emojis = {}
+
+      for line in body:gmatch("([^\n]*)\n") do
+        local level, groupName = line:match("^# ([sub]*group): (.*)")
+        local codepoints, emoji, description =
+          line:match("^([A-F0-9][A-Z0-9 ]+[A-Z0-9]) *; fully%-qualified *# (%S+) E%d+%.%d+ (.*)$")
+        if level == "group" then
+          group = groupName
+        elseif level == "subgroup" then
+          subGroup = groupName
+        elseif codepoints then
+          codepoints = codepoints:gsub(" ", "-")
+          table.insert(emojis, {
+            emoji = emoji,
+            description = description,
+            group = group,
+            subGroup = subGroup,
+            id = codepoints,
+          })
+        end
+      end
+    else
+      log.ef("couldn't download emoji database: %d\n%s", status, body)
+      return
+    end
+
+    hs.settings.set(settingsKey, emojis)
+  end
+
+  cache.emojis = emojis
+  return emojis
+end
+
+module.emojiIcon = function(emoji)
+  local image = renderGlyph(emoji, "emojis")
   return image
 end
 
