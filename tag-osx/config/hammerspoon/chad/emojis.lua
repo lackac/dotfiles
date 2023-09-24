@@ -35,6 +35,9 @@ end
 
 module.compileChoices = function(query)
   log.v("compileChoices " .. hs.inspect(query))
+  if cache.choices == nil or #cache.choices == 0 then
+    cacheEmojis()
+  end
   return cache.choices
 end
 
@@ -52,8 +55,6 @@ end
 module.start = function(main, _)
   module.main = main
   log = hs.logger.new(module.requireName, "verbose")
-
-  cacheEmojis()
 end
 
 module.stop = function() end
