@@ -1,35 +1,42 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-require "io/console"
+nerd_fonts_path=$HOME/Code/ryanoasis/nerd-fonts/
+script_path=bin/scripts/lib/i_all.sh
+script_full_path=$nerd_fonts_path$script_path
 
-# Assumes each value has the same length
-def print_in_columns(values, padding = "  ")
-  _rows, cols = IO.console.winsize
-  column_count = cols / (values.first.length + padding.length)
-  values.each_slice(column_count) do |row|
-    puts row.join(padding)
-  end
-end
+if [[ ! -f $script_full_path ]]; then
+  parent_dir=$(dirname $nerd_fonts_path)
+  mkdir -p $parent_dir
+  cd $parent_dir
+  git clone --filter=blob:none --sparse git@github.com:ryanoasis/nerd-fonts
+  cd nerd-fonts
+  git sparse-checkout add $(dirname $script_path)
+fi
 
-def char_info(codepoint)
-  [codepoint.to_s(16), codepoint.chr(Encoding::UTF_8)].join(" - ")
-end
+source $script_full_path
 
-filter = ARGV.first
-{
-  "Seti-UI"                 => 0xe5fa..0xe62e,
-  "Devicons"                => 0xe700..0xe7c5,
-  "Font Awesome"            => 0xf000..0xf2e0,
-  "Font Awesome Extension"  => 0xe200..0xe2a9,
-  "Octicons"                => [0x2192, 0x2665, 0x26a1] + [*0xf400..0xf4a8] + [0xf67c],
-  "Powerline Extra Symbols" => [*0xe0a0..0xe0a3] + [*0xe0b0..0xe0bf] + [*0xe0c0..0xe0c8] + [*0xe0cc..0xe0cf] + [*0xe0d0..0xe0d2] + [0xe0d4],
-  "IEC Power Symbols"       => [*0x23fb..0x23fe] + [0x2b58],
-  "Font Linux"              => 0xf300..0xf31c,
-  "Pomicons"                => 0xe000..0xe00a,
-  "Material"                => [0xf001, 0xf847] + [*0xf500..0xfd46],
-  "Weather"                 => 0xe300..0xe3e3,
-}.each do |section, codepoints|
-  next if filter && !section.downcase.index(filter.downcase)
-  puts "\e[1;34m#{section}\e[0m"
-  print_in_columns codepoints.map { |c| char_info(c) }
-end
+list_chars() {
+  for var in "${!i@}"; do
+    # trim 'i_' prefix
+    glyph_name=${var#*_}
+    # split name to group and name
+    glyph_group=${glyph_name%%_*}
+    glyph_name=${glyph_name#*_}
+    # replace _ with -
+    glyph_name=${glyph_name/_/-}
+    glyph_char=${!var}
+
+    echo -e "$glyph_char\t$glyph_group\t$glyph_name"
+  done
+}
+
+if [[ $1 = "-f" ]]; then
+  fzf_opts=(-i --delimiter '\t' --nth -1)
+  if [[ -n $2 ]]; then
+    fzf_opts+=(--filter "$2")
+  fi
+
+  list_chars | fzf ${fzf_opts[@]}
+else
+  list_chars
+fi
