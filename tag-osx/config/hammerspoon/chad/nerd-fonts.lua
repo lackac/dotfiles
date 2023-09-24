@@ -14,6 +14,12 @@ local log
 local function cacheNerdFonts()
   cache.choices = {}
 
+  -- avoid race condition triggering this twice and duplicating icons
+  if cache._caching then
+    return
+  end
+  cache._caching = true
+
   log.d("caching Nerd Fonts characters")
 
   local nerdFontsGlyphs = images.nerdFontsGlyphs() or {}
@@ -29,6 +35,7 @@ local function cacheNerdFonts()
     })
   end
 
+  cache._caching = nil
   log.df("cached %d Nerd Fonts glyphs", #cache.choices)
 end
 
@@ -37,7 +44,7 @@ module.compileChoices = function(query)
   if cache.choices == nil or #cache.choices == 0 then
     cacheNerdFonts()
   end
-  return cache.choices
+  return cache.choices or {}
 end
 
 module.complete = function(choice)

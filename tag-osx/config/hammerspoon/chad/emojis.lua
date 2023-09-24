@@ -15,6 +15,12 @@ local log
 local function cacheEmojis()
   cache.choices = {}
 
+  -- avoid race condition triggering this twice and duplicating icons
+  if cache._caching then
+    return
+  end
+  cache._caching = true
+
   log.d("caching Emojis")
 
   local emojis = images.emojis() or {}
@@ -30,6 +36,7 @@ local function cacheEmojis()
     })
   end
 
+  cache._caching = nil
   log.df("cached %d emojis", #cache.choices)
 end
 
@@ -38,7 +45,7 @@ module.compileChoices = function(query)
   if cache.choices == nil or #cache.choices == 0 then
     cacheEmojis()
   end
-  return cache.choices
+  return cache.choices or {}
 end
 
 module.complete = function(choice)
