@@ -4,7 +4,7 @@ local module = {
   useFzf = true,
   cache = cache,
   placeholder = "search for x11 color names",
-  tip = { text = "type c↦ to search x11 color names" },
+  tip = { text = "type c⇥ to search x11 color names" },
 }
 
 local log
