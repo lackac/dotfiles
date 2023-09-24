@@ -1,5 +1,15 @@
 local module = {}
 
+module.keys = function(obj)
+  local keys = {}
+
+  for k, _ in pairs(obj) do
+    table.insert(keys, k)
+  end
+
+  return keys
+end
+
 -- run function without window animation
 module.noAnim = function(callback)
   local lastAnimDuration = hs.window.animationDuration
