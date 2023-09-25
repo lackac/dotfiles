@@ -87,45 +87,34 @@ module.nerdFontsGlyphs = function()
     return cache.nerdFontsGlyphs
   end
 
-  local settingsKey = "ext.images:nerdFontsGlyphs"
-  local nameToGlyph = hs.settings.get(settingsKey)
-
-  if not nameToGlyph then
-    local allGlyphs = capture(nerdFontsPath)
-    if not allGlyphs or allGlyphs == "" then
-      log.e("couldn't list Nerd Fonts glyphs")
-      return
-    end
-
-    nameToGlyph = {}
-    for glyph, groupKey, name in allGlyphs:gmatch("([^\n]*)\t([^\n]*)\t([^\n]*)") do
-      local group = nerdFontsGroups[groupKey]
-      if not group then
-        log.wf("unknown Nerd Fonts group '%s'", groupKey)
-      end
-
-      local id = groupKey .. "-" .. name
-
-      nameToGlyph[id] = {
-        name = name,
-        groupKey = groupKey,
-        group = group,
-        glyph = glyph,
-      }
-    end
-    hs.settings.set(settingsKey, nameToGlyph)
+  local glyphs = {}
+  local allGlyphs = capture(nerdFontsPath)
+  if not allGlyphs or allGlyphs == "" then
+    log.e("couldn't list Nerd Fonts glyphs")
+    return
   end
 
-  cache.nerdFontsGlyphs = nameToGlyph
-  return nameToGlyph
+  for glyph, groupKey, name in allGlyphs:gmatch("([^\n]*)\t([^\n]*)\t([^\n]*)") do
+    local group = nerdFontsGroups[groupKey]
+    if not group then
+      log.wf("unknown Nerd Fonts group '%s'", groupKey)
+    end
+
+    table.insert(glyphs, {
+      name = name,
+      id = groupKey .. "-" .. name,
+      groupKey = groupKey,
+      group = group,
+      glyph = glyph,
+    })
+  end
+
+  cache.nerdFontsGlyphs = glyphs
+  return glyphs
 end
 
 module.nerdFontsIcon = function(glyph, color)
   color = color or "black"
-
-  if glyph:match("^[a-z]") then
-    glyph = module.nerdFontsGlyphs()[glyph]
-  end
 
   local image = renderGlyph(glyph, "nerd-fonts", {
     color = color,
@@ -142,44 +131,39 @@ module.emojis = function()
     return cache.emojis
   end
 
-  local settingsKey = "ext.images:emojis"
-  local emojis = hs.settings.get(settingsKey)
+  local emojis = {}
 
-  if not emojis then
-    log.d("downloading emoji database")
-    local status, body, _ = hs.http.get(emojiDatabaseUrl)
+  log.d("downloading emoji database")
+  local status, body, _ = hs.http.get(emojiDatabaseUrl)
 
-    if status == 200 then
-      log.d("downloaded emoji database")
-      local group
-      local subGroup
-      emojis = {}
+  if status == 200 then
+    log.d("downloaded emoji database")
+    local group
+    local subGroup
+    emojis = {}
 
-      for line in body:gmatch("([^\n]*)\n") do
-        local level, groupName = line:match("^# ([sub]*group): (.*)")
-        local codepoints, emoji, description =
-          line:match("^([A-F0-9][A-Z0-9 ]+[A-Z0-9]) *; fully%-qualified *# (%S+) E%d+%.%d+ (.*)$")
-        if level == "group" then
-          group = groupName
-        elseif level == "subgroup" then
-          subGroup = groupName
-        elseif codepoints then
-          codepoints = codepoints:gsub(" ", "-")
-          table.insert(emojis, {
-            emoji = emoji,
-            description = description,
-            group = group,
-            subGroup = subGroup,
-            id = codepoints,
-          })
-        end
+    for line in body:gmatch("([^\n]*)\n") do
+      local level, groupName = line:match("^# ([sub]*group): (.*)")
+      local codepoints, emoji, description =
+        line:match("^([A-F0-9][A-Z0-9 ]+[A-Z0-9]) *; fully%-qualified *# (%S+) E%d+%.%d+ (.*)$")
+      if level == "group" then
+        group = groupName
+      elseif level == "subgroup" then
+        subGroup = groupName
+      elseif codepoints then
+        codepoints = codepoints:gsub(" ", "-")
+        table.insert(emojis, {
+          emoji = emoji,
+          description = description,
+          group = group,
+          subGroup = subGroup,
+          id = codepoints,
+        })
       end
-    else
-      log.ef("couldn't download emoji database: %d\n%s", status, body)
-      return
     end
-
-    hs.settings.set(settingsKey, emojis)
+  else
+    log.ef("couldn't download emoji database: %d\n%s", status, body)
+    return
   end
 
   cache.emojis = emojis
