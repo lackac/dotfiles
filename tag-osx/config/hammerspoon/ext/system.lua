@@ -1,5 +1,5 @@
 local activateFrontmost = require("ext.application").activateFrontmost
-local assetPath = require("ext.utils").assetPath
+local nerdFontsIcon = require("ext.images").nerdFontsIcon
 
 local module = {}
 
@@ -22,7 +22,7 @@ module.toggleWiFi = function()
     .new({
       title = "Wi-Fi",
       subTitle = "Power: " .. (newStatus and "On" or "Off"),
-      contentImage = assetPath("airport.png"),
+      contentImage = nerdFontsIcon(newStatus and "󰖩" or "󰖪", "brown"),
     })
     :send()
 end
@@ -58,15 +58,15 @@ module.setTheme = function(theme)
 end
 
 module.toggleTheme = function()
-  local isDarkModeEnabled = module.isDarkModeEnabled()
+  local target = module.isDarkModeEnabled() and "light" or "dark"
 
-  module.setTheme(isDarkModeEnabled and "light" or "dark")
+  module.setTheme(target)
 
   hs.notify
     .new({
       title = "Theme",
-      subTitle = "Switched to: " .. (isDarkModeEnabled and "Light" or "Dark"),
-      contentImage = assetPath("theme.png"),
+      subTitle = "Switched to: " .. target,
+      contentImage = nerdFontsIcon(target == "light" and "󰖙" or "󰖔", "brown"),
     })
     :send()
 end
