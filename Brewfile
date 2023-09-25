@@ -16,6 +16,7 @@ brew "fzf"
 brew "gh"
 brew "gist"
 brew "gnupg"
+brew "gnu-units"
 brew "highlight"
 brew "htop-osx"
 brew "hub"
@@ -50,7 +51,7 @@ brew "wget"
 # languages managed via Homebrew
 brew "go"
 brew "lua"
-brew "python@3.9"
+brew "python"
 
 # requirements for asdf plugins
 brew "gpg"
