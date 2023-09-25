@@ -43,6 +43,14 @@ local function cacheNerdFonts()
 
     local elapsedTime = hs.timer.secondsSinceEpoch() - cachingStart
     log.df("cached %d Nerd Fonts glyphs in %.2f seconds", #cache.choices, elapsedTime)
+  end)
+
+  local progressTimer
+  progressTimer = hs.timer.doEvery(0.25, function()
+    log.v("progressTimer callback", hs.inspect(nerdFontsCacher), coroutine.status(nerdFontsCacher))
+    if coroutine.status(nerdFontsCacher) == "dead" then
+      progressTimer:stop()
+    end
     module.main.chooser:refreshChoicesCallback()
   end)
 
@@ -57,14 +65,12 @@ module.compileChoices = function(query)
   end
 
   if nerdFontsCacher and coroutine.status(nerdFontsCacher) ~= "dead" then
+    log.v("show progress", hs.inspect(nerdFontsCacher), coroutine.status(nerdFontsCacher))
     local progress = cache.totalChoices
         and cache.totalChoices > 0
         and math.floor(#cache.choices / cache.totalChoices * 100)
       or 0
 
-    hs.timer.doAfter(0.25, function()
-      module.main.chooser:refreshChoicesCallback()
-    end)
     return {
       {
         text = string.format(
@@ -80,6 +86,7 @@ module.compileChoices = function(query)
       },
     }
   else
+    log.v("show choices", hs.inspect(nerdFontsCacher), coroutine.status(nerdFontsCacher))
     return cache.choices or {}
   end
 end
