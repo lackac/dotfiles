@@ -1,4 +1,5 @@
 local system = require("ext.system")
+local nerdFontsIcon = require("ext.images").nerdFontsIcon
 
 local cache = {}
 local module = {
@@ -10,51 +11,51 @@ local log
 
 local commands = {
   ["Hammerspoon Console"] = {
-    image = "NSApplicationIcon",
+    image = "",
     action = system.toggleConsole,
   },
   ["Toggle Wifi"] = {
-    image = "NSNetwork",
+    image = "󰖩",
     action = system.toggleWiFi,
   },
   ["Show Trash"] = {
-    image = "NSTrashFull",
+    image = "",
     action = system.showTrash,
   },
   ["Empty Trash"] = {
-    image = "NSTrashEmpty",
+    image = "󱂨",
     action = system.emptyTrash,
   },
   ["Toggle OS Theme"] = {
-    image = "NSPreferencesGeneral",
+    image = "󰔎",
     action = system.toggleTheme,
   },
   ["Start Screensaver"] = {
-    image = "NSSlideshowTemplate",
+    image = "󱄄",
     action = hs.caffeinate.startScreensaver,
   },
   ["Lock Screen"] = {
-    image = "NSLockLockedTemplate",
+    image = "󰷛",
     action = hs.caffeinate.lockScreen,
   },
   ["Logout"] = {
-    image = "NSUserGuest",
+    image = "󰍃",
     action = hs.caffeinate.logOut,
   },
   ["Sleep"] = {
-    image = "NSStatusNone",
+    image = "󰒲",
     action = hs.caffeinate.systemSleep,
   },
   ["Sleep Displays"] = {
-    image = "NSStatusPartiallyAvailable",
+    image = "󰶐",
     action = hs.caffeinate.systemSleep,
   },
   ["Reboot"] = {
-    image = "NSTouchBarRefreshTemplate",
+    image = "󰜉",
     action = hs.caffeinate.restartSystem,
   },
   ["Shutdown"] = {
-    image = "NSStatusUnavailable",
+    image = "",
     action = hs.caffeinate.shutdownSystem,
   },
 }
@@ -67,7 +68,7 @@ local function buildChoices()
       text = text,
       id = command.id or module.requireName .. ":" .. text,
       source = module.requireName,
-      image = type(command.image) == "string" and hs.image.imageFromName(command.image) or command.image,
+      image = nerdFontsIcon(command.image, "darkmagenta"),
     })
   end
 end
