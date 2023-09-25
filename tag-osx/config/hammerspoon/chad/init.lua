@@ -20,7 +20,7 @@ local modal
 local plugins = {}
 local keywords = {}
 
-local latestQuery
+local latestQuery = ""
 local queryDelay = hs.timer.delayed.new(0.2, function()
   module.queryChanged(latestQuery, true)
 end)
