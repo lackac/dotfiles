@@ -8,7 +8,8 @@ local FZF_PATH = "/opt/homebrew/bin/fzf"
 local defaultOpts = "-i --delimiter '\t' --with-nth -1"
 
 local function buildCommand(filter, inputPath, opts)
-  local command = string.format("%s %s --filter '%s' < '%s'", FZF_PATH, opts or defaultOpts, filter, inputPath)
+  local command =
+    string.format("%s %s --filter '%s' < '%s'", FZF_PATH, opts or defaultOpts, filter:gsub("'", "'\\''"), inputPath)
   return command
 end
 
