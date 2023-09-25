@@ -10,6 +10,8 @@ local module = {
 
 local log
 
+local calculatorImage = hs.image.imageFromAppBundle("com.apple.Calculator")
+
 local function evaluateExpression(expr)
   log.vf("evaluating '%s' with bc", expr)
   local command = "/usr/bin/bc -l -e '" .. expr:gsub("'", "'\\''") .. "'"
@@ -28,7 +30,7 @@ module.compileChoices = function(query)
           text = result,
           id = "calculator-result",
           source = module.requireName,
-          image = hs.image.imageFromAppBundle("com.apple.Calculator"),
+          image = calculatorImage,
         },
       }
     end
