@@ -12,7 +12,7 @@ local module = {};
   module.name = dir
 end)()
 
-local log = hs.logger.new(module.name, "verbose")
+local log = hs.logger.new(module.name, "debug")
 
 local chooser
 local defaultPlaceholder = ""

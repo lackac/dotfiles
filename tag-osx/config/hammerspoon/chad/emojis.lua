@@ -11,41 +11,73 @@ local module = {
 }
 
 local log
+local emojiCacher
 
 local function cacheEmojis()
-  cache.choices = {}
-
-  -- avoid race condition triggering this twice and duplicating icons
-  if cache._caching then
+  if emojiCacher and coroutine.status(emojiCacher) ~= "dead" then
     return
   end
-  cache._caching = true
 
-  log.d("caching Emojis")
+  cache.choices = {}
+  cache.totalChoices = 0
+  local cachingStart = hs.timer.secondsSinceEpoch()
 
-  local emojis = images.emojis() or {}
+  emojiCacher = coroutine.create(function()
+    log.d("caching Emojis")
 
-  for _, e in ipairs(emojis) do
-    table.insert(cache.choices, {
-      text = e.description,
-      subText = e.group .. " > " .. e.subGroup,
-      emoji = e.emoji,
-      id = e.id,
-      source = module.requireName,
-      image = images.emojiIcon(e.emoji),
-    })
-  end
+    local emojis = images.emojis() or {}
+    cache.totalChoices = #emojis
 
-  cache._caching = nil
-  log.df("cached %d emojis", #cache.choices)
+    for i, e in ipairs(emojis) do
+      if i % 10 == 1 then
+        coroutine.applicationYield()
+      end
+      table.insert(cache.choices, {
+        text = e.description,
+        subText = e.group .. " > " .. e.subGroup,
+        emoji = e.emoji,
+        id = e.id,
+        source = module.requireName,
+        image = images.emojiIcon(e.emoji),
+      })
+    end
+
+    local elapsedTime = hs.timer.secondsSinceEpoch() - cachingStart
+    log.df("cached %d emojis in %.2f seconds", #cache.choices, elapsedTime)
+    module.main.chooser:refreshChoicesCallback()
+  end)
+
+  coroutine.resume(emojiCacher)
 end
 
 module.compileChoices = function(query)
   log.v("compileChoices " .. hs.inspect(query))
+
   if cache.choices == nil or #cache.choices == 0 then
     cacheEmojis()
   end
-  return cache.choices or {}
+
+  if emojiCacher and coroutine.status(emojiCacher) ~= "dead" then
+    local progress = cache.totalChoices
+        and cache.totalChoices > 0
+        and math.floor(#cache.choices / cache.totalChoices * 100)
+      or 0
+
+    hs.timer.doAfter(0.25, function()
+      module.main.chooser:refreshChoicesCallback()
+    end)
+    return {
+      {
+        text = string.format("Loading emojis %d%% [%d / %d]", progress, #cache.choices, cache.totalChoices or 0),
+        valid = false,
+        id = module.requireName .. "-progress",
+        source = module.requireName,
+        image = images.progressIcon(progress),
+      },
+    }
+  else
+    return cache.choices or {}
+  end
 end
 
 module.complete = function(choice)
@@ -61,7 +93,7 @@ end
 
 module.start = function(main, _)
   module.main = main
-  log = hs.logger.new(module.requireName, "verbose")
+  log = hs.logger.new(module.requireName, "debug")
 end
 
 module.stop = function() end

@@ -1,6 +1,6 @@
 local capture = require("ext.utils").capture
 
-local cache = { paths = {} }
+local cache = { paths = {}, progressIcons = {} }
 local module = { cache = cache }
 
 local log = hs.logger.new("ext.images", "debug")
@@ -173,6 +173,20 @@ end
 module.emojiIcon = function(emoji)
   local image = renderGlyph(emoji, "emojis")
   return image
+end
+
+-- Progress
+local progressGlyphs = { " ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" }
+
+module.progressIcon = function(percent)
+  percent = percent or 0
+  local index = 1 + math.floor(percent / 12.5)
+
+  if not cache.progressIcons[index] then
+    cache.progressIcons[index] = module.nerdFontsIcon(progressGlyphs[index], "forestgreen")
+  end
+
+  return cache.progressIcons[index]
 end
 
 return module
