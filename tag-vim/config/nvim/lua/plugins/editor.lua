@@ -88,14 +88,7 @@ return {
     },
   },
 
-  {
-    "folke/flash.nvim",
-    search = {
-      mode = function(str)
-        return "\\<" .. str
-      end,
-    },
-  },
+  { "folke/flash.nvim", enabled = false },
 
   -- vim-vinegar like file explorer that lets you edit your filesystem like a normal Neovim buffer
   {
