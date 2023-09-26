@@ -21,9 +21,59 @@ local plugins = {}
 local keywords = {}
 
 local latestQuery = ""
+local history = {}
+local historyMaxSize = 100
+local cursor
+local savedLatestQuery
+
 local queryDelay = hs.timer.delayed.new(0.2, function()
   module.queryChanged(latestQuery, true)
 end)
+
+local function prevQueryRow()
+  local selectedRow = chooser:selectedRow()
+  if selectedRow > 1 then
+    chooser:selectedRow(selectedRow - 1)
+    return
+  end
+
+  if not history or not history[1] then
+    return
+  end
+
+  if cursor == nil then
+    cursor = #history
+    savedLatestQuery = module.saveQuery()
+  else
+    cursor = cursor - 1
+  end
+  if cursor < 1 then
+    cursor = 1
+  end
+  log.vf("cursor at %d/%d (%s)", cursor, #history, hs.inspect(history[cursor]))
+
+  module.restoreQuery(history[cursor])
+end
+
+local function nextQueryOrRow()
+  if cursor == nil then
+    chooser:selectedRow(chooser:selectedRow() + 1)
+    return
+  elseif cursor == #history then
+    if savedLatestQuery then
+      chooser:selectedRow(chooser:selectedRow() + 1)
+    else
+      cursor = nil
+      module.updateQuery()
+    end
+    return
+  else
+    cursor = cursor + 1
+  end
+  log.vf("cursor at %d/%d (%s)", cursor, #history, hs.inspect(history[cursor]))
+
+  module.restoreQuery(history[cursor])
+end
 
 local function bindKeys()
   modal:bind({}, "escape", function()
@@ -40,6 +90,10 @@ local function bindKeys()
       module.activateKeyword(cleanedQuery)
     end
   end)
+
+  modal:bind({}, "up", prevQueryRow, nil, prevQueryRow)
+
+  modal:bind({}, "down", nextQueryOrRow, nil, nextQueryOrRow)
 end
 
 local function loadPlugin(pluginName)
@@ -85,9 +139,20 @@ local function loadPlugins()
   end
 end
 
+local function trimQueryHistory()
+  local size = #history
+  if size > historyMaxSize then
+    local trimmed = {}
+    table.move(history, size - historyMaxSize + 1, size, 1, trimmed)
+    history = trimmed
+  end
+end
+
 module.queryChanged = function(query, timeout)
   if timeout then
     log.v("delayed query: " .. hs.inspect(query))
+    cursor = nil
+    savedLatestQuery = nil
     chooser:refreshChoicesCallback()
   elseif query == "" then
     -- shortcut when emptying the query to avoid delay
@@ -155,6 +220,16 @@ module.compileChoices = function()
     end
   end
 
+  -- shortcut for loading progress indicators
+  if totalChoices == 1 then
+    for key, choicesInSource in pairs(mapOfChoices) do
+      local choiceId = choicesInSource[1] and choicesInSource[1].id
+      if choiceId:match("%-progress$") then
+        return choicesInSource
+      end
+    end
+  end
+
   local lookup = {}
   local choices = {}
 
@@ -209,6 +284,7 @@ end
 
 module.hidden = function()
   log.v("hidden")
+  module.saveQuery()
   drawBorder()
   modal:exit()
 end
@@ -228,6 +304,7 @@ end
 
 module.show = function()
   log.v("showing")
+  cursor = nil
   module.activeKeyword = nil
   chooser:query(nil)
   chooser:show()
@@ -247,18 +324,53 @@ module.toggle = function()
   end
 end
 
-module.clearQuery = function()
-  chooser:placeholderText(module.activeKeyword and keywords[module.activeKeyword].placeholder or defaultPlaceholder)
-  chooser:query(nil)
-  latestQuery = ""
+module.updateQuery = function(query, keyword)
+  module.activeKeyword = keyword
+  chooser:placeholderText(keyword and keywords[keyword].placeholder or defaultPlaceholder)
+  chooser:query(query)
+  latestQuery = query or ""
   chooser:refreshChoicesCallback()
+end
+
+module.saveQuery = function()
+  if latestQuery == "" then
+    return
+  end
+
+  -- don't save query if it's the same as the last one
+  local lastItem = history[#history]
+  if type(lastItem) == "string" and module.activeKeyword == nil and lastItem == latestQuery then
+    return true
+  end
+  if type(lastItem) == "table" and lastItem[1] == module.activeKeyword and lastItem[2] == latestQuery then
+    return true
+  end
+
+  table.insert(history, module.activeKeyword and { module.activeKeyword, latestQuery } or latestQuery)
+  if #history > historyMaxSize * 1.5 then
+    trimQueryHistory()
+  end
+  return true
+end
+
+module.restoreQuery = function(query)
+  local keyword
+
+  if type(query) == "table" then
+    keyword = query[1]
+    query = query[2]
+  elseif type(query) ~= "string" then
+    log.wf("can't restore query %s, wrong type", hs.inspect(query))
+    return
+  end
+
+  module.updateQuery(query, keyword)
 end
 
 module.activateKeyword = function(keyword)
   if keywords[keyword] then
     log.df("activating keyword '%s'", keyword)
-    module.activeKeyword = keyword
-    module.clearQuery()
+    module.updateQuery(nil, keyword)
   else
     log.wf("no such keyword '%s'", keyword)
   end
@@ -267,8 +379,8 @@ end
 module.deactivateKeyword = function()
   if module.activeKeyword then
     log.df("deactivating keyword '%s'", module.activeKeyword)
-    module.activeKeyword = nil
-    module.clearQuery()
+    module.saveQuery()
+    module.updateQuery()
   end
 end
 
@@ -284,6 +396,7 @@ module.start = function()
     :rightClickCallback(module.rightClicked)
 
   loadPlugins()
+  history = hs.settings.get(module.name .. ":queryHistory") or {}
 
   modal = hs.hotkey.modal.new()
   bindKeys()
@@ -292,6 +405,9 @@ module.start = function()
 end
 
 module.stop = function(reload)
+  trimQueryHistory()
+  hs.settings.set(module.name .. ":queryHistory", history)
+
   chooser:delete()
   chooser = nil
 
