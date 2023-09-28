@@ -26,6 +26,54 @@ local historyMaxSize = 100
 local cursor
 local savedLatestQuery
 
+local pluginLabel = hs.canvas.new({ x = 0, y = 0, w = 100, h = 18 }):appendElements({
+  type = "text",
+  text = "",
+  textSize = 16,
+  textColor = hs.drawing.color.x11.dimgray,
+  textAlignment = "center",
+})
+
+local function updatePluginLabel()
+  local text = module.name
+  if module.activeKeyword then
+    text = text .. " / " .. keywords[module.activeKeyword].name
+  end
+  pluginLabel[1].text = text
+end
+
+local function showPluginLabel()
+  local window = hs.window.filter.new(false):setAppFilter("Hammerspoon", { allowTitles = "Chooser" }):getWindows()[1]
+  if not window then
+    log.w("can't find chooser window for attaching label")
+    return
+  end
+
+  local axWindow = hs.axuielement.windowElement(window)
+  if not axWindow or not axWindow:isValid() then
+    log.w("can't find valid AXWindow for chooser for attaching label")
+    return
+  end
+
+  updatePluginLabel()
+  local frame = axWindow:attributeValue("AXFrame")
+  pluginLabel
+    :frame({
+      x = frame.x,
+      y = frame.y + 2,
+      w = frame.w,
+      h = 18,
+    })
+    :show()
+end
+
+local function hidePluginLabel()
+  if pluginLabel:isShowing() then
+    pluginLabel:hide()
+    pluginLabel[1].text = ""
+  end
+end
+
 local queryDelay = hs.timer.delayed.new(0.2, function()
   module.queryChanged(latestQuery, true)
 end)
@@ -100,6 +148,7 @@ local function loadPlugin(pluginName)
   local requireName = module.name .. "." .. pluginName
   local ok, plugin = pcall(require, requireName)
   if ok then
+    plugin.name = pluginName
     plugin.requireName = requireName
     if type(plugin.start) == "function" then
       plugin.start(module, pluginName)
@@ -279,12 +328,14 @@ end
 module.shown = function()
   log.v("shown")
   drawBorder()
+  showPluginLabel()
   modal:enter()
 end
 
 module.hidden = function()
   log.v("hidden")
   module.saveQuery()
+  hidePluginLabel()
   drawBorder()
   modal:exit()
 end
@@ -371,6 +422,7 @@ module.activateKeyword = function(keyword)
   if keywords[keyword] then
     log.df("activating keyword '%s'", keyword)
     module.updateQuery(nil, keyword)
+    updatePluginLabel()
   else
     log.wf("no such keyword '%s'", keyword)
   end
@@ -381,6 +433,7 @@ module.deactivateKeyword = function()
     log.df("deactivating keyword '%s'", module.activeKeyword)
     module.saveQuery()
     module.updateQuery()
+    updatePluginLabel()
   end
 end
 
