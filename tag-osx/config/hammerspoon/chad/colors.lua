@@ -34,7 +34,7 @@ end
 module.complete = function(choice)
   log.v("complete choice: " .. hs.inspect(choice))
   if choice then
-    hs.pasteboard.setContents(choice.text)
+    hs.pasteboard.setContents(choice.text:getString())
   end
 end
 
