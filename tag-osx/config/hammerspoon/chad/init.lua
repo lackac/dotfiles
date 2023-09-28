@@ -222,7 +222,7 @@ module.compileChoices = function()
 
   -- shortcut for loading progress indicators
   if totalChoices == 1 then
-    for key, choicesInSource in pairs(mapOfChoices) do
+    for _, choicesInSource in pairs(mapOfChoices) do
       local choiceId = choicesInSource[1] and choicesInSource[1].id
       if choiceId:match("%-progress$") then
         return choicesInSource
