@@ -79,6 +79,9 @@ module.start = function()
   hs.hotkey.bind({ "ctrl", "shift", "cmd" }, "space", function()
     require("chad").reload()
   end)
+  hs.hotkey.bind({ "ctrl", "cmd" }, "c", function()
+    require("chad").showWithKeyword("pb")
+  end)
 
   -- ctrl + tab as alternative to cmd + tab
   hs.hotkey.bind({ "ctrl" }, "tab", window.windowHints)

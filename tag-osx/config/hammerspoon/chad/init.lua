@@ -16,6 +16,7 @@ local log = hs.logger.new(module.name, "debug")
 
 local chooser
 local defaultPlaceholder = ""
+local shownWithKeyword
 local modal
 local plugins = {}
 local keywords = {}
@@ -74,14 +75,70 @@ local function hidePluginLabel()
   end
 end
 
+local preview = hs.canvas.new({ x = 0, y = 0, w = 100, h = 100 }):appendElements(
+  { type = "rectangle", roundedRectRadii = { xRadius = 8, yRadius = 8 }, action = "fill", fillColor = { alpha = 0.8 } },
+  {
+    type = "text",
+    text = "",
+    textFont = "FiraCode Nerd Font",
+    textSize = 16,
+    textColor = hs.drawing.color.x11.snow,
+    padding = 8,
+  }
+)
+
+local function showPreview(text)
+  local window = hs.window.filter.new(false):setAppFilter("Hammerspoon", { allowTitles = "Chooser" }):getWindows()[1]
+  if not window then
+    log.w("can't find chooser window for attaching preview")
+    return
+  end
+
+  local axWindow = hs.axuielement.windowElement(window)
+  if not axWindow or not axWindow:isValid() then
+    log.w("can't find valid AXWindow for chooser for attaching preview")
+    return
+  end
+
+  preview[2].text = text
+
+  local minFrame = preview:minimumTextSize(2, text)
+  local chooserFrame = axWindow:attributeValue("AXFrame")
+  preview
+    :frame({
+      x = chooserFrame.x + chooserFrame.w / 2 - minFrame.w / 2 - 8,
+      y = chooserFrame.y + chooserFrame.h + 10,
+      w = minFrame.w + 16,
+      h = minFrame.h + 16,
+    })
+    :show()
+end
+
+local function hidePreview()
+  if preview:isShowing() then
+    preview:hide()
+    preview[1].text = ""
+  end
+end
+
+local function updatePreview()
+  local item = chooser:selectedRowContents()
+  if item.fullText then
+    showPreview(item.fullText)
+  else
+    hidePreview()
+  end
+end
+
 local queryDelay = hs.timer.delayed.new(0.2, function()
   module.queryChanged(latestQuery, true)
 end)
 
-local function prevQueryRow()
+local function prevQueryOrRow()
   local selectedRow = chooser:selectedRow()
   if selectedRow > 1 then
     chooser:selectedRow(selectedRow - 1)
+    updatePreview()
     return
   end
 
@@ -106,10 +163,12 @@ end
 local function nextQueryOrRow()
   if cursor == nil then
     chooser:selectedRow(chooser:selectedRow() + 1)
+    updatePreview()
     return
   elseif cursor == #history then
     if savedLatestQuery then
       chooser:selectedRow(chooser:selectedRow() + 1)
+      updatePreview()
     else
       cursor = nil
       module.updateQuery()
@@ -123,9 +182,37 @@ local function nextQueryOrRow()
   module.restoreQuery(history[cursor])
 end
 
+local function prevRow()
+  local selectedRow = chooser:selectedRow()
+  if selectedRow > 1 then
+    chooser:selectedRow(selectedRow - 1)
+    updatePreview()
+  end
+end
+
+local function nextRow()
+  local selectedRow = chooser:selectedRow()
+  chooser:selectedRow(selectedRow + 1)
+  updatePreview()
+end
+
+local function prevPage()
+  local selectedRow = chooser:selectedRow()
+  if selectedRow > 1 then
+    chooser:selectedRow(math.max(selectedRow - 1, 1))
+    updatePreview()
+  end
+end
+
+local function nextPage()
+  local selectedRow = chooser:selectedRow()
+  chooser:selectedRow(selectedRow + 10)
+  updatePreview()
+end
+
 local function bindKeys()
   modal:bind({}, "escape", function()
-    if module.activeKeyword then
+    if module.activeKeyword and not shownWithKeyword then
       module.deactivateKeyword()
     else
       module.hide()
@@ -139,9 +226,12 @@ local function bindKeys()
     end
   end)
 
-  modal:bind({}, "up", prevQueryRow, nil, prevQueryRow)
-
+  modal:bind({}, "up", prevQueryOrRow, nil, prevQueryOrRow)
   modal:bind({}, "down", nextQueryOrRow, nil, nextQueryOrRow)
+  modal:bind({ "ctrl" }, "p", prevRow, nil, prevRow)
+  modal:bind({ "ctrl" }, "n", nextRow, nil, nextRow)
+  modal:bind({}, "pageup", prevPage, nil, prevPage)
+  modal:bind({}, "pagedown", nextPage, nil, nextPage)
 end
 
 local function loadPlugin(pluginName)
@@ -222,6 +312,7 @@ module.compileChoices = function()
   local numberOfSources = 0
   local totalChoices = 0
   local useFzf = false
+  local fzfOpts = { "-i --delimiter '\t' --with-nth 2.. --read0 --print0" }
 
   log.v("compiling choices from plugins")
   for requireName, plugin in pairs(plugins) do
@@ -232,6 +323,9 @@ module.compileChoices = function()
       numberOfPlugins = numberOfPlugins + 1
       local pluginChoices = plugin.compileChoices(latestQuery)
       useFzf = useFzf or plugin.useFzf
+      if plugin.fzfOpts then
+        table.insert(fzfOpts, plugin.fzfOpts)
+      end
       if #pluginChoices > 0 then
         -- considering this a plain list of choices and adding to our map
         mapOfChoices[requireName] = pluginChoices
@@ -295,7 +389,7 @@ module.compileChoices = function()
     for key, choicesInSource in pairs(mapOfChoices) do
       if not plugins[key] or plugins[key].useFzf then
         for _, choice in ipairs(choicesInSource) do
-          file:write(choice.id .. "\t" .. choice.text .. "\n")
+          file:write(choice.id .. "\t" .. (choice.fullText or choice.text) .. "\0")
           lookup[choice.id] = choice
         end
       end
@@ -305,7 +399,10 @@ module.compileChoices = function()
     if id and lookup[id] then
       table.insert(choices, lookup[id])
     end
-  end)
+  end, table.concat(fzfOpts, " "))
+
+  -- trigger preview for first choice
+  hs.timer.doAfter(0.25, updatePreview)
 
   return choices
 end
@@ -336,6 +433,7 @@ module.hidden = function()
   log.v("hidden")
   module.saveQuery()
   hidePluginLabel()
+  hidePreview()
   drawBorder()
   modal:exit()
 end
@@ -361,9 +459,25 @@ module.show = function()
   chooser:show()
 end
 
+module.showWithKeyword = function(keyword)
+  if keywords[keyword] then
+    log.df("activating keyword '%s'", keyword)
+    module.updateQuery(nil, keyword)
+    if not chooser:isVisible() then
+      cursor = nil
+      shownWithKeyword = true
+      chooser:show()
+    end
+    updatePluginLabel()
+  else
+    log.wf("no such keyword '%s'", keyword)
+  end
+end
+
 module.hide = function()
   log.v("hiding")
   queryDelay:stop()
+  shownWithKeyword = nil
   chooser:hide()
 end
 

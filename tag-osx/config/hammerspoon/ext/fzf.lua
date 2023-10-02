@@ -4,12 +4,9 @@ local log = hs.logger.new("fzf", "debug")
 
 local FZF_PATH = "/opt/homebrew/bin/fzf"
 
--- expecting tab delimited id and text pairs by default
-local defaultOpts = "-i --delimiter '\t' --with-nth -1"
-
 local function buildCommand(filter, inputPath, opts)
   local command =
-    string.format("%s %s --filter '%s' < '%s'", FZF_PATH, opts or defaultOpts, filter:gsub("'", "'\\''"), inputPath)
+    string.format("%s %s --filter '%s' < '%s'", FZF_PATH, opts or "", filter:gsub("'", "'\\''"), inputPath)
   return command
 end
 
@@ -44,8 +41,15 @@ module.filter = function(filterQuery, input, lineProcessor, opts)
   local result
 
   if type(lineProcessor) == "function" then
-    for line in fzf:lines() do
-      lineProcessor(line)
+    if opts:match("%-%-print0") then
+      result = fzf:read("*a")
+      for line in result:gmatch("(.-)\0") do
+        lineProcessor(line)
+      end
+    else
+      for line in fzf:lines() do
+        lineProcessor(line)
+      end
     end
   elseif lineProcessor == nil then
     result = fzf:read("*a")
