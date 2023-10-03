@@ -50,9 +50,11 @@ local function trimHistory()
 end
 
 local function trimForDisplay(text)
-  if text:len() > 60 or text:match("\n") then
+  if text:match("\n") then
     local trimmed = text:match("^(.-)\n"):sub(1, 60)
     return trimmed .. "…", text
+  elseif text:len() > 60 then
+    return text:sub(1, 60) .. "…", text
   else
     return text, nil
   end
@@ -132,7 +134,7 @@ module.complete = function(choice)
   log.v("complete choice: " .. hs.inspect(choice))
   if choice then
     hs.pasteboard.writeAllData({
-      ["public.utf8-plain-text"] = choice.text,
+      ["public.utf8-plain-text"] = choice.fullText or choice.text,
       ["org.nspasteboard.source"] = choice.sourceApp,
     })
   end
