@@ -85,7 +85,7 @@ cask "quicklook-json"
 # Fonts
 tap "homebrew/cask-fonts"
 cask "font-fira-code-nerd-font"
-cask "font-fira-mono-nerd-font"
+cask "font-symbols-only-nerd-font"
 
 # Mac App Store installs
 mas "Affinity Photo", id: 824183456

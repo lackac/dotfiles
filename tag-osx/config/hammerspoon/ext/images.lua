@@ -118,7 +118,7 @@ module.nerdFontsIcon = function(glyph, color)
 
   local image = renderGlyph(glyph, "nerd-fonts", {
     color = color,
-    textFont = "FiraCode Nerd Font",
+    textFont = "Symbols Nerd Font",
   })
   return image
 end
@@ -173,6 +173,22 @@ end
 module.emojiIcon = function(emoji)
   local image = renderGlyph(emoji, "emojis")
   return image
+end
+
+-- Generic icon generator based on the glyph
+module.icon = function(glyph, color)
+  local bytes = string.byte(glyph, 1, -1)
+  if bytes[1] == 238 or bytes[1] == 239 or bytes[1] == 243 then
+    return module.nerdFontsIcon(glyph, color)
+  elseif bytes[1] == 226 then
+    if glyph == "⏻" or glyph == "⏼" or glyph == "⏽" or glyph == "⏾" or glyph == "♥" or glyph == "⭘" then
+      return module.nerdFontsIcon(glyph, color)
+    else
+      return module.emojiIcon(glyph)
+    end
+  else
+    return module.emojiIcon(glyph)
+  end
 end
 
 -- Progress
