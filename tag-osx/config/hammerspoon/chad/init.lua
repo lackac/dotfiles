@@ -389,7 +389,8 @@ module.compileChoices = function()
     for key, choicesInSource in pairs(mapOfChoices) do
       if not plugins[key] or plugins[key].useFzf then
         for _, choice in ipairs(choicesInSource) do
-          file:write(choice.id .. "\t" .. (choice.fullText or choice.text) .. "\0")
+          local fzfChoice = choice.fzfInput or choice.fullText or choice.text
+          file:write(choice.id .. "\t" .. fzfChoice .. "\0")
           lookup[choice.id] = choice
         end
       end

@@ -18,6 +18,7 @@ local function cacheColors()
     local id = "x11" .. ":" .. color
     table.insert(cache.choices, {
       text = hs.styledtext.new(color, { font = { size = 18 }, color = hs.drawing.color.x11[color] }),
+      fzfInput = color,
       id = id,
       source = module.requireName,
     })
