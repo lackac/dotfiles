@@ -91,7 +91,7 @@ end
 
 module.start = function(main, _)
   module.main = main
-  log = hs.logger.new(module.requireName, "verbose")
+  log = hs.logger.new(module.requireName, "debug")
 
   loadApplications()
 end
