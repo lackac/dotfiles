@@ -70,8 +70,8 @@ module.start = function()
 
   -- throw between screens
   hs.fnutils.each({
-    { key = "]", dir = "prev" },
-    { key = "[", dir = "next" },
+    { key = "]", dir = "next" },
+    { key = "[", dir = "prev" },
   }, function(obj)
     bind(obj.key, function()
       throw(obj.dir)
