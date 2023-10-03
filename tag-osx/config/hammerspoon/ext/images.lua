@@ -177,7 +177,7 @@ end
 
 -- Generic icon generator based on the glyph
 module.icon = function(glyph, color)
-  local bytes = string.byte(glyph, 1, -1)
+  local bytes = table.pack(string.byte(glyph, 1, -1))
   if bytes[1] == 238 or bytes[1] == 239 or bytes[1] == 243 then
     return module.nerdFontsIcon(glyph, color)
   elseif bytes[1] == 226 then
