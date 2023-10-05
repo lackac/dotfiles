@@ -305,6 +305,12 @@ module.queryChanged = function(query, timeout)
   elseif keywords[query] and (keywords[query].autoActivate == true or keywords[query].autoActivate == query) then
     module.activateKeyword(query)
   else
+    local potentialKeyword = query:match("^%s*(%S+)%s+$")
+    if potentialKeyword and keywords[potentialKeyword] then
+      module.activateKeyword(potentialKeyword)
+      return
+    end
+
     log.v("query: " .. hs.inspect(query))
     latestQuery = query
     queryDelay:start()
