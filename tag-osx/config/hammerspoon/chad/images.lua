@@ -4,7 +4,7 @@ local module = {
   useFzf = true,
   cache = cache,
   placeholder = "search for builtin images",
-  tip = { text = "type i⇥ to search builtin icons" },
+  tip = { text = "i⇥ to search builtin icons" },
 }
 
 local log

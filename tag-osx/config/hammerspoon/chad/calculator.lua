@@ -5,7 +5,7 @@ local module = {
   autoActivate = "=",
   cache = cache,
   placeholder = "enter mathematical expression",
-  tip = { text = "type = for complex mathematical expressions" },
+  tip = { text = "= for complex mathematical expressions" },
 }
 
 local log

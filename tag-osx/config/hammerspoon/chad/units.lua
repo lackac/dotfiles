@@ -6,7 +6,7 @@ local module = {
   keyword = "u",
   cache = cache,
   placeholder = "1km mi / 1GBP HUF",
-  tip = { text = "type u⇥ for unit conversions" },
+  tip = { text = "u⇥ for unit conversions" },
 }
 
 local log

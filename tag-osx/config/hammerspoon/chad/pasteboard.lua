@@ -5,7 +5,7 @@ local module = {
   fzfOpts = "--tac --no-sort --scheme=history --tiebreak=index",
   cache = cache,
   placeholder = "",
-  tip = { text = "type pb⇥ to search the pasteboard history" },
+  tip = { text = "pb⇥ to search the pasteboard history" },
 }
 
 local log

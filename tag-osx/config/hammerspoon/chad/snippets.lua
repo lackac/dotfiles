@@ -6,7 +6,7 @@ local module = {
   useFzf = true,
   cache = cache,
   placeholder = "search the snippets library",
-  tip = { text = "type s⇥ to access snippets" },
+  tip = { text = "s⇥ to access snippets" },
 }
 
 local log

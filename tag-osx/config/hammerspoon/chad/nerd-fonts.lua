@@ -6,7 +6,7 @@ local module = {
   useFzf = true,
   cache = cache,
   placeholder = "search for nerd fonts glyphs",
-  tip = { text = "type nf⇥ to search nerd fonts glyphs" },
+  tip = { text = "nf⇥ to search nerd fonts glyphs" },
 }
 
 local log

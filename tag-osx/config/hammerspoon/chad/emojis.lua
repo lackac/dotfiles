@@ -7,7 +7,7 @@ local module = {
   useFzf = true,
   cache = cache,
   placeholder = "search for emoji characters",
-  tip = { text = "type : to search emoji characters" },
+  tip = { text = ": to search emoji characters" },
 }
 
 local log

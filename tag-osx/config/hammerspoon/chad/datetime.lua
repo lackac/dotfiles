@@ -6,7 +6,7 @@ local module = {
   useFzf = false,
   cache = cache,
   placeholder = "select a representation or enter format string",
-  tip = { text = "type d⇥ for formatted date and time" },
+  tip = { text = "d⇥ to format date and time" },
 }
 
 local log
