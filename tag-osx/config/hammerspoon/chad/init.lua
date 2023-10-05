@@ -44,7 +44,7 @@ local function updatePluginLabel()
 end
 
 local function showPluginLabel()
-  local window = hs.window.filter.new(false):setAppFilter("Hammerspoon", { allowTitles = "Chooser" }):getWindows()[1]
+  local window = module.chooserWindow()
   if not window then
     log.w("can't find chooser window for attaching label")
     return
@@ -88,7 +88,7 @@ local preview = hs.canvas.new({ x = 0, y = 0, w = 100, h = 100 }):appendElements
 )
 
 local function showPreview(text)
-  local window = hs.window.filter.new(false):setAppFilter("Hammerspoon", { allowTitles = "Chooser" }):getWindows()[1]
+  local window = module.chooserWindow()
   if not window then
     log.w("can't find chooser window for attaching preview")
     return
@@ -285,6 +285,11 @@ local function trimQueryHistory()
     table.move(history, size - historyMaxSize + 1, size, 1, trimmed)
     history = trimmed
   end
+end
+
+module.chooserWindow = function()
+  local windowFilter = hs.window.filter.new(false):setAppFilter("Hammerspoon", { allowTitles = "Chooser" })
+  return windowFilter:getWindows()[1]
 end
 
 module.queryChanged = function(query, timeout)

@@ -137,6 +137,9 @@ module.complete = function(choice)
       ["public.utf8-plain-text"] = choice.fullText or choice.text,
       ["org.nspasteboard.source"] = choice.sourceApp,
     })
+    hs.timer.waitWhile(module.main.chooserWindow, function()
+      hs.eventtap.keyStroke({ "cmd" }, "v")
+    end, 0.2)
   end
 end
 

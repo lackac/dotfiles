@@ -109,6 +109,9 @@ module.complete = function(choice)
   log.v("complete choice: " .. hs.inspect(choice))
   if choice then
     hs.pasteboard.setContents(choice.fullText or choice.text)
+    hs.timer.waitWhile(module.main.chooserWindow, function()
+      hs.eventtap.keyStroke({ "cmd" }, "v")
+    end, 0.2)
   end
 end
 
