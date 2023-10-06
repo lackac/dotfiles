@@ -1,7 +1,6 @@
 local status = hs.watchable.new("status")
 local log = hs.logger.new("watchables", "debug")
 local isDarkModeEnabled = require("ext.system").isDarkModeEnabled
-local debounce = require("ext.utils").debounce
 
 local config = require("config")
 
@@ -60,12 +59,16 @@ local updateSleep = function(event)
   log.d("updated sleep:", status.sleepEvent)
 end
 
-local updateUSB = function()
+local usbDebounce = hs.timer.delayed.new(3, function()
   status.isErgodoxAttached = hs.fnutils.find(hs.usb.attachedDevices(), function(device)
     return device.productName == "ErgoDox EZ"
   end) ~= nil
 
   log.d("updated ergodox:", status.isErgodoxAttached)
+end)
+
+local updateUSB = function()
+  usbDebounce:start()
 end
 
 local updateTheme = function()
@@ -82,7 +85,7 @@ module.start = function()
     wifi = hs.wifi.watcher.new(updateWiFi),
     battery = hs.battery.watcher.new(updateBattery),
     theme = hs.distributednotifications.new(updateTheme, "AppleInterfaceThemeChangedNotification"),
-    usb = hs.usb.watcher.new(debounce(updateUSB, 3)),
+    usb = hs.usb.watcher.new(updateUSB),
   }
 
   hs.fnutils.each(cache.watchers, function(watcher)
