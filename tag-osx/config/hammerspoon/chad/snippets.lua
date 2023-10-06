@@ -1,4 +1,5 @@
 local icon = require("ext.images").icon
+local trimForDisplay = require("ext.utils").trimForDisplay
 
 local cache = { icons = {} }
 local module = {
@@ -10,17 +11,6 @@ local module = {
 }
 
 local log
-
-local function trimForDisplay(text)
-  if text:match("\n") then
-    local trimmed = text:match("^(.-)\n"):sub(1, 60)
-    return trimmed .. "…", text
-  elseif text:len() > 60 then
-    return text:sub(1, 60) .. "…", text
-  else
-    return text, nil
-  end
-end
 
 local function iconImage(glyph)
   if not glyph then

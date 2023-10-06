@@ -1,3 +1,5 @@
+local trimForDisplay = require("ext.utils").trimForDisplay
+
 local cache = { appIcons = {} }
 local module = {
   keyword = "pb",
@@ -46,17 +48,6 @@ local function trimHistory()
     local trimmed = {}
     table.move(history, size - historyMaxSize + 1, size, 1, trimmed)
     history = trimmed
-  end
-end
-
-local function trimForDisplay(text)
-  if text:match("\n") then
-    local trimmed = text:match("^(.-)\n"):sub(1, 60)
-    return trimmed .. "…", text
-  elseif text:len() > 60 then
-    return text:sub(1, 60) .. "…", text
-  else
-    return text, nil
   end
 end
 

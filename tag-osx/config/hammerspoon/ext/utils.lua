@@ -41,6 +41,31 @@ module.rgb = function(r, g, b, a)
   return { red = r / 255, green = g / 255, blue = b / 255, alpha = a or 1.0 }
 end
 
+module.trimForDisplay = function(text, maxLength, singleLine)
+  if type(maxLength) == "boolean" then
+    singleLine = maxLength
+    if type(singleLine) == "number" then
+      maxLength = singleLine
+    else
+      maxLength = nil
+    end
+  end
+  maxLength = maxLength or 60
+  if singleLine ~= false then
+    singleLine = true
+  end
+
+  if singleLine and text:match("\n") then
+    local trimmed = text:match("^(.-)\n")
+    trimmed = trimmed:sub(1, utf8.offset(trimmed, maxLength))
+    return trimmed .. "…", text
+  elseif utf8.len(text) > maxLength then
+    return text:sub(1, utf8.offset(text, maxLength)) .. "…", text
+  else
+    return text, nil
+  end
+end
+
 module.unescape = function(str)
   local ret = string.gsub(str, "+", " ")
 
