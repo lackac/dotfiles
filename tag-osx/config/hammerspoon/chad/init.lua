@@ -307,7 +307,11 @@ module.queryChanged = function(query, timeout)
     -- shortcut when emptying the query to avoid delay
     latestQuery = query
     chooser:refreshChoicesCallback()
-  elseif keywords[query] and (keywords[query].autoActivate == true or keywords[query].autoActivate == query) then
+  elseif
+    module.activeKeyword == nil
+    and keywords[query]
+    and (keywords[query].autoActivate == true or keywords[query].autoActivate == query)
+  then
     module.activateKeyword(query)
   else
     local potentialKeyword = query:match("^%s*(%S+)%s+$")
