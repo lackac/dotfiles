@@ -473,8 +473,7 @@ end
 module.show = function()
   log.v("showing")
   cursor = nil
-  module.activeKeyword = nil
-  chooser:query(nil)
+  module.updateQuery()
   chooser:show()
 end
 
