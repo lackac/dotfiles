@@ -79,11 +79,15 @@ module.start = function()
   hs.hotkey.bind({ "ctrl", "shift", "cmd" }, "space", function()
     require("chad").reload()
   end)
-  hs.hotkey.bind({ "ctrl", "cmd" }, "c", function()
-    require("chad").showWithKeyword("pb")
-  end)
-  hs.hotkey.bind({ "ctrl", "cmd" }, "s", function()
-    require("chad").showWithKeyword("s")
+
+  hs.fnutils.each({
+    { key = "c", keyword = "pb" },
+    { key = "s", keyword = "s" },
+    { key = "t", keyword = "tr" },
+  }, function(object)
+    hs.hotkey.bind({ "ctrl", "cmd" }, object.key, function()
+      require("chad").showWithKeyword(object.keyword)
+    end)
   end)
 
   -- ctrl + tab as alternative to cmd + tab
