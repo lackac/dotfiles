@@ -180,7 +180,7 @@ end
 local function prevPage()
   local selectedRow = chooser:selectedRow()
   if selectedRow > 1 then
-    chooser:selectedRow(math.max(selectedRow - 1, 1))
+    chooser:selectedRow(math.max(selectedRow - 10, 1))
     updatePreview()
   end
 end
