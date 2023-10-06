@@ -471,7 +471,9 @@ end
 module.invalid = function(choice)
   log.v("invalid choice: " .. hs.inspect(choice))
   if choice then
-    if choice.keyword then
+    if choice.source and plugins[choice.source] and type(plugins[choice.source].invalid) == "function" then
+      plugins[choice.source].invalid(choice)
+    elseif choice.keyword then
       module.activateKeyword(choice.keyword)
     end
   end
