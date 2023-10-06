@@ -441,6 +441,17 @@ module.complete = function(choice)
   end
 end
 
+module.willOpen = function()
+  log.v("willOpen")
+  local focusedElement = hs.uielement.focusedElement()
+  local selectedText = focusedElement and focusedElement:selectedText()
+  if selectedText and selectedText ~= "" then
+    module.currentSelection = selectedText
+  else
+    module.currentSelection = nil
+  end
+end
+
 module.shown = function()
   log.v("shown")
   drawBorder()
@@ -587,9 +598,18 @@ module.start = function()
   bindKeys()
 
   module.chooser = chooser
+
+  hs.chooser.globalCallback = function(whichChooser, event)
+    if chooser == whichChooser and event == "willOpen" then
+      module.willOpen()
+    end
+    return hs.chooser._defaultGlobalCallback(whichChooser, event)
+  end
 end
 
 module.stop = function(reload)
+  hs.chooser.globalCallback = hs.chooser._defaultGlobalCallback
+
   trimQueryHistory()
   hs.settings.set(module.name .. ":queryHistory", history)
 
