@@ -15,6 +15,7 @@ end)()
 local log = hs.logger.new(module.name, "debug")
 
 local chooser
+local chooserWindowFilter = hs.window.filter.new(false):setAppFilter("Hammerspoon", { allowTitles = "Chooser" })
 local defaultPlaceholder = ""
 local shownWithKeyword
 local modal
@@ -44,28 +45,18 @@ local function updatePluginLabel()
 end
 
 local function showPluginLabel()
-  local window = module.chooserWindow()
-  if not window then
-    log.w("can't find chooser window for attaching label")
-    return
-  end
-
-  local axWindow = hs.axuielement.windowElement(window)
-  if not axWindow or not axWindow:isValid() then
-    log.w("can't find valid AXWindow for chooser for attaching label")
-    return
-  end
-
-  updatePluginLabel()
-  local frame = axWindow:attributeValue("AXFrame")
-  pluginLabel
-    :frame({
-      x = frame.x,
-      y = frame.y + 2,
-      w = frame.w,
-      h = 18,
-    })
-    :show()
+  module.withChooserWindow(function(_, axWindow)
+    updatePluginLabel()
+    local frame = axWindow:attributeValue("AXFrame")
+    pluginLabel
+      :frame({
+        x = frame.x,
+        y = frame.y + 2,
+        w = frame.w,
+        h = 18,
+      })
+      :show()
+  end)
 end
 
 local function hidePluginLabel()
@@ -88,30 +79,20 @@ local preview = hs.canvas.new({ x = 0, y = 0, w = 100, h = 100 }):appendElements
 )
 
 local function showPreview(text)
-  local window = module.chooserWindow()
-  if not window then
-    log.w("can't find chooser window for attaching preview")
-    return
-  end
+  module.withChooserWindow(function(_, axWindow)
+    preview[2].text = text
 
-  local axWindow = hs.axuielement.windowElement(window)
-  if not axWindow or not axWindow:isValid() then
-    log.w("can't find valid AXWindow for chooser for attaching preview")
-    return
-  end
-
-  preview[2].text = text
-
-  local minFrame = preview:minimumTextSize(2, text)
-  local chooserFrame = axWindow:attributeValue("AXFrame")
-  preview
-    :frame({
-      x = chooserFrame.x + chooserFrame.w / 2 - minFrame.w / 2 - 8,
-      y = chooserFrame.y + chooserFrame.h + 10,
-      w = minFrame.w + 16,
-      h = minFrame.h + 16,
-    })
-    :show()
+    local minFrame = preview:minimumTextSize(2, text)
+    local chooserFrame = axWindow:attributeValue("AXFrame")
+    preview
+      :frame({
+        x = chooserFrame.x + chooserFrame.w / 2 - minFrame.w / 2 - 8,
+        y = chooserFrame.y + chooserFrame.h + 10,
+        w = minFrame.w + 16,
+        h = minFrame.h + 16,
+      })
+      :show()
+  end)
 end
 
 local function hidePreview()
@@ -288,8 +269,32 @@ local function trimQueryHistory()
 end
 
 module.chooserWindow = function()
-  local windowFilter = hs.window.filter.new(false):setAppFilter("Hammerspoon", { allowTitles = "Chooser" })
-  return windowFilter:getWindows()[1]
+  return chooserWindowFilter:getWindows()[1]
+end
+
+module.withChooserWindow = function(callback)
+  local timer = hs.timer.waitUntil(module.chooserWindow, function()
+    local window = module.chooserWindow()
+    if not window then
+      log.w("can't find chooser window")
+      return
+    end
+
+    local axWindow = hs.axuielement.windowElement(window)
+    if not axWindow or not axWindow:isValid() then
+      log.w("can't find valid AXWindow for chooser")
+      return
+    end
+
+    callback(window, axWindow)
+  end, 0.1)
+
+  hs.timer.doAfter(1, function()
+    if timer:running() then
+      log.w("could't find chooser window")
+      timer:stop()
+    end
+  end)
 end
 
 module.queryChanged = function(query, timeout)
@@ -370,6 +375,7 @@ module.compileChoices = function()
   if numberOfSources == 1 and not useFzf then
     -- special case, likely plugin with keyword
     for _, choices in pairs(mapOfChoices) do
+      hs.timer.doAfter(0.25, updatePreview)
       return choices
     end
   end
@@ -379,6 +385,7 @@ module.compileChoices = function()
     for _, choicesInSource in pairs(mapOfChoices) do
       local choiceId = choicesInSource[1] and choicesInSource[1].id
       if choiceId:match("%-progress$") then
+        hs.timer.doAfter(0.25, updatePreview)
         return choicesInSource
       end
     end
