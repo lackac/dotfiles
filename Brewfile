@@ -63,7 +63,6 @@ brew "mas"
 # Desktop app installs
 cask "1password"
 cask "1password-cli"
-cask "alfred"
 cask "appcleaner"
 cask "brave-browser"
 cask "google-chrome"
