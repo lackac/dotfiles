@@ -22,12 +22,25 @@ module.applyTheme = function(theme)
   end
 
   local runtimeDir = os.getenv("XDG_RUNTIME_DIR") or os.getenv("HOME") .. "/Library/Caches/TemporaryItems/runtime"
+  local configDir = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config"
+
+  -- set lazygit theme
+  local lazygitConfigDir = configDir .. "/lazygit/"
+  local lazygitTheme = lazygitConfigDir .. "theme.yml"
+  local symlinkAttrs = hs.fs.symlinkAttributes(lazygitTheme)
+  if symlinkAttrs then
+    os.remove(lazygitTheme)
+  end
+  hs.fs.link(lazygitConfigDir .. "theme." .. theme .. ".yml", lazygitTheme, true)
 
   -- set kitty theme
-  local kittyTheme = (os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config")
-    .. "/kitty/colors/solarized."
-    .. theme
-    .. ".conf"
+  local kittyColorsDir = configDir .. "/kitty/colors/"
+  local kittyTheme = kittyColorsDir .. "solarized.conf"
+  local symlinkAttrs = hs.fs.symlinkAttributes(kittyTheme)
+  if symlinkAttrs then
+    os.remove(kittyTheme)
+  end
+  hs.fs.link(kittyColorsDir .. "solarized." .. theme .. ".conf", kittyTheme, true)
 
   for file in hs.fs.dir(runtimeDir) do
     if string.match(file, "^kitty%-%d+$") then
@@ -35,7 +48,7 @@ module.applyTheme = function(theme)
         .new(
           "/opt/homebrew/bin/kitty",
           nil,
-          { "@", "--to", "unix:" .. runtimeDir .. "/" .. file, "set-colors", "-a", kittyTheme }
+          { "@", "--to", "unix:" .. runtimeDir .. "/" .. file, "set-colors", "--all", "--configured", kittyTheme }
         )
         :start()
     elseif string.match(file, "^nvim%.%d+%.%d+") then

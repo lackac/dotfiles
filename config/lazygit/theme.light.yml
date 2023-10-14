@@ -1,0 +1,10 @@
+gui:
+  theme:
+    lightTheme: true
+    defaultFgColor:
+      - black
+    activeBorderColor:
+      - black
+      - bold
+    inactiveBorderColor:
+      - "#839496"

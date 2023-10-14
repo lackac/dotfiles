@@ -2,7 +2,11 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
-vim.o.background = "light"
+if vim.fn.system("defaults read -g AppleInterfaceStyle") == "Dark\n" then
+  vim.o.background = "dark"
+else
+  vim.o.background = "light"
+end
 
 -- file handling
 vim.opt.autowrite = false -- disable autowrite (enabled by LazyVim)
