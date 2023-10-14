@@ -26,32 +26,40 @@ return {
       opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "nvim_lua" } }))
 
       opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        ["<CR>"] = cmp.mapping({
+          i = function(fallback)
+            if cmp.visible() and cmp.get_active_entry() then
+              cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+            else
+              fallback()
+            end
+          end,
+          s = cmp.mapping.confirm({ select = true }),
+          c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+        }),
         ["<Tab>"] = cmp.mapping(function(fallback)
-          -- if cmp.visible() then
-          --   cmp.select_next_item()
-          if luasnip.expand_or_jumpable() then
+          if cmp.visible() then
+            cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+          -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+          -- they way you will only jump inside the snippet region
+          elseif luasnip.expand_or_jumpable() then
             luasnip.expand_or_jump()
           elseif has_words_before() then
-            cmp.mapping.confirm({ select = false })
+            cmp.complete()
           else
             fallback()
           end
         end, { "i", "s" }),
         ["<S-Tab>"] = cmp.mapping(function(fallback)
-          -- if cmp.visible() then
-          --   cmp.select_prev_item()
-          if luasnip.jumpable(-1) then
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip.jumpable(-1) then
             luasnip.jump(-1)
           else
             fallback()
           end
         end, { "i", "s" }),
       })
-
-      opts.confirm_opts = {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = false,
-      }
 
       opts.window = {
         completion = cmp.config.window.bordered(),
