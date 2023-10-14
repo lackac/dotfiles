@@ -15,9 +15,9 @@ return {
 
   {
     "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
     opts = {
-      char = "┊",
-      show_current_context = true,
+      indent = { char = "┊" },
     },
   },
 

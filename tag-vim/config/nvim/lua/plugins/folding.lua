@@ -127,7 +127,7 @@ return {
     },
     config = function()
       vim.o.fillchars = [[eob: ,fold:┄,foldopen:,foldsep:│,foldclose:]]
-      vim.o.foldcolumn = "auto:5"
+      vim.o.foldcolumn = "0"
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
@@ -135,8 +135,13 @@ return {
       local ufo = require("ufo")
 
       ufo.setup({
+        open_fold_hl_timeout = 400,
+        provider_selector = function(_, filetype, _)
+          return ftMap[filetype] or providerSelector
+        end,
         close_fold_kinds = { "imports", "comment" },
         fold_virt_text_handler = virtTextHandler,
+        enable_get_fold_virt_text = false,
         preview = {
           win_config = {
             border = { "", "─", "", "", "", "─", "", "" },
@@ -150,9 +155,6 @@ return {
             jumpBot = "]",
           },
         },
-        provider_selector = function(bufnr, filetype, buftype)
-          return ftMap[filetype] or providerSelector
-        end,
       })
 
       local ignore_filetypes = { "neo-tree" }
