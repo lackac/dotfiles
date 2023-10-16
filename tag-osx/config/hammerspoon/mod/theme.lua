@@ -2,6 +2,15 @@ local module = {}
 local log = hs.logger.new("theme", "debug")
 local rgb = require("ext.utils").rgb
 
+local function symlinkTheme(themeFile, theme)
+  local symlinkAttrs = hs.fs.symlinkAttributes(themeFile)
+  if symlinkAttrs then
+    os.remove(themeFile)
+  end
+  local targetFile = themeFile:gsub("%.[^.]+$", "." .. theme .. "%0")
+  hs.fs.link(targetFile, themeFile, true)
+end
+
 module.applyTheme = function(theme)
   -- set hs console theme
   hs.console.darkMode(theme == "dark")
@@ -25,22 +34,11 @@ module.applyTheme = function(theme)
   local configDir = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config"
 
   -- set lazygit theme
-  local lazygitConfigDir = configDir .. "/lazygit/"
-  local lazygitTheme = lazygitConfigDir .. "theme.yml"
-  local symlinkAttrs = hs.fs.symlinkAttributes(lazygitTheme)
-  if symlinkAttrs then
-    os.remove(lazygitTheme)
-  end
-  hs.fs.link(lazygitConfigDir .. "theme." .. theme .. ".yml", lazygitTheme, true)
+  symlinkTheme(configDir .. "/lazygit/theme.yml", theme)
 
   -- set kitty theme
-  local kittyColorsDir = configDir .. "/kitty/colors/"
-  local kittyTheme = kittyColorsDir .. "solarized.conf"
-  local symlinkAttrs = hs.fs.symlinkAttributes(kittyTheme)
-  if symlinkAttrs then
-    os.remove(kittyTheme)
-  end
-  hs.fs.link(kittyColorsDir .. "solarized." .. theme .. ".conf", kittyTheme, true)
+  local kittyTheme = configDir .. "/kitty/colors/solarized.conf"
+  symlinkTheme(kittyTheme, theme)
 
   for file in hs.fs.dir(runtimeDir) do
     if string.match(file, "^kitty%-%d+$") then
