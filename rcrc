@@ -1,5 +1,5 @@
 DOTFILES_DIR="~/.dotfiles-private ~/.dotfiles"
-COPY_ALWAYS="ssh/id_* ssh/*_rsa*"
+COPY_ALWAYS="ssh/id_* ssh/*_rsa* Library/LaunchAgents/*"
 EXCLUDES="README* script"
 TAGS="zsh tmux vim git ruby"
 SYMLINK_DIRS="zprezto-contrib config/hammerspoon config/kitty config/nvim config/tmux"
