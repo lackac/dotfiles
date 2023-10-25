@@ -17,6 +17,9 @@ vim.opt.writebackup = false -- if a file is being edited by another program (or 
 vim.opt.linebreak = true -- line break behaviour when wrap is on
 vim.opt.whichwrap:append("<,>,[,],h,l") -- keys allowed to move to the previous/next line when the beginning/end of line is reached
 
+-- don't use the system clipboard implicitly
+vim.opt.clipboard = ""
+
 -- searching
 vim.opt.hlsearch = true -- highlight all matches on previous search pattern
 
