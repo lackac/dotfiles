@@ -18,6 +18,10 @@ return {
             },
           },
         },
+        sourcekit = {
+          cmd = { "/usr/bin/sourcekit-lsp" },
+          filetypes = { "swift", "c", "cpp", "objc", "objective-c", "objective-cpp" },
+        },
       },
     },
   },
