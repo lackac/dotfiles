@@ -1,6 +1,6 @@
 LIB = libdictionary
 SOURCE = $(LIB).m
-TARGET = ../$(LIB).so
+TARGET = ../$(LIB).dylib
 HS_FRAMEWORKS = /Applications/Hammerspoon.app/Contents/Frameworks
 
 $(TARGET): $(SOURCE)

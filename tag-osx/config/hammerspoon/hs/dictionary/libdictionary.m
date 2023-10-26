@@ -2,22 +2,41 @@
 
 static int refTable = LUA_NOREF;
 
-extern CFArrayRef DCSCopyAvailableDictionaries();
-extern CFArrayRef DCSGetActiveDictionaries(void);
-extern DCSDictionaryRef DCSGetDefaultThesaurus(void);
+typedef CFTypeRef DCSRecordRef;
+
+typedef NS_ENUM(NSUInteger, DCSDictionarySearchMethod) {
+    DCSDictionarySearchMethodExactMatch,
+    DCSDictionarySearchMethodPrefixMatch,
+    DCSDictionarySearchMethodCommonPrefixMatch,
+    DCSDictionarySearchMethodWildcardMatch
+};
+
+typedef NS_ENUM(NSUInteger, DCSDefinitionStyle) {
+    DCSDefinitionStyleBareXHTML,
+    DCSDefinitionStyleXHTMLForApp,
+    DCSDefinitionStyleXHTMLForPanel,
+    DCSDefinitionStylePlainText,
+    DCSDefinitionStyleRaw
+};
+
+extern NSArray * DCSCopyAvailableDictionaries(void) NS_RETURNS_RETAINED;
+extern NSArray * DCSGetActiveDictionaries(void);
 extern DCSDictionaryRef DCSGetDefaultDictionary(void);
-extern CFStringRef DCSDictionaryGetName(DCSDictionaryRef dictionary);
+extern DCSDictionaryRef DCSGetDefaultThesaurus(void);
+extern NSString * DCSDictionaryGetName(DCSDictionaryRef dictionary);
 
-extern CFArrayRef DCSCopyRecordsForSearchString(DCSDictionaryRef dictionary, CFStringRef string, void *, void *);
-extern CFStringRef DCSRecordCopyData(CFTypeRef record, long version);
-extern CFStringRef DCSRecordGetHeadword(CFTypeRef record);
-extern CFStringRef DCSRecordGetTitle(CFTypeRef record);
+extern NSArray * __nullable DCSCopyRecordsForSearchString(DCSDictionaryRef dictionary, NSString * string, DCSDictionarySearchMethod searchMethod, NSUInteger maxResults) NS_RETURNS_RETAINED;
+extern NSString * __nullable DCSRecordCopyDefinition(DCSRecordRef record, DCSDefinitionStyle format) NS_RETURNS_RETAINED;
+extern NSString * __nullable DCSRecordGetHeadword(DCSRecordRef record);
+extern NSString * __nullable DCSRecordGetTitle(DCSRecordRef record);
 
-DCSDictionaryRef findDictionaryByName(NSString *dictionaryName) {
-  for (id dict in (__bridge_transfer NSArray *)DCSCopyAvailableDictionaries()) {
-    NSString *name = (__bridge NSString *)DCSDictionaryGetName((__bridge DCSDictionaryRef) dict);
+static DCSDictionaryRef findDictionaryByName(NSString *dictionaryName) {
+  for (id dictId in DCSCopyAvailableDictionaries()) {
+    DCSDictionaryRef dictionary = (__bridge DCSDictionaryRef) dictId;
+
+    NSString *name = DCSDictionaryGetName(dictionary);
     if ([name isEqualToString:dictionaryName]) {
-      return (__bridge DCSDictionaryRef) dict;
+      return dictionary;
     }
   }
   return NULL;
@@ -39,16 +58,18 @@ static int dictionaries(lua_State *L) {
   NSArray *dictionaries;
 
   if (lua_isboolean(L, 1) && lua_toboolean(L, 1)) {
-    dictionaries = (__bridge_transfer NSArray *)DCSCopyAvailableDictionaries();
+    dictionaries = DCSCopyAvailableDictionaries();
   } else {
-    dictionaries = (__bridge NSArray *)DCSGetActiveDictionaries();
+    dictionaries = DCSGetActiveDictionaries();
   }
 
   lua_newtable(L);
   unsigned long i = 1;
-  for (id dictionary in dictionaries) {
+  for (id dictId in dictionaries) {
+    DCSDictionaryRef dictionary = (__bridge DCSDictionaryRef) dictId;
+
     lua_pushinteger(L, (lua_Integer)i++);
-    NSString *name = (__bridge NSString *)DCSDictionaryGetName((__bridge DCSDictionaryRef) dictionary);
+    NSString *name = DCSDictionaryGetName(dictionary);
     [skin pushNSObject:name];
     lua_settable(L, -3);
   }
@@ -56,77 +77,67 @@ static int dictionaries(lua_State *L) {
   return 1;
 }
 
-/// hs.dictionary.lookup(word, dictionary, version)
+/// hs.dictionary.lookup(word, dictionary, format, matching, maxResults)
 /// Function
 /// Lookup the definition of a word in the MacOS Dictionary
 ///
 /// Parameters:
 ///  * word - The word to look up
 ///  * dictionary - The name of a dictionary or one of the keywords "active", "all", "defaultDictionary", or "defaultThesaurus".
-///  * version - A number (0-3) identifying the format to be used for the definitions
+///  * format - A number (0-3) identifying the format to be used for the definitions
+///  * matching - A number (0-3) identifying the method for matching the keyword
+///  * maxResults - Maximum number of results per dictionary
 ///
 /// Returns:
 ///  * A table with the definitions of the word according to the selected dictionaries
 static int lookup(lua_State *L) {
   LuaSkin *skin = [LuaSkin sharedWithState:L];
-  [skin checkArgs:LS_TSTRING, LS_TSTRING, LS_TNUMBER, LS_TBREAK];
-
-  [skin logDebug:@"Starting lookup"];
+  [skin checkArgs:LS_TSTRING, LS_TSTRING, LS_TNUMBER, LS_TNUMBER, LS_TNUMBER, LS_TBREAK];
 
   NSString *word = [skin toNSObjectAtIndex:1];
   NSArray *dictionaries;
-  long dataVersion = (long)lua_tointeger(L, 3);;
+  DCSDefinitionStyle format = (DCSDefinitionStyle)lua_tointeger(L, 3);
+  DCSDictionarySearchMethod matching = (DCSDictionarySearchMethod)lua_tointeger(L, 4);
+  NSUInteger maxResults = lua_tointeger(L, 4);
 
   NSString *dictionaryName = [skin toNSObjectAtIndex:2];
   if ([dictionaryName isEqualToString:@"all"]) {
-    dictionaries = (__bridge_transfer NSArray *)DCSCopyAvailableDictionaries();
+    dictionaries = DCSCopyAvailableDictionaries();
   } else if ([dictionaryName isEqualToString:@"active"]) {
-    dictionaries = (__bridge NSArray *)DCSGetActiveDictionaries();
+    dictionaries = DCSGetActiveDictionaries();
   } else if ([dictionaryName isEqualToString:@"defaultDictionary"]) {
-    dictionaries = @[(__bridge id)DCSGetDefaultDictionary()];
+    dictionaries = @[(__bridge id) DCSGetDefaultDictionary()];
   } else if ([dictionaryName isEqualToString:@"defaultThesaurus"]) {
-    dictionaries = @[(__bridge id)DCSGetDefaultThesaurus()];
+    dictionaries = @[(__bridge id) DCSGetDefaultThesaurus()];
   } else {
     DCSDictionaryRef dictionary = findDictionaryByName(dictionaryName);
     if (!dictionary) {
       return luaL_error(L, "Couldn't find dictionary '%s'", [dictionaryName UTF8String]);
     } else {
-      dictionaries = @[(__bridge id)dictionary];
+      dictionaries = @[(__bridge id) dictionary];
     }
   }
 
   lua_newtable(L);
 
   long i = 1;
-  for (id dict in dictionaries) {
-    DCSDictionaryRef dictionary = (__bridge DCSDictionaryRef) dict;
+  for (id dictId in dictionaries) {
+    DCSDictionaryRef dictionary = (__bridge DCSDictionaryRef) dictId;
 
-    CFRange termRange = DCSGetTermRangeInString(dictionary, (__bridge CFStringRef)word, 0);
-    if (termRange.location == kCFNotFound) {
-      continue;
-    }
-
-    NSString *term = [word substringWithRange:NSMakeRange(termRange.location, termRange.length)];
-
-    NSArray *records = (__bridge_transfer NSArray *)DCSCopyRecordsForSearchString(dictionary, (__bridge CFStringRef)term, NULL, NULL);
+    NSArray *records = DCSCopyRecordsForSearchString(dictionary, word, matching, maxResults);
     if (records) {
-      NSString *dictionaryName = (__bridge NSString *)DCSDictionaryGetName(dictionary);
+      NSString *dictionaryName = DCSDictionaryGetName(dictionary);
       for (id recordId in records) {
-        CFTypeRef record = (__bridge CFTypeRef) recordId;
+        DCSRecordRef record = (__bridge DCSRecordRef) recordId;
 
         lua_pushinteger(L, (lua_Integer)i++);
         lua_newtable(L);
 
-        NSString *s;
-
-        s = (__bridge_transfer NSString*) DCSRecordCopyData(record, dataVersion);
-        [skin pushNSObject:s];
+        [skin pushNSObject:DCSRecordCopyDefinition(record, format)];
         lua_setfield(L, -2, "definition");
-        s = (__bridge NSString*) DCSRecordGetHeadword(record);
-        [skin pushNSObject:s];
+        [skin pushNSObject:DCSRecordGetHeadword(record)];
         lua_setfield(L, -2, "headword");
-        s = (__bridge NSString*) DCSRecordGetTitle(record);
-        [skin pushNSObject:s];
+        [skin pushNSObject:DCSRecordGetTitle(record)];
         lua_setfield(L, -2, "title");
 
         [skin pushNSObject:dictionaryName];
