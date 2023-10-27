@@ -187,6 +187,10 @@ local flagExceptions = {
 }
 
 module.flagIcon = function(code)
+  if code == nil or code == "" then
+    return
+  end
+
   code = string.upper(code)
 
   local countryCode = code:match("[_-]([A-Z][A-Z])$")

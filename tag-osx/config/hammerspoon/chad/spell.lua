@@ -4,7 +4,7 @@ local nerdFontsIcon = require("ext.images").nerdFontsIcon
 local module = {
   keyword = "spell",
   useFzf = true,
-  tip = { text = "type spell⇥ to check correct spelling of word" },
+  tip = { text = "spell⇥ to check correct spelling of word" },
 }
 
 local log
