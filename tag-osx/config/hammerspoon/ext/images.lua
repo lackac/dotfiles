@@ -1,6 +1,6 @@
 local capture = require("ext.utils").capture
 
-local cache = { paths = {}, progressIcons = {} }
+local cache = { paths = {}, progressIcons = {}, flags = {} }
 local module = { cache = cache }
 
 local log = hs.logger.new("ext.images", "debug")
@@ -173,6 +173,37 @@ end
 module.emojiIcon = function(emoji)
   local image = renderGlyph(emoji, "emojis")
   return image
+end
+
+local flagExceptions = {
+  CS = "CZ",
+  DA = "DK",
+  EL = "GR",
+  JA = "JP",
+  KO = "KR",
+  NB = "NO",
+  UK = "UA",
+  ZH = "CH",
+}
+
+module.flagIcon = function(code)
+  code = string.upper(code)
+
+  local countryCode = code:match("[_-]([A-Z][A-Z])$")
+  if countryCode then
+    code = countryCode
+  end
+
+  code = flagExceptions[code] or code
+
+  if not cache.flags[code] then
+    local a, b = string.byte(code, 1, 2)
+    -- see https://en.wikipedia.org/wiki/Regional_indicator_symbol
+    local flagCode = utf8.char(a + 0x1F1E6 - 65, b + 0x1F1E6 - 65)
+    cache.flags[code] = module.emojiIcon(flagCode)
+  end
+
+  return cache.flags[code]
 end
 
 -- Generic icon generator based on the glyph

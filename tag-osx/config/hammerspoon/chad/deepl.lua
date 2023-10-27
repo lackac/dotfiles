@@ -1,4 +1,4 @@
-local emojiIcon = require("ext.images").emojiIcon
+local flagIcon = require("ext.images").flagIcon
 local trimForDisplay = require("ext.utils").trimForDisplay
 local hash = hs.hash.MD5
 
@@ -20,20 +20,6 @@ local defaultLanguages = {
   { language = "ES", name = "Spanish" },
   { language = "JA", name = "Japanese" },
 }
-local flagExceptions = {
-  CS = "CZ",
-  DA = "DK",
-  EL = "GR",
-  ["EN-GB"] = "GB",
-  ["EN-US"] = "US",
-  JA = "JP",
-  KO = "KR",
-  NB = "NO",
-  ["PT-BR"] = "BR",
-  ["PT-PT"] = "PT",
-  UK = "UA",
-  ZH = "CH",
-}
 local targetLanguageCodes = {}
 
 local deepLAPIBase = "https://api-free.deepl.com/v2/"
@@ -54,19 +40,6 @@ local function deepLRequest(method, path, data, callback)
   hs.http.doAsyncRequest(deepLAPIBase .. path, method, data, headers, callback)
 end
 
-local function flagImage(code)
-  code = string.upper(code)
-
-  if not cache.flags[code] then
-    local a, b = string.byte(code, 1, 2)
-    -- see https://en.wikipedia.org/wiki/Regional_indicator_symbol
-    local flagCode = utf8.char(a + 0x1F1E6 - 65, b + 0x1F1E6 - 65)
-    cache.flags[code] = emojiIcon(flagCode)
-  end
-
-  return cache.flags[code]
-end
-
 local function generateLanguageChoices()
   cache.languageChoices = {}
 
@@ -76,14 +49,13 @@ local function generateLanguageChoices()
     if targetLanguageCodes[target] then
       return
     end
-    local flagCode = flagExceptions[target] or target
     targetLanguageCodes[target] = {
       text = "Translate into " .. name,
       target = target,
       valid = false,
       id = "translate-into-" .. target,
       source = module.requireName,
-      image = flagImage(flagCode),
+      image = flagIcon(target),
     }
     table.insert(cache.languageChoices, targetLanguageCodes[target])
   end
