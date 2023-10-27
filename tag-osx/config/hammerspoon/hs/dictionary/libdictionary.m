@@ -23,7 +23,12 @@ extern NSArray * DCSCopyAvailableDictionaries(void) NS_RETURNS_RETAINED;
 extern NSArray * DCSGetActiveDictionaries(void);
 extern DCSDictionaryRef DCSGetDefaultDictionary(void);
 extern DCSDictionaryRef DCSGetDefaultThesaurus(void);
+extern DCSDictionaryRef __nullable DCSDictionaryCreateWithIdentifier(NSString *identifier);
 extern NSString * DCSDictionaryGetName(DCSDictionaryRef dictionary);
+extern NSString * DCSDictionaryGetShortName(DCSDictionaryRef dictionary);
+extern NSString * DCSDictionaryGetIdentifier(DCSDictionaryRef dictionary);
+extern NSString * __nullable DCSDictionaryGetPrimaryLanguage(DCSDictionaryRef dictionary);
+extern NSURL * __nullable DCSDictionaryGetURL(DCSDictionaryRef dictionary);
 
 extern NSArray * __nullable DCSCopyRecordsForSearchString(DCSDictionaryRef dictionary, NSString * string, DCSDictionarySearchMethod searchMethod, NSUInteger maxResults) NS_RETURNS_RETAINED;
 extern NSString * __nullable DCSRecordCopyDefinition(DCSRecordRef record, DCSDefinitionStyle format) NS_RETURNS_RETAINED;
@@ -50,7 +55,7 @@ static DCSDictionaryRef findDictionaryByName(NSString *dictionaryName) {
 ///  * all - an optional boolean. If true, all available dictionaries will be returned. Defaults to false.
 ///
 /// Returns:
-///  * A table with the names of the dictionaries
+///  * A table with the names, ids, and some other attributes of the dictionaries
 static int dictionaries(lua_State *L) {
   LuaSkin *skin = [LuaSkin sharedWithState:L];
   [skin checkArgs:LS_TBOOLEAN|LS_TOPTIONAL, LS_TBREAK];
@@ -69,8 +74,21 @@ static int dictionaries(lua_State *L) {
     DCSDictionaryRef dictionary = (__bridge DCSDictionaryRef) dictId;
 
     lua_pushinteger(L, (lua_Integer)i++);
-    NSString *name = DCSDictionaryGetName(dictionary);
-    [skin pushNSObject:name];
+    lua_newtable(L);
+
+    [skin pushNSObject:DCSDictionaryGetIdentifier(dictionary)];
+    lua_setfield(L, -2, "id");
+    [skin pushNSObject:DCSDictionaryGetName(dictionary)];
+    lua_setfield(L, -2, "name");
+    [skin pushNSObject:DCSDictionaryGetShortName(dictionary)];
+    lua_setfield(L, -2, "shortName");
+    [skin pushNSObject:DCSDictionaryGetPrimaryLanguage(dictionary)];
+    lua_setfield(L, -2, "language");
+
+    NSURL *URL = DCSDictionaryGetURL(dictionary);
+    lua_pushstring(L, [URL fileSystemRepresentation]);
+    lua_setfield(L, -2, "path");
+
     lua_settable(L, -3);
   }
 
@@ -83,7 +101,7 @@ static int dictionaries(lua_State *L) {
 ///
 /// Parameters:
 ///  * word - The word to look up
-///  * dictionary - The name of a dictionary or one of the keywords "active", "all", "defaultDictionary", or "defaultThesaurus".
+///  * dictionary - The id or name of a dictionary or one of the keywords "active", "all", "defaultDictionary", or "defaultThesaurus".
 ///  * format - A number (0-3) identifying the format to be used for the definitions
 ///  * matching - A number (0-3) identifying the method for matching the keyword
 ///  * maxResults - Maximum number of results per dictionary
@@ -110,7 +128,12 @@ static int lookup(lua_State *L) {
   } else if ([dictionaryName isEqualToString:@"defaultThesaurus"]) {
     dictionaries = @[(__bridge id) DCSGetDefaultThesaurus()];
   } else {
-    DCSDictionaryRef dictionary = findDictionaryByName(dictionaryName);
+    DCSDictionaryRef dictionary;
+    if ([dictionaryName hasPrefix:@"com.apple."]) {
+      dictionary = DCSDictionaryCreateWithIdentifier(dictionaryName);
+    } else {
+      dictionary = findDictionaryByName(dictionaryName);
+    }
     if (!dictionary) {
       return luaL_error(L, "Couldn't find dictionary '%s'", [dictionaryName UTF8String]);
     } else {
