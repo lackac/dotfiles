@@ -202,8 +202,20 @@ local function bindKeys()
 
   modal:bind({}, "tab", function()
     local cleanedQuery = string.match(latestQuery, "^%s*(%S+)%s*$")
-    if cleanedQuery and keywords[cleanedQuery] then
-      module.activateKeyword(cleanedQuery)
+    if cleanedQuery then
+      if keywords[cleanedQuery] then
+        module.activateKeyword(cleanedQuery)
+      else
+        local matchingKeywords = {}
+        for kw, _ in pairs(keywords) do
+          if kw:sub(1, #cleanedQuery) == cleanedQuery then
+            table.insert(matchingKeywords, kw)
+          end
+        end
+        if #matchingKeywords == 1 then
+          module.activateKeyword(matchingKeywords[1])
+        end
+      end
     end
   end)
 
