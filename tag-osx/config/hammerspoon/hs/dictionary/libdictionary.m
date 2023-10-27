@@ -159,6 +159,10 @@ static int lookup(lua_State *L) {
 
         [skin pushNSObject:DCSRecordCopyDefinition(record, format)];
         lua_setfield(L, -2, "definition");
+        if (format != DCSDefinitionStylePlainText) {
+          [skin pushNSObject:DCSRecordCopyDefinition(record, DCSDefinitionStylePlainText)];
+          lua_setfield(L, -2, "text");
+        }
         [skin pushNSObject:DCSRecordGetHeadword(record)];
         lua_setfield(L, -2, "headword");
         [skin pushNSObject:DCSRecordGetTitle(record)];
