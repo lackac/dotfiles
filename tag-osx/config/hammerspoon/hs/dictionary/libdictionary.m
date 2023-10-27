@@ -174,9 +174,37 @@ static int lookup(lua_State *L) {
   return 1;
 }
 
+static int guesses(lua_State *L) {
+  LuaSkin *skin = [LuaSkin sharedWithState:L];
+  [skin checkArgs:LS_TSTRING, LS_TBREAK];
+
+  NSString *word = [skin toNSObjectAtIndex:1];
+
+  NSSpellChecker *checker = [NSSpellChecker sharedSpellChecker];
+
+  if (!checker) {
+    return luaL_error(L, "No shared spell checker");
+  }
+
+  NSArray *guesses = [checker guessesForWordRange:NSMakeRange(0, word.length) inString:word language:nil inSpellDocumentWithTag:0];
+  if (guesses) {
+    lua_newtable(L);
+    long i = 1;
+
+    for (id guess in guesses) {
+      lua_pushinteger(L, (lua_Integer)i++);
+      [skin pushNSObject:(NSString*) guess];
+      lua_settable(L, -3);
+    }
+  }
+
+  return 1;
+}
+
 static luaL_Reg dictionarylib[] = {
   {"dictionaries", dictionaries},
   {"lookup", lookup},
+  {"guesses", guesses},
   {NULL, NULL}
 };
 
