@@ -523,6 +523,9 @@ end
 
 module.hide = function()
   log.v("hiding")
+  if module.activeKeyword then
+    module.deactivateKeyword()
+  end
   queryDelay:stop()
   shownWithKeyword = nil
   chooser:hide()
@@ -580,6 +583,9 @@ module.restoreQuery = function(query)
 end
 
 module.activateKeyword = function(keyword)
+  if module.activeKeyword and module.activeKeyword ~= keyword then
+    module.deactivateKeyword(true)
+  end
   if keywords[keyword] then
     log.df("activating keyword '%s'", keyword)
     module.updateQuery(nil, keyword)
@@ -589,12 +595,17 @@ module.activateKeyword = function(keyword)
   end
 end
 
-module.deactivateKeyword = function()
+module.deactivateKeyword = function(skipUpdates)
   if module.activeKeyword then
     log.df("deactivating keyword '%s'", module.activeKeyword)
     module.saveQuery()
-    module.updateQuery()
-    updatePluginLabel()
+    if type(keywords[module.activeKeyword].deactivate) == "function" then
+      keywords[module.activeKeyword].deactivate()
+    end
+    if not skipUpdates then
+      module.updateQuery()
+      updatePluginLabel()
+    end
   end
 end
 
