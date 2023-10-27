@@ -150,6 +150,7 @@ static int lookup(lua_State *L) {
     NSArray *records = DCSCopyRecordsForSearchString(dictionary, word, matching, maxResults);
     if (records) {
       NSString *dictionaryName = DCSDictionaryGetName(dictionary);
+      NSString *dictionaryLanguage = DCSDictionaryGetPrimaryLanguage(dictionary);
       for (id recordId in records) {
         DCSRecordRef record = (__bridge DCSRecordRef) recordId;
 
@@ -165,6 +166,8 @@ static int lookup(lua_State *L) {
 
         [skin pushNSObject:dictionaryName];
         lua_setfield(L, -2, "dictionary");
+        [skin pushNSObject:dictionaryLanguage];
+        lua_setfield(L, -2, "language");
 
         lua_settable(L, -3);
       }
