@@ -120,9 +120,11 @@ return {
   { "tpope/vim-rhubarb" }, -- GitHub extension for fugitive.vim
   { "tpope/vim-eunuch" }, -- UNIX command line helpers
   { "tpope/vim-repeat" }, -- enable repeating supported plugin maps with "."
-  { "tpope/vim-unimpaired" }, -- pairs of handy bracket mappings
   { "tpope/vim-rails" }, -- Ruby on Rails power tools
   { "tpope/vim-sleuth" }, -- Detect tabstop and shiftwidth automatically
+
+  -- rewrites of tpope plugins in lua
+  { "tummetott/unimpaired.nvim" }, -- pairs of handy bracket mappings
 
   -- miscellaneous
   { "pbrisbin/vim-mkdir" },
