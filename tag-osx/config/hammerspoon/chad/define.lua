@@ -24,16 +24,15 @@ local function showPanel(title, html)
     cache.webview = hs.webview
       .new(frame)
       :closeOnEscape(true)
-      :deleteOnClose(true)
       :windowStyle({ "borderless", "titled", "closable", "resizable" })
       :windowCallback(function(event, wv, meta)
         log.v("webview window callback" .. hs.inspect({ event, wv, meta }))
       end)
-  else
-    cache.webview:windowTitle(title):html(html)
-    if not cache.webview:isVisible() then
-      cache.webview:frame(frame):show():bringToFront()
-    end
+  end
+
+  cache.webview:windowTitle(title):html(html)
+  if not cache.webview:isVisible() then
+    cache.webview:frame(frame):show():bringToFront()
   end
 end
 
@@ -83,6 +82,10 @@ module.start = function(main, _)
   log = hs.logger.new(module.requireName, "verbose")
 end
 
-module.stop = function() end
+module.stop = function()
+  if cache.webview then
+    cache.webview:delete()
+  end
+end
 
 return module
