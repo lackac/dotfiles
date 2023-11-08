@@ -59,10 +59,10 @@ module.start = function()
     return false
   end)
 
-  -- this module should only run if I'm not using Ergodox
+  -- this module should only run if I'm not using voyager
   -- ideally I could use eventtap based on input device, but for now this will do
-  cache.watcher = hs.watchable.watch("status.isErgodoxAttached", function(_, _, _, _, isErgodoxAttached)
-    if isErgodoxAttached then
+  cache.watcher = hs.watchable.watch("status.voyagerAttached", function(_, _, _, _, voyagerAttached)
+    if voyagerAttached then
       log.d("stopping...")
       module.stop()
     else

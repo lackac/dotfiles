@@ -60,11 +60,20 @@ local updateSleep = function(event)
 end
 
 local usbDebounce = hs.timer.delayed.new(3, function()
-  status.isErgodoxAttached = hs.fnutils.find(hs.usb.attachedDevices(), function(device)
-    return device.productName == "ErgoDox EZ"
+  status.voyagerAttached = hs.fnutils.find(hs.usb.attachedDevices(), function(device)
+    return device.vendorName == "ZSA Technology Labs" and device.productName == "Voyager"
   end) ~= nil
 
-  log.d("updated ergodox:", status.isErgodoxAttached)
+  -- disable key remapping for voyager
+  if status.voyagerAttached then
+    os.execute([[
+      hidutil property \
+        --matching '{"ProductID": 0x1977, "VendorID": 0x3297}' \
+        --set '{"UserKeyMapping": []}'
+    ]])
+  end
+
+  log.d("updated voyager:", status.voyagerAttached)
 end)
 
 local updateUSB = function()

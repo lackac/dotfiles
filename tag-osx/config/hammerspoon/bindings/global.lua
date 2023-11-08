@@ -76,7 +76,7 @@ module.start = function()
   hs.hotkey.bind({ "ctrl" }, "space", function()
     require("chad").toggle()
   end)
-  hs.hotkey.bind({ "ctrl", "shift", "cmd" }, "space", function()
+  hs.hotkey.bind({ "ctrl", "alt", "cmd" }, "space", function()
     require("chad").reload()
   end)
 
@@ -89,9 +89,6 @@ module.start = function()
       require("chad").showWithKeyword(object.keyword)
     end)
   end)
-
-  -- ctrl + tab as alternative to cmd + tab
-  hs.hotkey.bind({ "ctrl" }, "tab", window.windowHints)
 
   -- toggles
   hs.fnutils.each({
@@ -113,6 +110,7 @@ module.start = function()
   hs.fnutils.each({
     { key = "return", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
+    { key = "b", apps = config.apps.browsers },
     { key = ",", apps = { "System Settings" } },
     { key = "s", apps = { "Slack" } },
     { key = "f", apps = { "Finder" } },
