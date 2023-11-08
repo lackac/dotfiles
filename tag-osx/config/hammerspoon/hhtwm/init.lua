@@ -668,6 +668,17 @@ module.tile = function()
   -- apply layout window-by-window
   local moveToFloat = {}
 
+  -- faster window movements for apps like Chrome, Electron, etc.
+  -- https://github.com/Hammerspoon/hammerspoon/issues/3224#issuecomment-1294359070
+  local restoreAXEnhancedUI = {}
+  for _, win in ipairs(allWindows) do
+    local axApp = hs.axuielement.applicationElement(win:application())
+    if axApp.AXEnhancedUserInterface then
+      axApp.AXEnhancedUserInterface = false
+      table.insert(restoreAXEnhancedUI, axApp)
+    end
+  end
+
   hs.fnutils.each(activeSpaces, function(spaceId)
     local spaceWindows = cache.spaces[spaceId] or {}
     local screen = getScreenBySpaceId(spaceId)
@@ -695,6 +706,10 @@ module.tile = function()
       end
     end
   end)
+
+  for _, axApp in ipairs(restoreAXEnhancedUI) do
+    axApp.AXEnhancedUserInterface = true
+  end
 
   hs.fnutils.each(moveToFloat, function(triplet)
     local win, spaceId, winIdx = table.unpack(triplet)
