@@ -22,3 +22,8 @@ hidutil property \
     { "HIDKeyboardModifierMappingSrc":0x700000035,
       "HIDKeyboardModifierMappingDst":0x700000064 }
   ]}'
+
+# No special configuration for the ZSA Voyager
+hidutil property \
+  --matching '{"ProductID": 0x1977, "VendorID": 0x3297}' \
+  --set '{"UserKeyMapping": []}'
