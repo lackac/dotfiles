@@ -14,6 +14,13 @@ local commands = {
     image = "",
     action = system.toggleConsole,
   },
+  ["Reload Applications Cache"] = {
+    image = "󰑓",
+    action = function()
+      local appsPlugin = require(module.main.name .. ".apps")
+      appsPlugin.reloadApplications()
+    end,
+  },
   ["Toggle Wifi"] = {
     image = "󰖩",
     action = system.toggleWiFi,
