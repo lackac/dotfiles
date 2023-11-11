@@ -95,27 +95,27 @@ module.start = function()
     { key = "/", fn = system.toggleConsole },
     { key = "q", fn = system.displaySleep },
     { key = "r", fn = hs.reload },
-    { key = "r", mod = { "shift" }, fn = hs.relaunch },
 
-    { key = "d", fn = forceDrop },
+    { key = "p", fn = forceDrop },
     { key = "v", fn = forcePaste },
-
-    { key = "t", mod = { "shift" }, fn = system.toggleTheme },
-    { key = "w", fn = system.toggleWiFi },
   }, function(object)
-    hyper:bind(object.mod or {}, object.key, object.fn)
+    hyper.multiBind(object.key, object.fn)
   end)
 
   -- apps
   hs.fnutils.each({
     { key = "return", apps = config.apps.terms },
+    { key = "t", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
-    { key = "b", apps = config.apps.browsers },
-    { key = ",", apps = { "System Settings" } },
-    { key = "s", apps = { "Slack" } },
+    { key = "backspace", apps = config.apps.browsers },
+    { key = "c", apps = { "Calendar" } },
     { key = "f", apps = { "Finder" } },
+    { key = "m", apps = { "Messages" } },
+    { key = "s", apps = { "Slack" } },
+    { key = "u", apps = { "Music" } },
+    { key = ",", apps = { "System Settings" } },
   }, function(object)
-    hyper:bind({}, object.key, function()
+    hyper.multiBind(object.key, function()
       smartLaunchOrFocus(object.apps)
     end)
   end)

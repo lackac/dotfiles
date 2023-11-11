@@ -18,6 +18,11 @@ hyper.exited = function()
   log.d("OFF")
 end
 
+hyper.multiBind = function(key, fn)
+  hs.hotkey.bind({ "ctrl", "alt", "shift", "cmd" }, key, fn)
+  hyper:bind({}, key, fn)
+end
+
 hyper.start = function()
   hs.hotkey.bind({}, "F19", hyper.pressed, hyper.released)
 

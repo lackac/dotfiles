@@ -123,7 +123,7 @@ module.start = function()
   bind("y", hhtwm.cycleWindowsOnSpace)
 
   -- [l]ayout
-  hyper:bind({}, "l", wm.cycleLayout)
+  hyper.multiBind("l", wm.cycleLayout)
 
   -- [c]enter window
   bind("c", function()

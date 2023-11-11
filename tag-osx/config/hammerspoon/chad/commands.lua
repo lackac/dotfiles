@@ -14,6 +14,14 @@ local commands = {
     image = "",
     action = system.toggleConsole,
   },
+  ["Reload Hammerspoon"] = {
+    image = "󰜉",
+    action = hs.reload,
+  },
+  ["Relaunch Hammerspoon"] = {
+    image = "󱄌",
+    action = hs.relaunch,
+  },
   ["Reload Applications Cache"] = {
     image = "󰑓",
     action = function()
