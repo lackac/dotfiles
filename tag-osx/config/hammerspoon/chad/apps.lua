@@ -98,7 +98,7 @@ end
 
 module.stop = function() end
 
-module.reloadApplications = function()
+module.refreshApplications = function()
   save("modTimes", {})
   cache.choices = {}
   loadApplications()

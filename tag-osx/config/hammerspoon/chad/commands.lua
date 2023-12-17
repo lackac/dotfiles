@@ -22,11 +22,11 @@ local commands = {
     image = "󱄌",
     action = hs.relaunch,
   },
-  ["Reload Applications Cache"] = {
+  ["Refresh Applications Cache"] = {
     image = "󰑓",
     action = function()
       local appsPlugin = require(module.main.name .. ".apps")
-      appsPlugin.reloadApplications()
+      appsPlugin.refreshApplications()
     end,
   },
   ["Toggle Wifi"] = {
