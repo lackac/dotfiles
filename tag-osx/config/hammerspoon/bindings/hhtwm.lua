@@ -58,14 +58,16 @@ module.start = function()
 
   -- move window
   hs.fnutils.each({
-    { key = "h", dir = "west" },
-    { key = "j", dir = "south" },
-    { key = "k", dir = "north" },
-    { key = "l", dir = "east" },
+    { keys = { "h", "4", "left" }, dir = "west" },
+    { keys = { "j", "5", "down" }, dir = "south" },
+    { keys = { "k", "8", "up" }, dir = "north" },
+    { keys = { "l", "6", "right" }, dir = "east" },
   }, function(obj)
-    bind(obj.key, function()
-      move(obj.dir)
-    end)
+    for _, key in ipairs(obj.keys) do
+      bind(key, function()
+        move(obj.dir)
+      end)
+    end
   end)
 
   -- throw between screens
@@ -156,7 +158,7 @@ module.start = function()
   for n = 0, 9 do
     local idx = tostring(n)
 
-    hs.hotkey.bind({ "ctrl", "shift" }, idx, function()
+    hyper.multiBind(idx, function()
       local index = n == 0 and 10 or n
       local layout = config.wm.managedLayouts[index]
 

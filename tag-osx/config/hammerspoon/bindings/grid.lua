@@ -48,10 +48,10 @@ module.start = function()
   end
 
   hs.fnutils.each({
-    { key = "h", fn = hs.grid.pushWindowLeft },
-    { key = "j", fn = hs.grid.pushWindowDown },
-    { key = "k", fn = hs.grid.pushWindowUp },
-    { key = "l", fn = hs.grid.pushWindowRight },
+    { keys = { "h", "4", "left" }, fn = hs.grid.pushWindowLeft },
+    { keys = { "j", "5", "down" }, fn = hs.grid.pushWindowDown },
+    { keys = { "k", "8", "up" }, fn = hs.grid.pushWindowUp },
+    { keys = { "l", "6", "right" }, fn = hs.grid.pushWindowRight },
 
     { key = "[", fn = hs.grid.pushWindowPrevScreen },
     { key = "]", fn = hs.grid.pushWindowNextScreen },
@@ -68,7 +68,10 @@ module.start = function()
     { key = "z", fn = hs.grid.maximizeWindow },
     { key = "c", fn = hs.grid.center },
   }, function(object)
-    bind(object.key, doWin(object.fn))
+    local keys = object.keys or { object.key }
+    for _, key in ipairs(keys) do
+      bind(key, doWin(object.fn))
+    end
   end)
 
   bind("u", function()

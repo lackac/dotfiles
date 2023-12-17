@@ -107,7 +107,7 @@ module.start = function()
     { key = "return", apps = config.apps.terms },
     { key = "t", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
-    { key = "backspace", apps = config.apps.browsers },
+    { key = "g", apps = config.apps.browsers },
     { key = "c", apps = { "Calendar" } },
     { key = "f", apps = { "Finder" } },
     { key = "m", apps = { "Messages" } },

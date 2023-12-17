@@ -49,20 +49,22 @@ end
 
 module.start = function()
   local bind = function(key, fn)
-    hs.hotkey.bind({ "ctrl", "alt" }, key, fn, nil, fn)
+    hs.hotkey.bind({ "ctrl", "alt", "shift" }, key, fn, nil, fn)
   end
 
   cache.focusFilter = hs.window.filter.new():setCurrentSpace(true):setDefaultFilter():keepActive()
 
   hs.fnutils.each({
-    { key = "h", cmd = "west" },
-    { key = "j", cmd = "south" },
-    { key = "k", cmd = "north" },
-    { key = "l", cmd = "east" },
+    { keys = { "h", "4", "left" }, cmd = "west" },
+    { keys = { "j", "5", "down" }, cmd = "south" },
+    { keys = { "k", "8", "up" }, cmd = "north" },
+    { keys = { "l", "6", "right" }, cmd = "east" },
   }, function(object)
-    bind(object.key, function()
-      focusAndHighlight(object.cmd)
-    end)
+    for _, key in ipairs(object.keys) do
+      bind(key, function()
+        focusAndHighlight(object.cmd)
+      end)
+    end
   end)
 
   -- cycle between windows on current screen, useful in tiling monocle mode
