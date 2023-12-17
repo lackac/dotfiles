@@ -10,7 +10,7 @@ return {
     "LF32TU87",
   },
   displayLayouts = {
-    ["Built-in Retina Display"] = { "monocle", "main-left" },
+    ["Built-in Retina Display"] = { "monocle", "tabbed-right" },
     ["LG SDQHD"] = { "main-top", "main-center", "tabbed-top", "monocle" },
     ["LF32TU87"] = { "main-left", "main-right", "main-center", "tabbed-right", "monocle" },
     ["HP Z27k G3"] = { "main-left", "tabbed-right", "monocle" },
