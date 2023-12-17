@@ -33,11 +33,19 @@ return {
     -- mappings in LazyVim are quite comprehensive already
     -- these are just a few additions
     keys = {
+      -- override LazyVim heuristic of using git_files when in a git repo
+      -- rg based find_files ignores are more precise and faster
+      { "<leader><space>", Util.telescope("find_files"), desc = "Find Files (root dir)" },
+      { "<leader>ff", Util.telescope("find_files"), desc = "Find Files (root dir)" },
+      { "<leader>fF", Util.telescope("find_files", { cwd = false }), desc = "Find Files (cwd)" },
+
+      -- override config files search to follow symlinks
       {
         "<leader>fc",
         Util.telescope("files", { cwd = vim.fn.stdpath("config"), follow = true }),
         desc = "Find Configuration Files",
       },
+
       { "<leader>sN", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
       { "<leader>snn", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
       { "<leader>U", "<cmd>Telescope undo<cr>", desc = "Undo tree" },
