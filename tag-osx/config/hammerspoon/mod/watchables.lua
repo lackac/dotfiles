@@ -23,7 +23,7 @@ local updateBattery = function()
   }
 end
 
-local updateScreen = function()
+local screenDebounce = hs.timer.delayed.new(0.2, function()
   status.connectedScreens = #hs.screen.allScreens()
   status.connectedScreenIds = hs.fnutils.map(hs.screen.allScreens(), function(screen)
     return screen:id()
@@ -34,6 +34,10 @@ local updateScreen = function()
   status.isLaptopScreenConnected = hs.screen.find("Built%-in") ~= nil
 
   log.d("updated screens:", hs.inspect(status.connectedScreenNames))
+end)
+
+local updateScreen = function()
+  screenDebounce:start()
 end
 
 local updateWiFi = function()
