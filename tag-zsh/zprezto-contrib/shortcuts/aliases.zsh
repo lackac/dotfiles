@@ -1,6 +1,13 @@
 alias vim=nvim
 alias mux=tmuxinator
 
+alias ls='eza'
+alias l='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lt='ls --tree'
+alias tree='ls --tree'
+
 alias psg='ps aux | grep'
 alias mwget='wget -v -c -x -r -l 0 -L -np'
 alias :q=exit

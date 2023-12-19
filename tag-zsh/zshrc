@@ -29,6 +29,11 @@ if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
   export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 fi
 
+export EZA_ICONS_AUTO=1
+
+export BAT_STYLE=plain
+export BAT_THEME="Solarized (light)"
+
 # colors for jq which work in both light and dark themes
 export JQ_COLORS="2;35:0;31:0;32:0;33:0;36:0;34:0;34:1;34"
 
