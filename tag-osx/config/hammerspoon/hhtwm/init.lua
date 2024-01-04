@@ -72,9 +72,9 @@ end
 
 module.setDisplayLayouts = function(newLayouts)
   if type(newLayouts) == "table" then
-    cache.displayLayouts = layouts
+    cache.displayLayouts = newLayouts
   else
-    log.ef("Wrong type of argument given to %s: %s", debug.getinfo(1, "n").name, hs.inspect(layouts))
+    log.ef("Wrong type of argument given to %s: %s", debug.getinfo(1, "n").name, hs.inspect(newLayouts))
   end
 end
 
@@ -151,8 +151,10 @@ module.getLayout = function(spaceId)
 
   local screenUUID = hs.spaces.spaceDisplay(spaceId)
   local screen = hs.screen.findByID(screenUUID)
+  local layoutKey = screen and screens.normalizedScreenName(screen)
 
   return cache.layouts[spaceId]
+    or (screen and cache.displayLayouts and cache.displayLayouts[layoutKey])
     or (screen and cache.displayLayouts and cache.displayLayouts[screen:id()])
     or (screen and cache.displayLayouts and cache.displayLayouts[screen:name()])
     or "monocle"
@@ -477,12 +479,23 @@ module.applyManagedLayout = function(layout)
   local allWindows = cache.filter:getWindows()
   local windowToFocus = hs.window.focusedWindow()
 
-  for screenName, spaces in pairs(layout) do
-    local screen = hs.screen.find(screenName)
-    log.d("applyManagedLayout -", screenName, hs.inspect(screen))
-    if not screen then
+  local screenOrder = layout.order
+  if screenOrder == nil then
+    screenOrder = {}
+    for k, _ in pairs(layout) do
+      table.insert(screenOrder, k)
+    end
+  end
+
+  for i = #screenOrder, 1, -1 do
+    local screenName = screenOrder[i]
+    local spaces = layout[screenName]
+    local screen = screens.findScreen(screenName)
+
+    if not spaces or not screen then
       goto nextSpace
     end
+    log.d("applyManagedLayout -", screenName, hs.inspect(screen))
 
     local spaceIds = hs.spaces.spacesForScreen(screen)
     log.d("applyManagedLayout -- spaces: ", hs.inspect(spaceIds))

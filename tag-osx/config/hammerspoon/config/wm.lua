@@ -6,14 +6,19 @@ return {
   defaultLayouts = { "monocle", "main-left" },
   displayOrder = {
     "Built-in Retina Display",
+    "LG SDQHD-V",
     "LG SDQHD",
     "LF32TU87",
+    "HP Z27k G3-V",
+    "HP Z27k G3",
   },
   displayLayouts = {
     ["Built-in Retina Display"] = { "monocle", "tabbed-right" },
-    ["LG SDQHD"] = { "main-top", "main-center", "tabbed-top", "monocle" },
+    ["LG SDQHD-V"] = { "main-top", "main-center", "tabbed-top", "monocle" },
+    ["LG SDQHD"] = { "main-left", "main-center", "tabbed-right", "monocle" },
     ["LF32TU87"] = { "main-left", "main-right", "main-center", "tabbed-right", "monocle" },
     ["HP Z27k G3"] = { "main-left", "tabbed-right", "monocle" },
+    ["HP Z27k G3-V"] = { "main-top", "tabbed-top", "monocle" },
   },
 
   managedLayouts = {
@@ -28,7 +33,7 @@ return {
           },
         },
       },
-      ["LG SDQHD"] = {
+      ["LG SDQHD-V"] = {
         {
           layout = "main-top",
           layoutOptions = { mainPaneRatio = 0.618 },
@@ -58,6 +63,7 @@ return {
       },
     },
     {
+      order = { "Built%-in", "HP Z27k G3-V", "HP Z27k G3" },
       ["Built%-in"] = {
         {
           layout = "monocle",
@@ -87,6 +93,15 @@ return {
             "Calendar",
             "Messages",
             "Timing",
+          },
+        },
+      },
+      ["HP Z27k G3-V"] = {
+        {
+          layout = "tabbed-top",
+          layoutOptions = { mainPaneRatio = 0.5 },
+          windows = {
+            "kitty",
           },
         },
       },

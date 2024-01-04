@@ -1,6 +1,7 @@
 local activeScreen = require("ext.screens").activeScreen
 local table = require("ext.table")
 local hhtwm = require("hhtwm")
+local screens = require("ext.screens")
 local log = hs.logger.new("wm", "debug")
 local config = require("config")
 
@@ -86,8 +87,9 @@ end
 
 module.cycleLayout = function()
   local screen = activeScreen()
+  local layoutKey = screens.normalizedScreenName(screen)
 
-  local layouts = config.wm.displayLayouts[screen:name()] or config.wm.defaultLayouts
+  local layouts = config.wm.displayLayouts[layoutKey] or config.wm.defaultLayouts
 
   local currentLayout = hhtwm.getLayout()
   local currentLayoutIndex = hs.fnutils.indexOf(layouts, currentLayout) or 0

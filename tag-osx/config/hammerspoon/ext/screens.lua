@@ -52,9 +52,29 @@ module.focusScreen = function(screen)
   hs.eventtap.leftClick(mousePosition)
 end
 
+-- consistent screen naming considering orientation and multiple screens
+module.normalizedScreenName = function(screen)
+  local name = screen:name():match("^(.*) %(%d%)$") or screen:name()
+  local mode = screen:currentMode()
+  if mode.h > mode.w then
+    name = name .. "-V"
+  end
+  return name
+end
+
+-- find the screen with the correct orientation
+module.findScreen = function(screenName)
+  local baseScreenName, vertical = screenName:match("^(.*)(%-V)$")
+  local matchingScreens = table.pack(hs.screen.find(baseScreenName or screenName))
+  return hs.fnutils.find(matchingScreens, function(s)
+    local mode = s:currentMode()
+    return (vertical and mode.h > mode.w) or (not vertical and mode.h <= mode.w)
+  end)
+end
+
 -- consistently step trough screen based on order in config.wm.displayOrder
 module.stepScreen = function(currentScreen, dir)
-  local currentScreenName = currentScreen:name()
+  local currentScreenName = module.normalizedScreenName(currentScreen)
   local index = hs.fnutils.indexOf(config.wm.displayOrder, currentScreenName)
 
   if index == nil then
@@ -64,7 +84,7 @@ module.stepScreen = function(currentScreen, dir)
   local screens = {}
   local screenCount = 0
   hs.fnutils.each(hs.screen.allScreens(), function(s)
-    screens[s:name()] = s
+    screens[module.normalizedScreenName(s)] = s
     screenCount = screenCount + 1
   end)
   -- cycling less than 3 screens is always consistent
