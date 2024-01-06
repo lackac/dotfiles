@@ -2,15 +2,6 @@ local module = {}
 local log = hs.logger.new("theme", "debug")
 local rgb = require("ext.utils").rgb
 
-local function symlinkTheme(themeFile, theme)
-  local symlinkAttrs = hs.fs.symlinkAttributes(themeFile)
-  if symlinkAttrs then
-    os.remove(themeFile)
-  end
-  local targetFile = themeFile:gsub("%.[^.]+$", "." .. theme .. "%0")
-  hs.fs.link(targetFile, themeFile, true)
-end
-
 module.applyTheme = function(theme)
   -- set hs console theme
   hs.console.darkMode(theme == "dark")
@@ -30,35 +21,7 @@ module.applyTheme = function(theme)
     hs.console.consoleCommandColor(rgb(133, 53, 0))
   end
 
-  local runtimeDir = os.getenv("XDG_RUNTIME_DIR") or os.getenv("HOME") .. "/Library/Caches/TemporaryItems/runtime"
-  local configDir = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config"
-
-  -- set lazygit theme
-  symlinkTheme(configDir .. "/lazygit/theme.yml", theme)
-
-  -- set kitty theme
-  local kittyTheme = configDir .. "/kitty/colors/solarized.conf"
-  symlinkTheme(kittyTheme, theme)
-
-  for file in hs.fs.dir(runtimeDir) do
-    if string.match(file, "^kitty%-%d+$") then
-      hs.task
-        .new(
-          "/opt/homebrew/bin/kitty",
-          nil,
-          { "@", "--to", "unix:" .. runtimeDir .. "/" .. file, "set-colors", "--all", "--configured", kittyTheme }
-        )
-        :start()
-    elseif string.match(file, "^nvim%.%d+%.%d+") then
-      hs.task
-        .new(
-          "/opt/homebrew/bin/nvim",
-          nil,
-          { "--server", runtimeDir .. "/" .. file, "--remote-expr", "nvim_set_option('background', '" .. theme .. "')" }
-        )
-        :start()
-    end
-  end
+  hs.task.new(os.getenv("HOME") .. "/bin/theme", nil, { theme }):start()
 end
 
 module.start = function()

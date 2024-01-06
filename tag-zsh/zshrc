@@ -32,13 +32,17 @@ fi
 export EZA_ICONS_AUTO=1
 
 export BAT_STYLE=plain
-export BAT_THEME="Solarized (light)"
 
 # colors for jq which work in both light and dark themes
 export JQ_COLORS="2;35:0;31:0;32:0;33:0;36:0;34:0;34:1;34"
 
 # combined config for lazygit to follow OS theme
 export LG_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/lazygit/config.yml,${XDG_CONFIG_HOME:-$HOME/.config}/lazygit/theme.yml"
+
+# dynamic color settings based on OS Theme
+if [[ -s $HOME/bin/theme ]]; then
+  source $HOME/bin/theme
+fi
 
 # Customize to your needs...
 

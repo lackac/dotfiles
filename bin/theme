@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-$HOME/Library/Caches/TemporaryItems/runtime}"
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+if [[ ":$PATH:" != *":/opt/homebrew/bin:"* ]]; then
+  PATH="/opt/homebrew/bin:$PATH"
+fi
+
+theme=$1
+
+if [[ -z $theme ]]; then
+  theme=$( (defaults read -g AppleInterfaceStyle 2>/dev/null || echo "light") | tr 'A-Z' 'a-z')
+fi
+
+color_theme=solarized
+variant=$theme
+lazygit_accent=
+
+if [[ $color_theme == "catppuccin" ]]; then
+  lazygit_accent="/blue"
+  if [[ $theme == "light" ]]; then
+    variant="latte"
+  else
+    variant="macchiato"
+  fi
+fi
+
+symlink_theme() {
+  local path=$1
+  local theme=$2
+  if [[ -L "$path" ]]; then
+    rm -f "$path"
+  fi
+  ln -s "$theme" "$path"
+}
+
+gen_fzf_default_opts() {
+  local base03="234"
+  local base02="235"
+  local base01="240"
+  local base00="241"
+  local base0="244"
+  local base1="245"
+  local base2="254"
+  local base3="230"
+  local yellow="136"
+  local orange="166"
+  local red="160"
+  local magenta="125"
+  local violet="61"
+  local blue="33"
+  local cyan="37"
+  local green="64"
+
+  local fzf_solarized_dark="
+    --color fg:-1,bg:-1,hl:$blue,fg+:$base2,bg+:-1,hl+:$blue
+    --color info:$yellow,prompt:$yellow,pointer:$base3,marker:$base3,spinner:$yellow"
+  local fzf_solarized_light="
+    --color fg:-1,bg:-1,hl:$blue,fg+:$base02,bg+:-1,hl+:$blue
+    --color info:$yellow,prompt:$yellow,pointer:$base03,marker:$base03,spinner:$yellow"
+  local fzf_catppuccin_latte=" \
+    --color=bg+:#ccd0da,bg:#eff1f5,spinner:#dc8a78,hl:#d20f39 \
+    --color=fg:#4c4f69,header:#d20f39,info:#8839ef,pointer:#dc8a78 \
+    --color=marker:#dc8a78,fg+:#4c4f69,prompt:#8839ef,hl+:#d20f39"
+  local fzf_catppuccin_frappe=" \
+    --color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
+    --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
+    --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
+  local fzf_catppuccin_macchiato=" \
+    --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
+    --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
+    --color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+  local fzf_catppuccin_mocha=" \
+    --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+    --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+    --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+
+  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS ${(P)${:-fzf_${1}_${2}}}"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  symlink_theme "${XDG_CONFIG_HOME}/lazygit/theme.yml" "$color_theme/$variant$lazygit_accent.yml"
+
+  kitty_theme="${XDG_CONFIG_HOME}/kitty/colors/theme.conf"
+  symlink_theme "$kitty_theme" "$color_theme.$variant.conf"
+
+  for socket_path in ${XDG_RUNTIME_DIR}/*; do
+    if [[ -S "$socket_path" ]]; then
+      socket="$(basename "$socket_path")"
+      case "$socket" in
+      kitty-*)
+        kitty @ --to "unix:$socket_path" set-colors --all --configured "$kitty_theme"
+        ;;
+      nvim.*)
+        pid="${socket#nvim.}"
+        pid="${pid%.*}"
+        if ps -p $pid > /dev/null; then
+          nvim --server "$socket_path" --remote-expr "nvim_set_option('background', '$theme')"
+        else
+          rm -f "$socket_path"
+        fi
+        ;;
+      esac
+    fi
+  done
+
+  starship config palette ${color_theme}_$variant
+else
+  case $color_theme in
+  catppuccin)
+    export BAT_THEME="Catppuccin-$variant"
+    ;;
+  solarized)
+    export BAT_THEME="Solarized ($variant)"
+    ;;
+  esac
+
+  gen_fzf_default_opts $color_theme $variant
+fi
