@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+FORTUNES_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/games/fortunes
+
+fortune 40% $FORTUNES_DIR/goodreads 40% $FORTUNES_DIR/bsd $FORTUNES_DIR/fun
