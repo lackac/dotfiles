@@ -21,7 +21,6 @@ brew "gh"
 brew "gist"
 brew "gnupg"
 brew "gnu-units"
-brew "highlight"
 brew "htop-osx"
 brew "hub"
 brew "hunspell"
@@ -37,6 +36,7 @@ brew "nextdns"
 brew "oath-toolkit"
 brew "packer"
 brew "pinentry-mac"
+brew "pngpaste"
 brew "puma-dev"
 brew "rcm"
 brew "reattach-to-user-namespace"
@@ -56,7 +56,6 @@ brew "zk"
 
 # languages managed via Homebrew
 brew "go"
-brew "lua"
 brew "python"
 
 # requirements for asdf plugins

@@ -13,6 +13,11 @@ $HOME/.macos
 git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf
 . $HOME/.asdf/asdf.sh
 
+asdf plugin add lua
+asdf install lua 5.1.5
+asdf global lua 5.1.5
+luarocks install magick
+
 asdf plugin add ruby
 asdf install ruby latest
 asdf install ruby 2.7.4

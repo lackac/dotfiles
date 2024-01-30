@@ -98,6 +98,13 @@ return {
 
   { "folke/flash.nvim", enabled = false },
 
+  {
+    "3rd/image.nvim",
+    opts = {
+      tmux_show_only_in_active_window = true,
+    },
+  },
+
   -- vim-vinegar like file explorer that lets you edit your filesystem like a normal Neovim buffer
   {
     "stevearc/oil.nvim",

@@ -8,6 +8,8 @@ alias lla='ls -la'
 alias lt='ls --tree'
 alias tree='ls --tree'
 
+alias icat='kitty icat'
+
 alias psg='ps aux | grep'
 alias mwget='wget -v -c -x -r -l 0 -L -np'
 alias :q=exit
