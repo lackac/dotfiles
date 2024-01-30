@@ -6,8 +6,8 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = { "qf", "help", "man", "lspinfo", "spectre_panel" },
   callback = function()
     vim.cmd([[
-      nnoremap <silent> <buffer> q :close<CR> 
-      set nobuflisted 
+      nnoremap <silent> <buffer> q :close<CR>
+      set nobuflisted
     ]])
   end,
 })
@@ -34,5 +34,13 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
     if line_count >= 5000 then
       vim.cmd("IlluminatePauseBuf")
     end
+  end,
+})
+
+-- workaround for exit code 134 when nvim is invoked as editor by another porcess (e.g. zk)
+-- https://old.reddit.com/r/neovim/comments/14bcfmb/nonzero_exit_code/
+vim.api.nvim_create_autocmd({ "VimLeave" }, {
+  callback = function()
+    vim.cmd("sleep 10m")
   end,
 })

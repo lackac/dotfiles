@@ -2,6 +2,8 @@
 # Miscellaneous and local configuration
 #
 
+export ZK_NOTEBOOK_DIR=${ZDOTDIR:-$HOME}/Documents/Notes
+
 export ERL_FLAGS="-kernel shell_history enabled"
 
 export GOPATH=${ZDOTDIR:-$HOME}/.go
@@ -13,8 +15,4 @@ fi
 
 if [[ -d /usr/local/opt/android-sdk ]]; then
   export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
-fi
-
-if [[ -s ${ZDOTDIR:-$HOME}/.zprofile.local ]]; then
-  source ${ZDOTDIR:-$HOME}/.zprofile.local
 fi

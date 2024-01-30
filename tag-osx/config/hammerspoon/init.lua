@@ -19,6 +19,7 @@ bindings.enabled = {
   "ctrl-esc",
   "focus",
   "global",
+  "notes",
   "viscosity",
 }
 

@@ -1,7 +1,7 @@
 return {
   {
     "numToStr/Navigator.nvim",
-    config = {
+    opts = {
       -- Save modified buffer(s) when moving to mux
       -- nil - Don't save (default)
       -- 'current' - Only save the current modified buffer
