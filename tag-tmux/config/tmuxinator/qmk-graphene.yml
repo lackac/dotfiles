@@ -1,0 +1,17 @@
+name: "󰌌 Graphene"
+root: ~/Code/lackac/qmk_graphene
+startup_window: shell
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - vim
+  - : lazygit
+  - shell:
+  - QMK:
+      root: ~/Code/qmk/qmk_firmware
+      layout: main-horizontal
+      panes:
+        - vim
+        - "# qmk compile && qmk flash"
+        - qmk console

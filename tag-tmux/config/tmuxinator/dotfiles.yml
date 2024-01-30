@@ -1,0 +1,22 @@
+# ~/.tmuxinator/dotfiles.yml
+# you can make as many windows as you wish...
+
+name: " 󱁼"
+root: ~/.dotfiles
+startup_window: shell
+windows:
+  - :
+      layout: main-horizontal
+      panes:
+        - vim
+  - : lazygit
+  - shell:
+      layout: even-horizontal
+      panes:
+        -
+        - cd ~/.dotfiles-private
+  - :
+      index: 9
+      layout: main-horizontal
+      panes:
+        - hs
