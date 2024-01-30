@@ -5,8 +5,11 @@ alias ls='eza'
 alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
-alias lt='ls --tree'
-alias tree='ls --tree'
+alias lk='eza -l --sort=size'
+alias lt='eza -l --sort=modified'
+alias lc='eza -l --sort=changed'
+alias lu='eza -l --sort=accessed'
+alias tree='eza --tree'
 
 alias icat='kitty icat'
 
