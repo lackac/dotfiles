@@ -15,9 +15,9 @@
 } &!
 
 # Execute code only if STDERR is bound to a TTY but not already in a TMUX session.
-if [[ -o INTERACTIVE && -t 2 && -z $TMUX ]]; then
+if [[ -o INTERACTIVE && -t 2 && -z $TMUX && -z $ZSH_EXECUTION_STRING && -z $ZSH_SCRIPT ]]; then
 
   # Enter tmux (attach to existing session or start a new one with tmuxinator)
   tmux attach || mux main
 
-fi >&2
+fi
