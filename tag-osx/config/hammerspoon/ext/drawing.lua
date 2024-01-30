@@ -30,7 +30,7 @@ end
 module.drawBorder = function()
   local focusedWindow = hs.window.focusedWindow()
 
-  if not focusedWindow or focusedWindow:role() ~= "AXWindow" then
+  if not focusedWindow or focusedWindow:role() ~= "AXWindow" or focusedWindow:isFullscreen() then
     if cache.borderCanvas then
       cache.borderCanvas:hide(0.5)
     end
@@ -45,7 +45,6 @@ module.drawBorder = function()
   local distance = borderStyle.distance or 6
   local roundRadius = borderStyle.roundRadius or 12
 
-  local isFullScreen = focusedWindow:isFullScreen()
   local frame = focusedWindow:frame()
 
   if not cache.borderCanvas then
@@ -56,16 +55,12 @@ module.drawBorder = function()
       :alpha(alpha)
   end
 
-  if isFullScreen then
-    cache.borderCanvas:frame(frame)
-  else
-    cache.borderCanvas:frame({
-      x = frame.x - distance / 2,
-      y = frame.y - distance / 2,
-      w = frame.w + distance,
-      h = frame.h + distance,
-    })
-  end
+  cache.borderCanvas:frame({
+    x = frame.x - distance / 2,
+    y = frame.y - distance / 2,
+    w = frame.w + distance,
+    h = frame.h + distance,
+  })
 
   cache.borderCanvas[1] = {
     type = "rectangle",
