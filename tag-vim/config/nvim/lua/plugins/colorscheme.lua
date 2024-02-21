@@ -1,6 +1,12 @@
 return {
   {
-    "ishan9299/nvim-solarized-lua",
+    "maxmx03/solarized.nvim",
+    opts = {
+      highlights = {
+        ["@markup.strong"] = { bold = true },
+        ["Underlined"] = { underline = true },
+      },
+    },
   },
 
   {
