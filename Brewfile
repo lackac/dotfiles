@@ -53,6 +53,7 @@ brew "tree"
 brew "watch"
 brew "wget"
 brew "zk"
+brew "zoxide"
 
 # languages managed via Homebrew
 brew "go"

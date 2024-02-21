@@ -1,5 +1,5 @@
 if [[ $1 == "list" ]]; then
-  tree -dL 2 ~/Code
+  /opt/homebrew/bin/tree -dL 2 ~/Code
   return;
 fi
 
@@ -16,6 +16,6 @@ fi
 if [[ -d ~/Code/$user/$repo ]]; then
   cd ~/Code/$user/$repo
 else
-  local match=$(tree -fidL 2 --noreport ~/Code | grep /$user$ | head -1)
+  local match=$(/opt/homebrew/bin/tree -fidL 2 --noreport ~/Code | grep /$user$ | head -1)
   [[ $match != "" ]] && cd $match
 fi

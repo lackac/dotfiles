@@ -5,6 +5,11 @@
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
+# zoxide
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init --cmd cd zsh)"
+fi
+
 # starship
 if (( $+commands[starship] )); then
   eval "$(starship init zsh)"
