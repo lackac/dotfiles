@@ -1,6 +1,6 @@
 # When you're using Rails console, show queries in the console
 extend_console "rails", defined?(ActiveSupport::Notifications), false do
-  Pry.config.prompt_name = "#{Rails.application.class.parent_name.downcase}:#{Rails.env.first(3)}"
+  Pry.config.prompt_name = "#{Rails.application.class.module_parent_name.downcase}:#{Rails.env.first(3)}"
 
   extend Rails::ConsoleMethods if defined? Rails::ConsoleMethods
 

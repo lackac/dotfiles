@@ -25,7 +25,7 @@ require File.expand_path("~/.pryrc.d/essentials.rb")
 Dir[File.expand_path("~/.pryrc.d/*.rb")].each {|f| require(f) rescue nil}
 
 # load .pryrc from current directory
-if File.exists?(".pryrc") and ((File.symlink?(".pryrc") and File.readlink(".pryrc") != __FILE__) or (!File.symlink?(".pryrc") and File.expand_path(".pryrc") != __FILE__))
+if File.exist?(".pryrc") and ((File.symlink?(".pryrc") and File.readlink(".pryrc") != __FILE__) or (!File.symlink?(".pryrc") and File.expand_path(".pryrc") != __FILE__))
   begin
     load(".pryrc")
     $console_extensions << "#{ANSI_CODES[:GREEN]}local .pryrc#{ANSI_CODES[:RESET]}"
