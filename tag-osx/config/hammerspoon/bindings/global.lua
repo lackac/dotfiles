@@ -107,10 +107,10 @@ module.start = function()
     { key = "t", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
     { key = "g", apps = config.apps.browsers },
-    { key = "c", apps = { "Calendar" } },
+    { key = "c", apps = { "Calendar", "Reminders" } },
     { key = "f", apps = { "Finder" } },
     { key = "m", apps = { "Messages" } },
-    { key = "s", apps = { "Slack" } },
+    { key = "s", apps = { "Slack", "Microsoft Teams" } },
     { key = "u", apps = { "Music" } },
     { key = ",", apps = { "System Settings" } },
   }, function(object)
