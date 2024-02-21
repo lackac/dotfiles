@@ -89,6 +89,7 @@ cask "quicklook-json"
 
 # Fonts
 tap "homebrew/cask-fonts"
+cask "font-caskaydia-cove-nerd-font"
 cask "font-fira-code-nerd-font"
 cask "font-symbols-only-nerd-font"
 
