@@ -67,6 +67,9 @@ module.findScreen = function(screenName)
   local baseScreenName, vertical = screenName:match("^(.*)(%-V)$")
   local matchingScreens = table.pack(hs.screen.find(baseScreenName or screenName))
   return hs.fnutils.find(matchingScreens, function(s)
+    if type(s) ~= "userdata" then
+      return false
+    end
     local mode = s:currentMode()
     return (vertical and mode.h > mode.w) or (not vertical and mode.h <= mode.w)
   end)
