@@ -3,9 +3,13 @@
 	email = lackac@lackac.hu
 	signingkey = lackac@lackac.hu
 
+[author]
+	email = laszlo.bacsi@100starlings.com
+
 [include]
-	path = .gitconfig.private
-	path = .gitconfig.local
+	path = private
+	path = local
+	path = theme
 
 [alias]
 	co = checkout
@@ -20,24 +24,44 @@
 	humin = name-rev --refs=refs/heads/* --stdin
 	cl = log -n25 --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset' -- lib
 	start = !git init && git commit --allow-empty -m \"Inception\"
-[branch]
-	autosetuprebase = always
+
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
 [color]
 	diff = auto
 	status = auto
 	branch = auto
-[commit]
-	gpgsign = true
-[core]
-	excludesfile = ~/.gitignore
-	pager = diff-so-fancy | less --tabs=1,5 -R
+
 [init]
 	defaultBranch = main
+[branch]
+	autosetuprebase = always
+[commit]
+	verbose = true
+	gpgsign = true
+[diff]
+	algorithm = histogram
+	colorMoved = default
+	colorMovedWS = allow-indentation-change
+	submodule = log
+[status]
+	submoduleSummary = true
+[submodule]
+	recurse = true
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
+[rebase]
+	autosquash = true
+	autostash = true
+[fetch]
+	prune = true
 [push]
 	default = upstream
 	followTags = true
+[rerere]
+	enabled = true
 
 [url "git@github.com:"]
 	insteadOf = "gh:"
@@ -54,16 +78,17 @@
 [url "git@heroku.com:"]
 	insteadOf = "heroku:"
 
-[rerere]
-	enabled = 1
+[delta]
+	navigate = true
+
 [heroku]
 	account = personal
+
 [hub]
 	protocol = https
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	required = true
 	process = git-lfs filter-process
-[author]
-	email = laszlo.bacsi@100starlings.com

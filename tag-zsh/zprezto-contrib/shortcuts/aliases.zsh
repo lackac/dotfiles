@@ -29,7 +29,7 @@ alias cal-uk=cal-en
 alias gst='git status -sb'
 alias gl='git log --decorate --graph --pretty="%C(auto)%h%d %C(bold)%s %C(blue)%ar%Creset %ad" --date=iso'
 alias glb='gl --branches'
-alias glp='git log -p --decorate --word-diff'
+alias glp='git log -p --decorate'
 alias gco='git checkout'
 alias gcm='git checkout master'
 alias gcd='git checkout dev'

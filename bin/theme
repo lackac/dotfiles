@@ -80,6 +80,8 @@ gen_fzf_default_opts() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  symlink_theme "${XDG_CONFIG_HOME}/git/theme" "$variant"
+
   symlink_theme "${XDG_CONFIG_HOME}/lazygit/theme.yml" "$color_theme/$variant$lazygit_accent.yml"
 
   kitty_theme="${XDG_CONFIG_HOME}/kitty/colors/theme.conf"
