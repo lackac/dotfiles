@@ -3,9 +3,12 @@
 <plist version="1.0">
     <dict>
         <key>Label</key>
-        <string>remap-keys</string>
-        <key>Program</key>
-        <string>/Users/lackac/bin/remap_keys</string>
+        <string>hu.lackac.remap-keys</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>sudo</string>
+          <string>/Users/lackac/bin/remap_keys</string>
+        </array>
         <key>RunAtLoad</key>
         <true/>
         <key>KeepAlive</key>

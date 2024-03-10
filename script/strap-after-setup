@@ -3,11 +3,19 @@
 # setup prezto for configuring ZSH
 git clone --recurse-submodules https://github.com/sorin-ionescu/prezto.git $HOME/.zprezto
 
-# setup Mac OS related dotfiles
-rcup -t osx
+if [[ $(uname) = "Darwin" ]]; then
+  # setup Mac OS related dotfiles
+  rcup -t osx
 
-# reconfigure Mac OS settings
-$HOME/.macos
+  # reconfigure Mac OS settings
+  $HOME/.macos
+
+  # change some application configuration
+  defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
+
+  # run remap_keys on boot as root
+  #echo "$(whoami) ALL=(ALL) NOPASSWD: $(which remap_keys)" | sudo tee /etc/sudoers.d/remap_keys
+fi
 
 # install asdf and various languages
 git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf
@@ -44,6 +52,3 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 # install gems for Pry
 gem install -N -i ~/.prygems pry pry-doc pry-remote pry-stack_explorer awesome_print coderay hirb
-
-# change some application configuration
-defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
