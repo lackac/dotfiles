@@ -20,6 +20,10 @@ vim.opt.whichwrap:append("<,>,[,],h,l") -- keys allowed to move to the previous/
 -- don't use the system clipboard implicitly
 vim.opt.clipboard = ""
 
+-- set terminal window title
+vim.opt.title = true
+vim.opt.titlestring = 'nvim - %{expand("%:~")}'
+
 -- searching
 vim.opt.hlsearch = true -- highlight all matches on previous search pattern
 
