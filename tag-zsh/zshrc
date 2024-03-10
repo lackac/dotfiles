@@ -29,6 +29,11 @@ if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
   export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 fi
 
+# rebind ^R to atuin
+if (( $+commands[atuin] )); then
+  bindkey '^R' atuin-search
+fi
+
 export EZA_ICONS_AUTO=1
 
 export BAT_STYLE=plain

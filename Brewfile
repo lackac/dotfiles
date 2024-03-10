@@ -4,6 +4,7 @@ tap "puma/puma"
 
 # command line tools
 brew "ansible"
+brew "atuin"
 brew "awscli"
 brew "bat"
 brew "coreutils"

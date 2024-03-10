@@ -15,6 +15,10 @@ if (( $+commands[starship] )); then
   eval "$(starship init zsh)"
 fi
 
+if (( $+commands[atuin] )); then
+  eval "$(atuin init zsh --disable-up-arrow --disable-ctrl-r)"
+fi
+
 # direnv
 if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
