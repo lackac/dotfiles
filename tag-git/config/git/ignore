@@ -7,6 +7,7 @@
 
 .bundle
 vendor/ruby/
+vendor/cache/*-darwin.gem
 
 # The following ignores all files in the .xcodeproj bundle,
 # And then adds back in only the project (skipping the user files)
