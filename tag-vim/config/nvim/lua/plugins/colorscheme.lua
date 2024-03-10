@@ -5,6 +5,7 @@ return {
       highlights = {
         ["@markup.strong"] = { bold = true },
         ["Underlined"] = { underline = true },
+        ["illuminatedWord"] = { link = "LspReferenceText" },
       },
     },
   },

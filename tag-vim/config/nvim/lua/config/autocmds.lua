@@ -22,9 +22,23 @@ vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({ "VimEnter" }, {
-  callback = function()
-    vim.cmd("hi link illuminatedWord LspReferenceText")
+-- this is to fix bug: https://github.com/folke/which-key.nvim/issues/476
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "Set up neorg Which-Key descriptions",
+  group = vim.api.nvim_create_augroup("neorg_mapping_descriptions", { clear = true }),
+  pattern = "norg",
+  callback = function(args)
+    local wk = require("which-key")
+    vim.keymap.set("n", "<LocalLeader>", function()
+      wk.show(vim.g.maplocalleader)
+    end, { buffer = true })
+    wk.register({
+      i = { name = "insert" },
+      l = { name = "lists" },
+      m = { name = "modes" },
+      n = { name = "notes" },
+      t = { name = "todos" },
+    }, { prefix = "<LocalLeader>", buffer = args.buf })
   end,
 })
 
