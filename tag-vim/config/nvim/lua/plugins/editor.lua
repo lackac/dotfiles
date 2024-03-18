@@ -38,6 +38,14 @@ return {
       { "<leader>sN", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
       { "<leader>snn", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
       { "<leader>U", "<cmd>Telescope undo<cr>", desc = "Undo tree" },
+
+      -- alternative keybinds for git related functions to avoid conflict with neogit
+      { "<leader>gc", false },
+      { "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "status (Telescope)" },
+      { "<leader>gS", "<cmd>Telescope git_stash<CR>", desc = "stash (Telescope)" },
+      { "<leader>gb", "<cmd>Telescope git_branches<CR>", desc = "branches (Telescope)" },
+      { "<leader>gl", "<cmd>Telescope git_commits<CR>", desc = "log (Telescope)" },
+      { "<leader>gL", "<cmd>Telescope git_bcommits<CR>", desc = "file history (Telescope)" },
     },
 
     config = function(_, opts)
@@ -86,6 +94,40 @@ return {
     },
   },
 
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    cmd = "Neogit",
+    opts = {
+      kind = "auto",
+      commit_select_view = {
+        kind = "auto",
+      },
+      log_view = {
+        kind = "auto",
+      },
+      reflog_view = {
+        kind = "auto",
+      },
+      signs = {
+        -- { CLOSED, OPENED }
+        hunk = { "", "" },
+        item = { "", "" },
+        section = { "", "" },
+      },
+    },
+    keys = {
+      { "<leader>gg", "<cmd>Neogit<CR>", desc = "status" },
+      { "<leader>gc", "<cmd>Neogit commit<CR>", desc = "commit" },
+      { "<leader>gp", "<cmd>Neogit pull<CR>", desc = "pull" },
+      { "<leader>gP", "<cmd>Neogit push<CR>", desc = "push" },
+    },
+  },
+
   { "folke/flash.nvim", enabled = false },
 
   {
@@ -121,8 +163,6 @@ return {
   },
 
   -- tpope wonders
-  { "tpope/vim-fugitive" }, -- git wrapper commands
-  { "tpope/vim-rhubarb" }, -- GitHub extension for fugitive.vim
   { "tpope/vim-eunuch" }, -- UNIX command line helpers
   { "tpope/vim-repeat" }, -- enable repeating supported plugin maps with "."
   { "tpope/vim-rails" }, -- Ruby on Rails power tools
