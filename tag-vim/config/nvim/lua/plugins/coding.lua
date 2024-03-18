@@ -23,7 +23,7 @@ return {
       local cmp = require("cmp")
       local luasnip = require("luasnip")
 
-      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "nvim_lua" } }))
+      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "nvim_lua" }, { name = "neorg" } }))
 
       opts.mapping = vim.tbl_extend("force", opts.mapping, {
         ["<CR>"] = cmp.mapping({

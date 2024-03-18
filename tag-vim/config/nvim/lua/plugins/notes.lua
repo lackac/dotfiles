@@ -5,12 +5,11 @@ return {
     cmd = "Neorg",
     dependencies = { "nvim-lua/plenary.nvim" },
     build = ":Neorg sync-parsers",
+    keys = {},
     opts = {
       load = {
-        ["core.defaults"] = {}, -- Loads default behaviour
-        ["core.completion"] = { config = { engine = "nvim-cmp", name = "[Norg]" } },
-        ["core.integrations.nvim-cmp"] = {},
-        ["core.concealer"] = { config = { icon_preset = "diamond" } }, -- Adds pretty icons to your documents
+        ["core.defaults"] = {},
+        ["core.esupports.metagen"] = { config = { type = "auto", update_date = true } },
         ["core.keybinds"] = {
           -- https://github.com/nvim-neorg/neorg/blob/main/lua/neorg/modules/core/keybinds/keybinds.lua
           config = {
@@ -18,32 +17,43 @@ return {
             neorg_leader = "<LocalLeader>",
             hook = function(kb)
               kb.remap_key("norg", "n", "<C-Space>", kb.leader .. kb.leader)
+
+              kb.map(
+                "neorg",
+                "n",
+                kb.leader .. "ce",
+                "core.looking-glass.magnify-code-block",
+                { opts = { desc = "[neorg] Edit code block in buffer" } }
+              )
             end,
           },
         },
-        ["core.dirman"] = { -- Manages Neorg workspaces
+        ["core.dirman"] = {
           config = {
+            default_workspace = "notes",
             workspaces = {
               notes = "~/Documents/Notes",
             },
           },
         },
-        ["core.esupports.metagen"] = { config = { type = "auto", update_date = true } },
-        ["core.qol.toc"] = {},
-        ["core.qol.todo_items"] = {},
-        ["core.looking-glass"] = {},
+        ["core.journal"] = {
+          config = {
+            strategy = "flat",
+            workspace = "notes",
+          },
+        },
+
+        ["core.completion"] = { config = { engine = "nvim-cmp", name = "[Norg]" } },
+        ["core.concealer"] = { config = { icon_preset = "diamond" } }, -- Adds pretty icons to your documents
         ["core.presenter"] = { config = { zen_mode = "zen-mode" } },
         ["core.export"] = {},
         ["core.export.markdown"] = { config = { extensions = "all" } },
         ["core.summary"] = {},
+        ["core.syntax"] = {},
         ["core.tangle"] = { config = { report_on_empty = false } },
         ["core.ui.calendar"] = {},
-        ["core.journal"] = {
-          config = {
-            strategy = "flat",
-            workspace = "Notes",
-          },
-        },
+
+        ["core.integrations.nvim-cmp"] = {},
       },
     },
   },

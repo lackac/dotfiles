@@ -1,5 +1,9 @@
 return {
   {
+    "folke/zen-mode.nvim",
+  },
+
+  {
     "nvim-lualine/lualine.nvim",
     opts = {
       sections = {
