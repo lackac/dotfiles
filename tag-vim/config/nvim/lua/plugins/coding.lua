@@ -120,11 +120,11 @@ return {
     event = "BufRead",
     keys = {
       {
-        "[c",
+        "[]",
         function()
           require("treesitter-context").go_to_context()
         end,
-        desc = "Jump to [c]ontext",
+        desc = "Jump to context",
         silent = true,
       },
     },

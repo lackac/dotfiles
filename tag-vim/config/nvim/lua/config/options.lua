@@ -4,16 +4,8 @@
 
 vim.g.maplocalleader = ","
 
-if vim.fn.system("defaults read -g AppleInterfaceStyle") == "Dark\n" then
-  vim.o.background = "dark"
-else
-  vim.o.background = "light"
-end
-
 -- file handling
 vim.opt.autowrite = false -- disable autowrite (enabled by LazyVim)
-vim.opt.swapfile = false -- don't create a swapfile
-vim.opt.writebackup = false -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
 
 -- editing
 vim.opt.linebreak = true -- line break behaviour when wrap is on
@@ -30,17 +22,10 @@ vim.opt.titlestring = 'nvim - %{expand("%:~")}'
 vim.opt.hlsearch = true -- highlight all matches on previous search pattern
 
 -- display
---vim.opt.cmdheight = 1                           -- more space in the neovim command line for displaying messages
---vim.opt.showtabline = 0                         -- always show tabs
---vim.opt.showcmd = false                         -- hide (partial) command in the last line of the screen (for performance)
---vim.opt.ruler = false                           -- hide the line and column number of the cursor position
---vim.opt.numberwidth = 4                         -- minimal number of columns to use for the line number {default 4}
---vim.opt.fillchars.eob = " " -- show empty lines at the end of a buffer as ` ` {default `~`}
---vim.opt.guifont = "monospace:h17"               -- the font used in graphical neovim applications
 vim.opt.listchars = {
   tab = "▸ ",
   trail = "·",
-  eol = "¬",
+  --eol = "¬",
   extends = ">",
   precedes = "<",
 }

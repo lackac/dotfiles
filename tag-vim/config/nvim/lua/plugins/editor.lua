@@ -3,14 +3,11 @@ local Util = require("lazyvim.util")
 return {
   {
     "nvim-telescope/telescope.nvim",
-
-    -- enable faster and more capable fuzzy search with fzf
     dependencies = {
       {
         "debugloop/telescope-undo.nvim",
       },
     },
-
     opts = {
       defaults = {
         prompt_prefix = " ",
@@ -22,7 +19,6 @@ return {
         undo = {},
       },
     },
-
     -- mappings in LazyVim are quite comprehensive already
     -- these are just a few additions
     keys = {
@@ -67,6 +63,7 @@ return {
         "Trouble",
         "lir",
         "Outline",
+        "oil",
         "spectre_panel",
         "toggleterm",
         "DressingSelect",

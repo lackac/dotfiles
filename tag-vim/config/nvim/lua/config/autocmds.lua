@@ -2,18 +2,6 @@
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
-vim.api.nvim_create_autocmd({ "FileType" }, {
-  pattern = { "qf", "help", "man", "lspinfo", "spectre_panel" },
-  callback = function()
-    vim.cmd([[
-      nnoremap <silent> <buffer> q :close<CR>
-      set nobuflisted
-    ]])
-  end,
-})
-
-vim.cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
-
 -- don't use the command line window, so this effectively disables it and with that the annoying
 -- opening of it when pressing 'q:' accidentally
 vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
@@ -23,6 +11,7 @@ vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
 })
 
 -- this is to fix bug: https://github.com/folke/which-key.nvim/issues/476
+-- and define norg keymap groups
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Set up neorg Which-Key descriptions",
   group = vim.api.nvim_create_augroup("neorg_mapping_descriptions", { clear = true }),
@@ -34,6 +23,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end, { buffer = true })
     wk.register({
       i = { name = "insert" },
+      c = { name = "code" },
       l = { name = "lists" },
       m = { name = "modes" },
       n = { name = "notes" },
@@ -42,6 +32,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- disable word illumination for large files
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
   callback = function()
     local line_count = vim.api.nvim_buf_line_count(0)

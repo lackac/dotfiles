@@ -8,6 +8,13 @@ return {
         ["illuminatedWord"] = { link = "LspReferenceText" },
       },
     },
+    init = function()
+      if vim.fn.system("defaults read -g AppleInterfaceStyle") == "Dark\n" then
+        vim.o.background = "dark"
+      else
+        vim.o.background = "light"
+      end
+    end,
   },
 
   {
