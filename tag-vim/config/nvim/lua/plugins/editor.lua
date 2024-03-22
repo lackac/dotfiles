@@ -172,6 +172,5 @@ return {
   { "tummetott/unimpaired.nvim" }, -- pairs of handy bracket mappings
 
   -- miscellaneous
-  { "pbrisbin/vim-mkdir" },
   { "duff/vim-scratch" },
 }
