@@ -6,6 +6,7 @@ return {
   defaultLayouts = { "monocle", "main-left" },
   displayOrder = {
     "Built-in Retina Display",
+    "S27C900P",
     "LG SDQHD-V",
     "LG SDQHD",
     "LF32TU87",
@@ -14,8 +15,9 @@ return {
   },
   displayLayouts = {
     ["Built-in Retina Display"] = { "monocle", "tabbed-right" },
-    ["LG SDQHD-V"] = { "main-top", "main-center", "tabbed-top", "monocle" },
-    ["LG SDQHD"] = { "main-left", "main-center", "tabbed-right", "monocle" },
+    ["S27C900P"] = { "main-left", "tabbed-right", "monocle" },
+    ["LG SDQHD-V"] = { "main-top", "tabbed-top", "monocle" },
+    ["LG SDQHD"] = { "main-left", "tabbed-right", "monocle" },
     ["LF32TU87"] = { "main-left", "main-right", "main-center", "tabbed-right", "monocle" },
     ["HP Z27k G3"] = { "main-left", "tabbed-right", "monocle" },
     ["HP Z27k G3-V"] = { "main-top", "tabbed-top", "monocle" },
@@ -23,31 +25,26 @@ return {
 
   managedLayouts = {
     {
-      ["Built%-in"] = {
+      ["LG SDQHD-V"] = {
         {
-          layout = "monocle",
+          layout = "tabbed-top",
+          layoutOptions = { mainPaneRatio = 0.5 },
           windows = {
+            { app = "Brave Browser", title = "🐦$" },
+            { app = "Brave Browser", title = "📦$" },
+            { app = "Brave Browser", title = "🚗$" },
             "Slack",
             "Dash",
             "Finder",
           },
         },
       },
-      ["LG SDQHD-V"] = {
+      ["S27C900P"] = {
         {
-          layout = "main-top",
-          layoutOptions = { mainPaneRatio = 0.618 },
-          windows = { "kitty" },
-        },
-      },
-      ["LF32TU87"] = {
-        {
-          layout = "main-left",
+          layout = "tabbed-right",
           layoutOptions = { mainPaneRatio = 0.618 },
           windows = {
-            { app = "Brave Browser", title = "🐦$", focus = true },
-            { app = "Brave Browser", title = "📦$" },
-            { app = "Brave Browser", title = "🚗$" },
+            { app = "kitty", focus = true },
           },
         },
         {
@@ -58,6 +55,17 @@ return {
             "Calendar",
             "Messages",
             "Timing",
+            "Music",
+          },
+        },
+      },
+      ["Built%-in"] = {
+        {
+          layout = "monocle",
+          windows = {
+            "Slack",
+            "Dash",
+            "Finder",
           },
         },
       },
