@@ -77,7 +77,7 @@ end
 module.start = function()
   hs.fnutils.each({
     { key = "n", command = "cd $ZK_NOTEBOOK_DIR && zk edit --interactive" },
-    { key = "d", command = 'cd $ZK_NOTEBOOK_DIR && nvim "$(zk new -g daily --no-input --print-path 2>>/tmp/zk.err)"' },
+    -- { key = "d", command = 'cd $ZK_NOTEBOOK_DIR && nvim "$(zk new -g daily --no-input --print-path 2>>/tmp/zk.err)"' },
     {
       key = "b",
       command = 'cd $ZK_NOTEBOOK_DIR && nvim "$(zk new -g bookmark --interactive --print-path 2>>/tmp/zk.err <{})"',
