@@ -4,6 +4,9 @@
 
 vim.g.maplocalleader = ","
 
+-- Disable Snacks animations
+vim.g.snacks_animate = false
+
 -- file handling
 vim.opt.autowrite = false -- disable autowrite (enabled by LazyVim)
 
@@ -31,6 +34,3 @@ vim.opt.listchars = {
 }
 vim.opt.showbreak = "↳" -- the character to show at the start of lines that have been wrapped
 
--- disable netrw in favour of oil
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1

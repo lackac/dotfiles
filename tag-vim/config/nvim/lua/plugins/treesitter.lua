@@ -10,7 +10,9 @@ return {
     opts = {
       ensure_installed = {
         "bash",
+        "c",
         "css",
+        "diff",
         "eex",
         "elixir",
         "erlang",
@@ -33,8 +35,10 @@ return {
         "typescript",
         "vim",
         "vimdoc",
+        "xml",
         "yaml",
       },
+      indent = { enable = true, disable = { "yaml", "ruby" } },
       incremental_selection = {
         enable = true,
         keymaps = {

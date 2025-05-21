@@ -10,38 +10,6 @@ vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
   end,
 })
 
--- this is to fix bug: https://github.com/folke/which-key.nvim/issues/476
--- and define norg keymap groups
-vim.api.nvim_create_autocmd("FileType", {
-  desc = "Set up neorg Which-Key descriptions",
-  group = vim.api.nvim_create_augroup("neorg_mapping_descriptions", { clear = true }),
-  pattern = "norg",
-  callback = function(args)
-    local wk = require("which-key")
-    vim.keymap.set("n", "<LocalLeader>", function()
-      wk.show(vim.g.maplocalleader)
-    end, { buffer = true })
-    wk.register({
-      i = { name = "insert" },
-      c = { name = "code" },
-      l = { name = "lists" },
-      m = { name = "modes" },
-      n = { name = "notes" },
-      t = { name = "todos" },
-    }, { prefix = "<LocalLeader>", buffer = args.buf })
-  end,
-})
-
--- disable word illumination for large files
-vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-  callback = function()
-    local line_count = vim.api.nvim_buf_line_count(0)
-    if line_count >= 5000 then
-      vim.cmd("IlluminatePauseBuf")
-    end
-  end,
-})
-
 -- workaround for exit code 134 when nvim is invoked as editor by another porcess (e.g. zk)
 -- https://old.reddit.com/r/neovim/comments/14bcfmb/nonzero_exit_code/
 vim.api.nvim_create_autocmd({ "VimLeave" }, {

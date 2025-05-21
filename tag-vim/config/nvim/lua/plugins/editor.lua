@@ -1,85 +1,4 @@
-local Util = require("lazyvim.util")
-
 return {
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      {
-        "debugloop/telescope-undo.nvim",
-      },
-    },
-    opts = {
-      defaults = {
-        prompt_prefix = " ",
-        selection_caret = " ",
-        path_display = { "smart" },
-        file_ignore_patterns = { ".git/", "node_modules/", "vendor/" },
-      },
-      extensions = {
-        undo = {},
-      },
-    },
-    -- mappings in LazyVim are quite comprehensive already
-    -- these are just a few additions
-    keys = {
-      -- override LazyVim heuristic of using git_files when in a git repo
-      -- rg based find_files ignores are more precise and faster
-      { "<leader><space>", Util.telescope("find_files"), desc = "Find Files (root dir)" },
-      { "<leader>ff", Util.telescope("find_files"), desc = "Find Files (root dir)" },
-      { "<leader>fF", Util.telescope("find_files", { cwd = false }), desc = "Find Files (cwd)" },
-
-      -- override config files search to follow symlinks
-      {
-        "<leader>fc",
-        Util.telescope("files", { cwd = vim.fn.stdpath("config"), follow = true }),
-        desc = "Find Configuration Files",
-      },
-
-      { "<leader>sN", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
-      { "<leader>snn", "<cmd>Telescope notify<cr>", desc = "List Notifications" },
-      { "<leader>U", "<cmd>Telescope undo<cr>", desc = "Undo tree" },
-
-      -- alternative keybinds for git related functions to avoid conflict with neogit
-      { "<leader>gc", false },
-      { "<leader>gs", "<cmd>Telescope git_status<CR>", desc = "status (Telescope)" },
-      { "<leader>gS", "<cmd>Telescope git_stash<CR>", desc = "stash (Telescope)" },
-      { "<leader>gb", "<cmd>Telescope git_branches<CR>", desc = "branches (Telescope)" },
-      { "<leader>gl", "<cmd>Telescope git_commits<CR>", desc = "log (Telescope)" },
-      { "<leader>gL", "<cmd>Telescope git_bcommits<CR>", desc = "file history (Telescope)" },
-    },
-
-    config = function(_, opts)
-      local telescope = require("telescope")
-      telescope.setup(opts)
-      telescope.load_extension("notify")
-      telescope.load_extension("undo")
-    end,
-  },
-
-  -- more file types for illuminate to ignore
-  {
-    "RRethy/vim-illuminate",
-    opts = {
-      filetypes_denylist = {
-        "dirvish",
-        "fugitive",
-        "alpha",
-        "NvimTree",
-        "neo-tree",
-        "packer",
-        "neogitstatus",
-        "Trouble",
-        "lir",
-        "Outline",
-        "oil",
-        "spectre_panel",
-        "toggleterm",
-        "DressingSelect",
-        "TelescopePrompt",
-      },
-    },
-  },
-
   -- file explorer
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -92,6 +11,40 @@ return {
         },
       },
     },
+    config = function()
+      require("neo-tree").setup({
+        filesystem = {
+          commands = {
+            avante_add_files = function(state)
+              local node = state.tree:get_node()
+              local filepath = node:get_id()
+              local relative_path = require("avante.utils").relative_path(filepath)
+
+              local sidebar = require("avante").get()
+
+              local open = sidebar:is_open()
+              -- ensure avante sidebar is open
+              if not open then
+                require("avante.api").ask()
+                sidebar = require("avante").get()
+              end
+
+              sidebar.file_selector:add_selected_file(relative_path)
+
+              -- remove neo tree buffer
+              if not open then
+                sidebar.file_selector:remove_selected_file("neo-tree filesystem [1]")
+              end
+            end,
+          },
+          window = {
+            mappings = {
+              ["oa"] = "avante_add_files",
+            },
+          },
+        },
+      })
+    end,
   },
 
   {
@@ -129,13 +82,6 @@ return {
   },
 
   { "folke/flash.nvim", enabled = false },
-
-  {
-    "3rd/image.nvim",
-    opts = {
-      tmux_show_only_in_active_window = true,
-    },
-  },
 
   -- vim-vinegar like file explorer that lets you edit your filesystem like a normal Neovim buffer
   {

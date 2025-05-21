@@ -1,9 +1,5 @@
 return {
   {
-    "folke/zen-mode.nvim",
-  },
-
-  {
     "nvim-lualine/lualine.nvim",
     opts = {
       sections = {
@@ -18,15 +14,11 @@ return {
   },
 
   {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
+    "folke/snacks.nvim",
     opts = {
-      indent = { char = "┊" },
+      indent = {
+        indent = { char = "┊" },
+      },
     },
   },
-
-  -- part of mini.indentscope is already implemented in indent-blankline without
-  -- the annoying animation and the indent object is brought in from kiyoon in
-  -- editor.lua
-  { "echasnovski/mini.indentscope", enabled = false },
 }
