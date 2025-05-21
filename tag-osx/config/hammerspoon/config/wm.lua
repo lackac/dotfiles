@@ -9,16 +9,14 @@ return {
     "S27C900P",
     "LG SDQHD-V",
     "LG SDQHD",
-    "LF32TU87",
     "HP Z27k G3-V",
     "HP Z27k G3",
   },
   displayLayouts = {
     ["Built-in Retina Display"] = { "monocle", "tabbed-right" },
     ["S27C900P"] = { "main-left", "tabbed-right", "monocle" },
-    ["LG SDQHD-V"] = { "main-top", "tabbed-top", "monocle" },
+    ["LG SDQHD-V"] = { "tabbed-top", "main-top", "monocle" },
     ["LG SDQHD"] = { "main-left", "tabbed-right", "monocle" },
-    ["LF32TU87"] = { "main-left", "main-right", "main-center", "tabbed-right", "monocle" },
     ["HP Z27k G3"] = { "main-left", "tabbed-right", "monocle" },
     ["HP Z27k G3-V"] = { "main-top", "tabbed-top", "monocle" },
   },
@@ -28,12 +26,13 @@ return {
       ["LG SDQHD-V"] = {
         {
           layout = "tabbed-top",
-          layoutOptions = { mainPaneRatio = 0.5 },
+          layoutOptions = { mainPaneRatio = 1 - 0.618 },
           windows = {
+            "Slack",
             { app = "Brave Browser", title = "🐦$" },
             { app = "Brave Browser", title = "📦$" },
             { app = "Brave Browser", title = "🚗$" },
-            "Slack",
+            { app = "Brave Browser", title = "🆙$" },
             "Dash",
             "Finder",
           },
@@ -45,6 +44,7 @@ return {
           layoutOptions = { mainPaneRatio = 0.618 },
           windows = {
             { app = "kitty", focus = true },
+            { app = "Zed" },
           },
         },
         {
@@ -88,9 +88,11 @@ return {
           layoutOptions = { mainPaneRatio = 0.5 },
           windows = {
             "kitty",
+            { app = "Zed" },
             { app = "Brave Browser", title = "🐦$", focus = true },
             { app = "Brave Browser", title = "📦$" },
             { app = "Brave Browser", title = "🚗$" },
+            { app = "Brave Browser", title = "🆙$" },
           },
         },
         {

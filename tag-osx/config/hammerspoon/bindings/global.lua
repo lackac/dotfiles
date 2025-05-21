@@ -107,6 +107,7 @@ module.start = function()
     { key = "t", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
     { key = "g", apps = config.apps.browsers },
+    { key = "z", apps = { "Zed" } },
     { key = "c", apps = { "Calendar", "Reminders" } },
     { key = "f", apps = { "Finder" } },
     { key = "m", apps = { "Messages" } },
