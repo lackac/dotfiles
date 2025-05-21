@@ -1,15 +1,19 @@
 # taps
 tap "nextdns/tap"
 tap "puma/puma"
+tap "hashicorp/tap"
 
 # command line tools
 brew "ansible"
 brew "atuin"
 brew "awscli"
+brew "aws-amicleaner"
 brew "bat"
+brew "colima"
 brew "coreutils"
 brew "ctags"
 brew "direnv"
+brew "docker"
 brew "dust"
 brew "duf"
 brew "eza"
@@ -35,6 +39,7 @@ brew "mosh"
 brew "neovim"
 brew "nextdns"
 brew "oath-toolkit"
+brew "opentofu"
 brew "packer"
 brew "pinentry-mac"
 brew "pngpaste"
@@ -51,6 +56,7 @@ brew "the_silver_searcher"
 brew "tldr"
 brew "tmux"
 brew "tree"
+brew "typst"
 brew "watch"
 brew "wget"
 brew "zk"
@@ -70,13 +76,14 @@ brew "mas"
 # Desktop app installs
 cask "1password"
 cask "1password-cli"
+cask "alt-c"
 cask "appcleaner"
 cask "brave-browser"
+cask "git-credential-manager"
 cask "google-chrome"
 cask "google-drive"
 cask "hammerspoon"
 cask "keybase"
-cask "keymapp"
 cask "kitty"
 cask "prusaslicer"
 cask "setapp"
@@ -84,10 +91,6 @@ cask "shortcat"
 cask "slack"
 cask "viscosity"
 cask "vlc"
-
-# QuickLook plugins
-cask "quicklook-csv"
-cask "quicklook-json"
 
 # Fonts
 tap "homebrew/cask-fonts"
@@ -98,9 +101,5 @@ cask "font-symbols-only-nerd-font"
 # Mac App Store installs
 mas "Affinity Photo", id: 824183456
 mas "Affinity Designer", id: 824171161
-mas "Microsoft Word", id: 462054704
-mas "Microsoft Excel", id: 462058435
-mas "Pocket", id: 568494494
 mas "Transmit", id: 403388562
-mas "Tweetbot", id: 557168941
 mas "The Unarchiver", id: 425424353
