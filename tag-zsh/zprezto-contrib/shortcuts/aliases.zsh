@@ -1,6 +1,8 @@
 alias vim=nvim
 alias mux=tmuxinator
 
+alias nix='noglob nix'
+
 alias ls='eza'
 alias l='ls -l'
 alias la='ls -a'
