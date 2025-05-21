@@ -1,14 +1,26 @@
 return {
   {
     "saghen/blink.cmp",
-    opts = function(_, opts)
-      opts.completion = { list = { selection = { preselect = false, auto_insert = true } } }
-      opts.keymap = {
+    dependencies = {
+      "Kaiser-Yang/blink-cmp-avante",
+    },
+    opts = {
+      completion = { list = { selection = { preselect = false, auto_insert = true } } },
+      sources = {
+        default = { "avante" },
+        providers = {
+          avante = {
+            module = "blink-cmp-avante",
+            name = "Avante",
+          },
+        },
+      },
+      keymap = {
         preset = "enter",
         ["<Tab>"] = { "select_next", "fallback" },
         ["<S-Tab>"] = { "select_prev", "fallback" },
-      }
-    end,
+      },
+    },
   },
 
   { "kylechui/nvim-surround", config = true },
