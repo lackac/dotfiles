@@ -45,6 +45,17 @@ local commands = {
     image = "󰔎",
     action = system.toggleTheme,
   },
+  ["Caffeine"] = {
+    image = hs.caffeinate.get("displayIdle") and "󰾪" or "󰅶",
+    subText = hs.caffeinate.get("displayIdle") and "Decaf" or "Caffeinate",
+    passSelf = true,
+    action = function(self)
+      hs.caffeinate.toggle("displayIdle")
+      local state = hs.caffeinate.get("displayIdle")
+      self.choice.subText = state and "Decaf" or "Caffeinate"
+      self.choice.image = nerdFontsIcon(state and "󰾪" or "󰅶", "darkmagenta")
+    end,
+  },
   ["Start Screensaver"] = {
     image = "󱄄",
     action = hs.caffeinate.startScreensaver,
@@ -61,10 +72,6 @@ local commands = {
     image = "󰒲",
     action = hs.caffeinate.systemSleep,
   },
-  ["Sleep Displays"] = {
-    image = "󰶐",
-    action = hs.caffeinate.systemSleep,
-  },
   ["Reboot"] = {
     image = "󰜉",
     action = hs.caffeinate.restartSystem,
@@ -79,12 +86,14 @@ local function buildChoices()
   cache.choices = {}
 
   for text, command in pairs(commands) do
-    table.insert(cache.choices, {
+    command.choice = {
       text = text,
+      subText = command.subText,
       id = command.id or module.requireName .. ":" .. text,
       source = module.requireName,
       image = nerdFontsIcon(command.image, "darkmagenta"),
-    })
+    }
+    table.insert(cache.choices, command.choice)
   end
 end
 
@@ -103,7 +112,11 @@ module.complete = function(choice)
     local command = commands[choice.text]
     if command then
       if type(command.action) == "function" then
-        command.action()
+        if command.passSelf then
+          command:action()
+        else
+          command.action()
+        end
       else
         log.wf("couldn't execute action (type: %s) for choice '%s'", type(command.action), choice.text)
       end
