@@ -238,7 +238,15 @@ local function evaluateRules(url, currentApp, currentAppTitle)
 end
 
 local function getAppAndTitle(senderPID)
+  log.df(
+    "senderPID: %s, appForPID: %s, mostRecentApp: %s, frontmostApplication: %s",
+    senderPID,
+    senderPID ~= nil and senderPID ~= -1 and hs.application.applicationForPID(senderPID),
+    cache.mostRecentApp,
+    hs.application.frontmostApplication()
+  )
   local currentApp = senderPID ~= nil and senderPID ~= -1 and hs.application.applicationForPID(senderPID)
+    or cache.mostRecentApp
     or hs.application.frontmostApplication()
   local focusedWindow = currentApp:focusedWindow()
 
@@ -269,10 +277,21 @@ module.start = function()
       table.unpack(config.urls.redirDecoders)
     )
   end
+
+  cache.appWatcher = hs.application.watcher.new(function(name, event, app)
+    log.df("appWatcher event '%s' from application '%s'", event, name)
+    if event == hs.application.watcher.activated and name ~= "Hammerspoon" then
+      cache.mostRecentApp = app
+    end
+  end)
+  cache.appWatcher:start()
 end
 
 module.stop = function()
   hs.urlevent.httpCallback = nil
+  if cache.appWatcher then
+    cache.appWatcher:stop()
+  end
 end
 
 return module
