@@ -14,6 +14,7 @@ local modules = {
 
 bindings.enabled = {
   "hyper",
+  "autoclicker",
   "block-hide",
   "brightness",
   "ctrl-esc",
