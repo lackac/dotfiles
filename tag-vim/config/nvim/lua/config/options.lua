@@ -34,3 +34,5 @@ vim.opt.listchars = {
 }
 vim.opt.showbreak = "↳" -- the character to show at the start of lines that have been wrapped
 
+vim.g.lazyvim_ruby_lsp = "ruby_lsp"
+vim.g.lazyvim_ruby_formatter = "rubocop"

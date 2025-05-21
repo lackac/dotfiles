@@ -18,8 +18,16 @@ return {
             },
           },
         },
+        ruby_lsp = {
+          mason = false,
+          cmd = { vim.fn.expand("~/.asdf/shims/ruby-lsp") },
+        },
+        rubocop = {
+          mason = false,
+          cmd = { "bundle", "exec", "rubocop", "--lsp" },
+        },
         sourcekit = {
-          cmd = { "/usr/bin/sourcekit-lsp" },
+          cmd = { "$TOOLCHAIN_PATH/usr/bin/sourcekit-lsp" },
           filetypes = { "swift", "c", "cpp", "objc", "objective-c", "objective-cpp" },
         },
       },
