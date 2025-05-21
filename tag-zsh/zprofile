@@ -62,7 +62,6 @@ path=(
   ~/bin
   ~/.local/bin
   ~/.prygems/bin
-  /opt/chef/bin
   /opt/homebrew/bin
   /usr/local/{bin,sbin}
   /usr/{bin,sbin}
@@ -90,4 +89,8 @@ export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 
 if [[ -s ${ZDOTDIR:-$HOME}/.zprofile.local ]]; then
   source ${ZDOTDIR:-$HOME}/.zprofile.local
+fi
+
+if [[ -s ${ZDOTDIR:-$HOME}/.zprofile.private ]]; then
+  source ${ZDOTDIR:-$HOME}/.zprofile.private
 fi
