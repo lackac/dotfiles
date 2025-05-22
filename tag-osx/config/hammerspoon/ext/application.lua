@@ -69,9 +69,8 @@ module.smartLaunchOrFocus = function(launchApps)
 
   -- create table of sorted windows per application
   hs.fnutils.each(runningApps, function(runningApp)
-    local standardWindows = hs.fnutils.filter(runningApp:allWindows(), function(win)
-      return win:isStandard()
-    end)
+    local standardWindows =
+      hs.window.filter.new(false):setAppFilter(runningApp:name(), { allowRoles = "AXStandardWindow" }):getWindows()
 
     -- sort by id, so windows don't jump randomly every time
     table.sort(standardWindows, function(a, b)
