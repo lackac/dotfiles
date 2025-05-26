@@ -4,10 +4,10 @@ tap "puma/puma"
 tap "hashicorp/tap"
 
 # command line tools
-brew "ansible"
+brew "ansible"                      # per-project
 brew "atuin"
 brew "awscli"
-brew "aws-amicleaner"
+brew "aws-amicleaner"               # per-project
 brew "bat"
 brew "colima"
 brew "coreutils"
@@ -33,14 +33,14 @@ brew "imagemagick"
 brew "ipcalc"
 brew "jq"
 brew "lazygit"
-brew "ledger"
+brew "ledger"                       # per-project
 brew "m-cli"
 brew "mosh"
 brew "neovim"
 brew "nextdns"
 brew "oath-toolkit"
-brew "opentofu"
-brew "packer"
+brew "opentofu"                     # per-project
+brew "packer"                     # per-project
 brew "pinentry-mac"
 brew "pngpaste"
 brew "puma-dev"
@@ -50,13 +50,13 @@ brew "ripgrep"
 brew "starship"
 brew "sqlite"
 brew "terminal-notifier"
-brew "terraform"
-brew "terragrunt"
+brew "terraform"                     # per-project
+brew "terragrunt"                     # per-project
 brew "the_silver_searcher"
 brew "tldr"
 brew "tmux"
 brew "tree"
-brew "typst"
+brew "typst"                     # per-project
 brew "watch"
 brew "wget"
 brew "zk"
