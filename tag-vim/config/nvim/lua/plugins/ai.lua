@@ -40,7 +40,15 @@ return {
     opts = {
       provider = "claude",
       claude = {
+        model = "claude-sonnet-4-20250514",
         max_tokens = 32768,
+      },
+      auto_suggestion_provider = "claude_fast",
+      vendors = {
+        claude_fast = {
+          __inherited_from = "claude",
+          model = "claude-3-5-haiku-20241022",
+        },
       },
       system_prompt = function()
         local hub = require("mcphub").get_hub_instance()

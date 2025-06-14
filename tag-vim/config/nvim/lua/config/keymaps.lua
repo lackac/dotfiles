@@ -22,3 +22,7 @@ map("n", "<leader>h", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" 
 
 -- Better paste
 map("v", "p", '"_dP')
+
+-- Easier copying to system clipboard (other way is handled by yanky)
+map("n", "<leader>y", '"+y')
+map("v", "<leader>y", '"+y')
