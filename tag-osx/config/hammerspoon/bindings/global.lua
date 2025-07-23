@@ -79,6 +79,9 @@ module.start = function()
     require("chad").reload()
   end)
 
+  local whisper = require("whisper"):start()
+  hyper.multiBind(".", whisper.togglePaste)
+
   hs.fnutils.each({
     { key = "c", keyword = "pb" },
     { key = "s", keyword = "s" },
@@ -107,7 +110,6 @@ module.start = function()
     { key = "t", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
     { key = "g", apps = config.apps.browsers },
-    { key = "z", apps = { "Zed" } },
     { key = "c", apps = { "Calendar", "Reminders" } },
     { key = "f", apps = { "Finder" } },
     { key = "m", apps = { "Messages" } },
@@ -123,6 +125,7 @@ end
 
 module.stop = function()
   require("chad"):stop()
+  require("whisper"):stop()
 end
 
 return module
