@@ -2,6 +2,7 @@
 
 # Use Caps Lock as Control and Left Control as F19
 hidutil property \
+  --matching '{"PrimaryUsagePage": 1,"PrimaryUsage": 6}' \
   --set '{"UserKeyMapping": [
     { "HIDKeyboardModifierMappingSrc":0x700000039,
       "HIDKeyboardModifierMappingDst":0x7000000e0 },
@@ -11,7 +12,7 @@ hidutil property \
 
 # Internal Keyboard specific remappings
 hidutil property \
-  --matching '{"ProductID": 0x0, "VendorID": 0x0}' \
+  --matching '{"ProductID": 0x0, "VendorID": 0x0, "PrimaryUsagePage": 1,"PrimaryUsage": 6}' \
   --set '{"UserKeyMapping": [
     { "HIDKeyboardModifierMappingSrc":0x700000039,
       "HIDKeyboardModifierMappingDst":0x7000000e0 },
@@ -26,4 +27,9 @@ hidutil property \
 # No special configuration for the ZSA Voyager
 hidutil property \
   --matching '{"ProductID": 0x1977, "VendorID": 0x3297}' \
+  --set '{"UserKeyMapping": []}'
+
+# No special configuration for the splitkb keyboards
+hidutil property \
+  --matching '{"ProductID": 0x3a07, "VendorID": 0x8d1d}' \
   --set '{"UserKeyMapping": []}'
