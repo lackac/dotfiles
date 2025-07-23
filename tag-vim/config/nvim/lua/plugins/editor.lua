@@ -89,6 +89,7 @@ return {
     opts = {
       keymaps = {
         ["<C-h>"] = false,
+        ["<C-l>"] = false,
         ["<C-t>"] = false,
         ["<C-v>"] = "actions.select_vsplit",
         ["<C-x>"] = "actions.select_split",
