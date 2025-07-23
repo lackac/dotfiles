@@ -200,7 +200,11 @@ module.equalizeLayout = function(golden)
   end
 
   if cache.layoutOptions[spaceId] then
-    cache.layoutOptions[spaceId] = defaultLayoutOptions(golden)
+    local newOptions = defaultLayoutOptions(golden)
+    if cache.layoutOptions[spaceId].mainPaneRatio == newOptions.mainPaneRatio then
+      newOptions.mainPaneRatio = 1 - newOptions.mainPaneRatio
+    end
+    cache.layoutOptions[spaceId] = newOptions
 
     module.tile()
   end
