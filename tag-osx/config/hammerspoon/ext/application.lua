@@ -63,9 +63,14 @@ module.smartLaunchOrFocus = function(launchApps)
   launchApps = type(launchApps) == "table" and launchApps or { launchApps }
 
   -- filter running applications by apps array
-  local runningApps = hs.fnutils.map(launchApps, function(launchApp)
-    return hs.application.get(launchApp)
-  end)
+  local runningApps = hs.fnutils.ifilter(
+    hs.fnutils.map(launchApps, function(launchApp)
+      return hs.application.get(launchApp)
+    end),
+    function(app)
+      return app and app.__type == "hs.application"
+    end
+  )
 
   -- create table of sorted windows per application
   hs.fnutils.each(runningApps, function(runningApp)
