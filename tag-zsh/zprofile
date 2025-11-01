@@ -59,6 +59,8 @@ typeset -gU cdpath fpath mailpath path
 
 # Set the list of directories that Zsh searches for programs.
 path=(
+  ~/.nix-profile/bin
+  /nix/var/nix/profiles/default/bin
   ~/bin
   ~/.local/bin
   ~/.prygems/bin
@@ -86,6 +88,10 @@ fi
 # Updated terminfo for builtin ncurses
 # see: https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
 export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
+
+if [[ -s /etc/profile.d/nix.sh ]]; then
+  source /etc/profile.d/nix.sh
+fi
 
 if [[ -s ${ZDOTDIR:-$HOME}/.zprofile.local ]]; then
   source ${ZDOTDIR:-$HOME}/.zprofile.local

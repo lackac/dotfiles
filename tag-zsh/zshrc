@@ -54,3 +54,6 @@ fi
 if [[ -s ${ZDOTDIR:-$HOME}/.zshrc.local ]]; then
   source ${ZDOTDIR:-$HOME}/.zshrc.local
 fi
+[ -s "/Users/lackac/.jabba/jabba.sh" ] && source "/Users/lackac/.jabba/jabba.sh"
+
+. "$HOME/.local/share/../bin/env"

@@ -26,3 +26,6 @@ export ANDROID_SDK_ROOT=/usr/local/Cellar/android-sdk/r20.0.1
 [[ -s ~/.tmuxinator/scripts/tmuxinator ]] && source ~/.tmuxinator/scripts/tmuxinator
 
 [[ -f ~/.custom_profile ]] && source ~/.custom_profile
+[ -s "/Users/lackac/.jabba/jabba.sh" ] && source "/Users/lackac/.jabba/jabba.sh"
+
+. "$HOME/.local/share/../bin/env"
