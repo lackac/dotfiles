@@ -23,6 +23,8 @@ vendor/cache/*-darwin.gem
 a.out
 
 .envrc
+.direnv/
+
 .powenv
 .irbrc
 .pryrc
@@ -31,3 +33,6 @@ config/setup_load_paths.rb
 tags
 .tags
 .tags[0-9]
+
+devlog.md
+.private-journal
