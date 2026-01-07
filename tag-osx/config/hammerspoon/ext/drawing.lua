@@ -43,7 +43,7 @@ module.drawBorder = function()
   local alpha = borderStyle.alpha or 0.6
   local borderWidth = borderStyle.width or 2
   local distance = borderStyle.distance or 6
-  local roundRadius = borderStyle.roundRadius or 12
+  local roundRadius = borderStyle.roundRadius or 26
 
   local frame = focusedWindow:frame()
 
