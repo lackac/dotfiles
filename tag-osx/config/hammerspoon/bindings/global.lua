@@ -80,7 +80,7 @@ module.start = function()
   end)
 
   local whisper = require("whisper"):start()
-  hyper.multiBind(".", whisper.togglePaste)
+  hyper.multiBind("n", whisper.togglePaste)
 
   hs.fnutils.each({
     { key = "c", keyword = "pb" },
@@ -110,10 +110,11 @@ module.start = function()
     { key = "t", apps = config.apps.terms },
     { key = "space", apps = config.apps.browsers },
     { key = "g", apps = config.apps.browsers },
+    { key = "o", apps = { "Obsidian" } },
     { key = "c", apps = { "Calendar", "Reminders" } },
     { key = "f", apps = { "Finder" } },
     { key = "m", apps = { "Messages" } },
-    { key = "s", apps = { "Slack", "Microsoft Teams" } },
+    { key = "s", apps = { "Slack", "Mattermost", "Microsoft Teams" } },
     { key = "u", apps = { "Music" } },
     { key = ",", apps = { "System Settings" } },
   }, function(object)

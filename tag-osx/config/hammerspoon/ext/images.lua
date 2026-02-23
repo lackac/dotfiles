@@ -66,6 +66,7 @@ local nerdFontsPath = os.getenv("HOME") .. "/bin/nerd-fonts"
 local nerdFontsGroups = {
   cod = "Codicons",
   dev = "Devicons",
+  extra = "Extra",
   fa = "Font Awesome",
   fae = "Font Awesome Extension",
   iec = "IEC Power Symbols",
