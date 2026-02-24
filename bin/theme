@@ -94,8 +94,9 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
       kitty-*)
         kitty @ --to "unix:$socket_path" set-colors --all --configured "$kitty_theme"
         ;;
-      nvim.*)
+      nvim.* | nvf.*)
         pid="${socket#nvim.}"
+        pid="${pid#nvf.}"
         pid="${pid%.*}"
         if ps -p $pid > /dev/null; then
           nvim --server "$socket_path" --remote-expr "nvim_set_option('background', '$theme')"

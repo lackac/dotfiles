@@ -1,7 +1,12 @@
-alias vim=nvim
+alias vim=nvf
 alias mux=tmuxinator
 
 alias nix='noglob nix'
+
+alias nvf='nix run ~/Code/lackac/nvf-config'
+alias oc=opencode
+
+alias batw='bat --wrap=character'
 
 alias ls='eza'
 alias l='ls -l'
