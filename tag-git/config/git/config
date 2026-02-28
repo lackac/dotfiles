@@ -4,10 +4,10 @@
 	signingkey = lackac@lackac.hu
 
 [author]
-	email = laszlo.bacsi@100starlings.com
+	email = lackac@lackac.hu
 
 [include]
-	path = private
+  #path = private
 	path = local
 	path = theme
 
@@ -23,7 +23,7 @@
 	human = name-rev --name-only --refs=refs/heads/*
 	humin = name-rev --refs=refs/heads/* --stdin
 	cl = log -n25 --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset' -- lib
-	start = !git init && git commit --allow-empty -m \"Inception\"
+	start = !git init && git commit --allow-empty -m \"chore: inception\"
 
 [core]
 	pager = delta
@@ -94,7 +94,3 @@
 	process = git-lfs filter-process
 [credential "https://github.com"]
 	username = lackac
-[credential]
-	helper = /usr/local/share/gcm-core/git-credential-manager
-[credential "https://dev.azure.com"]
-	useHttpPath = true
